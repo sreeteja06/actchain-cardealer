@@ -13,11 +13,11 @@ import ListItem from '@material-ui/core/ListItem';
 import ListItemIcon from '@material-ui/core/ListItemIcon';
 import ListItemText from '@material-ui/core/ListItemText';
 import ListSubheader from '@material-ui/core/ListSubheader';
-import DashboardIcon from '@material-ui/icons/Dashboard';
-import ShoppingCartIcon from '@material-ui/icons/ShoppingCart';
-import PeopleIcon from '@material-ui/icons/People';
-import BarChartIcon from '@material-ui/icons/BarChart';
-import LayersIcon from '@material-ui/icons/Layers';
+import DashboardIcon from '@material-ui/icons/DashboardOutlined';
+import ShoppingCartIcon from '@material-ui/icons/ShoppingCartOutlined';
+import PeopleIcon from '@material-ui/icons/PeopleOutlined';
+import BarChartIcon from '@material-ui/icons/BarChartOutlined';
+import LayersIcon from '@material-ui/icons/LayersOutlined';
 import AssignmentIcon from '@material-ui/icons/Assignment';
 
 export const DealerNavItems = ( props ) => (
@@ -26,7 +26,7 @@ export const DealerNavItems = ( props ) => (
         onClick={event => props.handleListItemClick( event, 0, "Market" )}
             selected={props.selectedIndex === 0}
         >
-            <ListItemIcon>
+            <ListItemIcon style={{ "color": '#FFFFFF' }}>
                 <DashboardIcon />
             </ListItemIcon>
             <ListItemText primary="Market" />
@@ -35,7 +35,7 @@ export const DealerNavItems = ( props ) => (
             onClick={event => props.handleListItemClick( event, 1, "PlacedBids" )}
             selected={props.selectedIndex === 1}
         >
-            <ListItemIcon>
+            <ListItemIcon style={{ "color": '#FFFFFF' }}>
                 <ShoppingCartIcon />
             </ListItemIcon>
             <ListItemText primary="Placed-Bids" />
@@ -44,7 +44,7 @@ export const DealerNavItems = ( props ) => (
             onClick={event => props.handleListItemClick( event, 2, "CarStock" )}
             selected={props.selectedIndex === 2}
         >
-            <ListItemIcon>
+            <ListItemIcon style={{ "color": '#FFFFFF' }}>
                 <BarChartIcon />
             </ListItemIcon>
             <ListItemText primary="Cars Stock" />
@@ -53,7 +53,7 @@ export const DealerNavItems = ( props ) => (
             onClick={event => props.handleListItemClick( event, 3, "Customers" )}
             selected={props.selectedIndex === 3}
         >
-            <ListItemIcon>
+            <ListItemIcon style={{ "color": '#FFFFFF' }}>
                 <PeopleIcon />
             </ListItemIcon>
             <ListItemText primary="Customers" />
@@ -62,7 +62,7 @@ export const DealerNavItems = ( props ) => (
             onClick={event => props.handleListItemClick( event, 4, "AddCar" )}
             selected={props.selectedIndex === 4}
         >
-            <ListItemIcon>
+            <ListItemIcon style={{ "color": '#FFFFFF' }}>
                 <LayersIcon />
             </ListItemIcon>
             <ListItemText primary="Add Car" />

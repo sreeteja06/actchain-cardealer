@@ -26,6 +26,7 @@ import Market from '../Market/Market';
 import { DealerNavItems, BuyerNavItems } from './listitems';
 import PlacedBids from '../PlacedBids/PlacedBids'
 import CarStock from '../CarStock/CarStock'
+import AddCar from '../AddCar/AddCar'
 
 const drawerWidth = 240;
 
@@ -114,7 +115,6 @@ const useStyles = makeStyles( theme => ( {
 const DashboardNav = ( props ) => {
   const [SelectedNavItem, setSelectedNavItem] = React.useState('Market');
   const classes = useStyles();
-  const theme = useTheme();
   const [open, setOpen] = React.useState( false );
   const [selectedIndex, setSelectedIndex] = React.useState( 0 );
 
@@ -152,7 +152,12 @@ const DashboardNav = ( props ) => {
             <Typography component="h1" variant="h6" color="inherit" noWrap className={classes.title}>
               {SelectedNavItem}
             </Typography>
-            <LogoutIcon onClick={logout}></LogoutIcon>
+            <IconButton 
+              color="inherit"
+              onClick={logout}
+            >
+             <LogoutIcon/>
+            </IconButton>
           </Toolbar>
         </AppBar>
         <Drawer
@@ -178,6 +183,7 @@ const DashboardNav = ( props ) => {
           {SelectedNavItem==='Market'?<Market></Market>:null}
           {SelectedNavItem === 'PlacedBids' ? <PlacedBids></PlacedBids> : null}
           {SelectedNavItem === 'CarStock' ? <CarStock></CarStock> : null}
+          {SelectedNavItem === 'AddCar' ? <AddCar></AddCar> : null}
         </main>
       </div>
     </div>
