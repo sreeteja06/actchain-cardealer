@@ -1,19 +1,9 @@
-/*
- * SPDX-License-Identifier: Apache-2.0
- *     _____________  ___  
-      / ___/ ___/ _ \/ _ \ 
-     (__  ) /  /  __/  __/ 
-    /____/_/   \___/\___  
- * File Created: Friday, 16th August 2019 1:49:06 pm
- * Author: SreeTeja06 (sreeteja.muthyala@gmail.com)
-
- */
 let express = require( 'express' )
 let router = express.Router()
 
 let { mongoose } = ( '../db/mongoose' );
 
-let User = require( './user' );
+let User = require( '../models/user' );
 let { authenticate } = require( '../middleware/authentication' );
 require( '../config/config' );
 
@@ -31,7 +21,7 @@ router.post( '/users', awaitHandler( ( req, res ) => {
     let body = {
         email: req.body.email,
         password: req.body.password,
-        admin: req.body.admin
+        role: req.body.role
     }
     let user = new User( body );
     user.save().then( () => {

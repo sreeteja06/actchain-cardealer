@@ -2,7 +2,7 @@
 const validator = require('validator');
 
 const mongoose = require( 'mongoose' );
-let accessSchema = new mongoose.Schema({
+let dealerSchema = new mongoose.Schema({
     dealerRegId:{
         type: String,
         required: true,
@@ -37,4 +37,4 @@ let accessSchema = new mongoose.Schema({
 });
 
 
-module.exports = mongoose.model( 'dealer', accessSchema );
+module.exports = mongoose.model( 'dealer', dealerSchema );

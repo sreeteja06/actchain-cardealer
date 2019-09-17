@@ -1,6 +1,6 @@
 const mongoose = require( 'mongoose' );
 
-let accessSchema = new mongoose.Schema({
+let carSchema = new mongoose.Schema({
     
     carName:{
         type: String,
@@ -36,5 +36,5 @@ let accessSchema = new mongoose.Schema({
 });
 
 
-module.exports = mongoose.model( 'car', accessSchema );
+module.exports = mongoose.model( 'car', carSchema );
 //request model carid,customerId

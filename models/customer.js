@@ -1,6 +1,6 @@
 const validator = require('validator');
 const mongoose = require( 'mongoose' );
-let accessSchema = new mongoose.Schema({
+let CustomerSchema = new mongoose.Schema({
     
     firstName:{
         type: String,
@@ -38,4 +38,4 @@ let accessSchema = new mongoose.Schema({
 });
 
 
-module.exports = mongoose.model( 'customer', accessSchema );
+module.exports = mongoose.model( 'customer', CustomerSchema );
