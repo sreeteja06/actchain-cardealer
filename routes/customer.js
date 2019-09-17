@@ -32,15 +32,16 @@ router.get('/',awaitHandler(async(req,res)=>{
 router.post(
     '/requestACar',
     awaitHandler( async ( req, res ) => {
-        let request = {
-            carID : req.body.carID,
-            customerID: req.body.customerID,
-        }
-       let requestData = new requestDB(request);
+         
+       let requestData = new requestDB({
+        carID : req.body.carID,
+        customerID: req.body.customerID,
+        
+    });
        requestData.save(function(err) {
         if (err) throw err;    
         console.log('car successfully saved.');
-        res.send( requestDB );}
+        res.send( requestData );}
         )}
 ));
  
