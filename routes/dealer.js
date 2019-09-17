@@ -18,4 +18,18 @@ const awaitHandler = fn => {
 router.get('/',awaitHandler(async(req,res)=>{
     res.send('You are in dealer route')
 }))
+
+router.post(
+    '/quoteDiscount',
+    awaitHandler( async ( req, res ) => {
+        var quote = {"dealerID": req.body.dealerID, "Pricequote": req.body.Pricequote};
+       let requested =  await requestDB.findOne({_id: req.body.requestID});
+       
+       requested.quotes.push(quote);
+       requested.save(function(err) {
+        if (err) throw err;    
+        console.log('car successfully saved.');
+        res.send( requested );})
+    })  );
+ 
 module.exports = router
