@@ -31,6 +31,14 @@ let UserSchema = new mongoose.Schema( {
       require: true,
       minlength: 6
    },
+   firstName: {
+      type: String,
+      required: true,
+   },
+   lastName: {
+      type: String,
+      required: true,
+   },
    role: {
       type: String,
       default: false

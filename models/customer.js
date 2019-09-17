@@ -1,40 +1,16 @@
 const validator = require('validator');
 const mongoose = require( 'mongoose' );
 let CustomerSchema = new mongoose.Schema({
-    
-    firstName:{
-        type: String,
-        required: true,
-        unique : true
-    },
-    lastName:{
-        type: String,
-        required: true,
-        unique : true
-    },
     SSN:{
-        type: Number,
+        type: String,
         required: true,
         unique : true,
         minlength:2
-
     },
-    email: {
-        type: String,
+    _user: {
+        type: mongoose.Schema.Types.ObjectId,
         required: true,
-        trim: true,
-        minlength: 1,
-        unique: true,
-        validate: {
-           validator: validator.isEmail,
-           message: '{VALUE} is not a valid email'
-        }
-     },
-     password: {
-        type: String,
-        require: true,
-        minlength: 6
-     },
+    },
 });
 
 

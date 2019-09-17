@@ -28,7 +28,7 @@ app.use( '/dealer', dealerRoute );
 app.use( '/customer', customerRoute );
 app.use( '/', authRoute );
 
-const port = process.env.PORT || 3000;
+const port = process.env.PORT || 4000;
 
 var server = http.createServer( app ).listen( port, function () { } );
 console.log( '****************** SERVER STARTED ************************' );
