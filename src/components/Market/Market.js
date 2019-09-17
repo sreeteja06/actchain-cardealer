@@ -11,15 +11,41 @@
 import React from 'react';
 import MUIDataTable from "mui-datatables";
 import { Button } from '@material-ui/core'
+import QuoteDialog from '../QuoteDialog/QuoteDialog';
 
 
-const QuotePrice = ( e ) => {
-    console.log( e )
-}
-
-export default function addCar() {
-
+const Market = () => {
+    const [open, setOpen] = React.useState( false );
+    const [dialogProps, setDialogProps] = React.useState( {
+        name: "",
+        manufacturer: "",
+        model:"",
+        trim: "",
+        year: "",
+        MSRP: ""
+    } )
+    const QuotePrice = ( e ) => {
+        console.log( e )
+        setOpen(true);
+        setDialogProps({
+            name: e[1],
+            manufacturer: e[2],
+            model: e[3],
+            trim: e[4],
+            year: e[5],
+            MSRP: e[6]
+        })
+    }
     const columns = [
+        {
+            name: "requestID",
+            label: "requestID",
+            options: {
+                filter: false,
+                sort: false,
+                display: false
+            }
+        },
         {
             name: "name",
             label: "Name",
@@ -33,15 +59,23 @@ export default function addCar() {
             label: "Manufacturer",
             options: {
                 filter: true,
-                sort: false,
+                sort: true,
             }
         },
         {
-            name: "type",
-            label: "Type",
+            name: "model",
+            label: "Model",
             options: {
                 filter: true,
-                sort: false,
+                sort: true,
+            }
+        },
+        {
+            name: "trim",
+            label: "Trim",
+            options: {
+                filter: true,
+                sort: true,
             }
         },
         {
@@ -49,15 +83,23 @@ export default function addCar() {
             label: "Year",
             options: {
                 filter: true,
-                sort: false,
+                sort: true,
             }
         },
         {
-            name: "lowestdeal",
-            label: "Lowestdeal",
+            name: "MSRP",
+            label: "MSRP",
             options: {
                 filter: true,
-                sort: false,
+                sort: true,
+            }
+        },
+        {
+            name: "rank",
+            label: "Rank",
+            options: {
+                filter: true,
+                sort: true,
             }
         },
         {
@@ -70,7 +112,7 @@ export default function addCar() {
                     return (
                         <Button
                             style={{ "backgroundColor": "rgb(25,123,189)", "color": "white" }}
-                            onClick={e => QuotePrice( tableMeta )}>
+                            onClick={e => QuotePrice( tableMeta.rowData )}>
                             Quote Price
                         </Button>
                     );
@@ -79,24 +121,24 @@ export default function addCar() {
         },
     ];
 
-    function createData( name, manufacturer, type, year, lowestdeal ) {
-        return { name, manufacturer, type, year, lowestdeal };
+    function createData( name, manufacturer,model, trim, year, MSRP ) {
+        return { name, manufacturer,model, trim, year, MSRP };
     }
 
     const data = [
-        createData( 'Cupcake', "Audi", "LXI", 2019, 4.3 ),
-        createData( 'Donut', "Benz", "VDI", 2015, 4.9 ),
-        createData( 'Eclair', "Ferrari", "XR", 1992, 6.0 ),
-        createData( 'Frozen yoghurt', "Lambo", "PRO", 2014, 4.0 ),
-        createData( 'Gingerbread', "HG", 16.0, 1999, 3.9 ),
-        createData( 'Honeycomb', "VW", 3.2, 2000, 6.5 ),
-        createData( 'Ice cream sandwich', "BMW", 9.0, 2004, 4.3 ),
-        createData( 'Jelly Bean', "Bugati", 0.0, 1996, 0.0 ),
-        createData( 'KitKat', "Skoda", 26.0, 2012, 7.0 ),
-        createData( 'Lollipop', "Yamaha", 0.2, 2010, 2.0 ),
-        createData( 'Marshmallow', "Astro Martin", 0, 2016, 2.0 ),
-        createData( 'Nougat', "KIA", 19.0, 1991, 37.0 ),
-        createData( 'Oreo', "Ford", 18.0, 1993, 4.0 ),
+        createData( 'Customer1', "Audi","model1", "LXI", 2019, 4.3 ),
+        createData( 'Customer2', "Benz", "model1", "VDI", 2015, 4.9 ),
+        createData( 'Customer13', "Ferrari", "model1", "XR", 1992, 6.0 ),
+        createData( 'Customer5', "Lambo", "model1", "PRO", 2014, 4.0 ),
+        createData( 'Customer6', "HG", "model1", 16.0, 1999, 3.9 ),
+        createData( 'Customer8', "VW", "model1", 3.2, 2000, 6.5 ),
+        createData( 'Customer15', "BMW", "model1", 9.0, 2004, 4.3 ),
+        createData( 'Customer10', "Bugati", "model1", 0.0, 1996, 0.0 ),
+        createData( 'Customer21', "Skoda", "model1", 26.0, 2012, 7.0 ),
+        createData( 'Customer19', "Yamaha", "model1", 0.2, 2010, 2.0 ),
+        createData( 'Customer22', "Astro Martin", "model1", 0, 2016, 2.0 ),
+        createData( 'Customer17', "KIA", "model1", 19.0, 1991, 37.0 ),
+        createData( 'Customer1', "Ford", "model1", 18.0, 1993, 4.0 ),
     ];
 
     const options = {
@@ -108,10 +150,15 @@ export default function addCar() {
     };
 
     return (
+        <div>
         <MUIDataTable
             data={data}
             columns={columns}
             options={options}
         />
+        <QuoteDialog open={open} setOpen={setOpen} values={dialogProps}></QuoteDialog>
+        </div>
     )
 }
+
+export default Market

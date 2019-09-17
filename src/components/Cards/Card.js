@@ -37,6 +37,8 @@ const Card = (props) => {
                               phone={props.phone}
                               email={props.email}
                               password={props.password}
+                              ID={props.ID}
+                              usertype={props.usertype}
                             />:null}
                         </div>
                         <div className="col-md-6 text-center">

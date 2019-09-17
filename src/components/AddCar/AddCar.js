@@ -9,10 +9,121 @@
 
  */
 import React from 'react';
+import { withStyles, makeStyles } from '@material-ui/core/styles';
+import TextField from '@material-ui/core/TextField';
+import { Grid } from '@material-ui/core'
+import { Button } from '@material-ui/core'
+import AddIcon from '@material-ui/icons/AddOutlined';
 
-export default function addCar() {
+const useStyles = makeStyles( theme => ( {
+    root: {
+        display: 'flex',
+        flexWrap: 'wrap',
+    },
+    margin: {
+        margin: theme.spacing( 1 )
+    },
+    gridMargin: {
+        marginTop: '7%'
+    }
+} ) );
+
+const ValidationTextField = withStyles( {
+    root: {
+        '& input:valid + fieldset': {
+            borderColor: 'green',
+            borderWidth: 2,
+        },
+        '& input:invalid + fieldset': {
+            borderColor: 'red',
+            borderWidth: 2,
+        },
+        '& input:valid:focus + fieldset': {
+            borderLeftWidth: 6,
+            padding: '4px !important', // override inline-style
+        },
+    },
+} )( TextField );
+
+let car = {
+    manufacturer: 'BMW',
+    model: 'S07',
+    trim: 'Lxi',
+    year: '2007',
+    msrp: '20000'
+}
+
+const onChangeManu = (value, type) => {
+    car[type] = value
+}
+
+const addCarButtonClick = () => {
+    console.log(car)
+}
+
+export default function AddCar() {
+    const classes = useStyles();
 
     return (
-        <h1>Add Car</h1>
-    )
+        <form className={classes.root} noValidate>
+            <Grid
+                className={classes.gridMargin}
+                container
+                direction="column"
+                justify="center"
+                alignItems="center">
+                <ValidationTextField
+                    className={classes.margin}
+                    label="Manufacturer"
+                    required
+                    variant="outlined"
+                    defaultValue="BMW"
+                    id="Manufacturer"
+                    onChange = {e => onChangeManu(e.target.value, "manufacturer")}
+                />
+                <ValidationTextField
+                    className={classes.margin}
+                    label="Model"
+                    required
+                    variant="outlined"
+                    defaultValue="S07"
+                    id="Model"
+                    onChange={e => onChangeManu( e.target.value, "model" )}
+                />
+                <ValidationTextField
+                    className={classes.margin}
+                    label="Trim"
+                    required
+                    variant="outlined"
+                    defaultValue="Lxi"
+                    id="Trim"
+                    onChange={e => onChangeManu( e.target.value, "trim" )}
+                />
+                <ValidationTextField
+                    className={classes.margin}
+                    label="Year"
+                    required
+                    variant="outlined"
+                    defaultValue="2007"
+                    id="Year"
+                    onChange={e => onChangeManu( e.target.value, "year" )}
+                />
+                <ValidationTextField
+                    className={classes.margin}
+                    label="MSRP"
+                    required
+                    variant="outlined"
+                    defaultValue="20000"
+                    id="MSRP"
+                    onChange={e => onChangeManu( e.target.value, "msrp" )}
+                />
+                <Button
+                    style={{ "backgroundColor": "rgb(25,123,189)", "color": "white", "padding": "10px"}}
+                    onClick={e => addCarButtonClick(e)}>
+                    Add Car
+                    <AddIcon/>
+                </Button>
+            </Grid>
+        </form>
+    );
 }

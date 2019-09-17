@@ -23,7 +23,9 @@ class LoginContainer extends Component {
         redirect: false,
         firstname: '',
         lastname: '',
-        phone: ''
+        phone: '',
+        ID: '',
+        type: ''
     }
     orgUsername = '';
     organization = '';
@@ -72,6 +74,18 @@ class LoginContainer extends Component {
         } )
     }
 
+    getId = ( e ) => {
+        this.setState({
+            ID: e.target.value
+        })
+    }
+
+    getType = (value) => {
+        this.setState({
+            type: value
+        })
+    }
+
     render() {
         if ( this.state.redirect ) {
             console.log( 'redirecting' );
@@ -95,7 +109,9 @@ class LoginContainer extends Component {
                         lastname={this.getLastName}
                         phone={this.getPhone}
                         email={this.getEmail}
-                        password={this.getPassword} />
+                        password={this.getPassword}
+                        ID={this.getId}
+                        usertype={this.getType} />
                 </Layout>
             </div>
         );

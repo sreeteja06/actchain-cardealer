@@ -10,7 +10,7 @@
  */
 import React from 'react';
 import clsx from 'clsx';
-import { makeStyles, useTheme } from '@material-ui/core/styles';
+import { makeStyles } from '@material-ui/core/styles';
 import Drawer from '@material-ui/core/Drawer';
 import CssBaseline from '@material-ui/core/CssBaseline';
 import AppBar from '@material-ui/core/AppBar';
@@ -24,9 +24,9 @@ import MenuIcon from '@material-ui/icons/Menu';
 import ChevronLeftIcon from '@material-ui/icons/ChevronLeft';
 import Market from '../Market/Market';
 import { DealerNavItems, BuyerNavItems } from './listitems';
-import PlacedBids from '../PlacedBids/PlacedBids'
-import CarStock from '../CarStock/CarStock'
+import CarDetails from '../CarDetails/CarDetails'
 import AddCar from '../AddCar/AddCar'
+import GetQuote from '../GetQuote/GetQuote'
 
 const drawerWidth = 240;
 
@@ -113,10 +113,17 @@ const useStyles = makeStyles( theme => ( {
 } ) );
 
 const DashboardNav = ( props ) => {
-  const [SelectedNavItem, setSelectedNavItem] = React.useState('Market');
+  const userType = 'Dealer' //use cookie or sessions later
+  let firstCard = 'Market'
+  if(userType === 'Buyer'){
+      firstCard = 'Dashboard'
+  }
+  let [SelectedNavItem, setSelectedNavItem] = React.useState(firstCard);
+  
   const classes = useStyles();
   const [open, setOpen] = React.useState( false );
   const [selectedIndex, setSelectedIndex] = React.useState( 0 );
+
 
   function handleDrawerOpen() {
     setOpen( true );
@@ -152,6 +159,9 @@ const DashboardNav = ( props ) => {
             <Typography component="h1" variant="h6" color="inherit" noWrap className={classes.title}>
               {SelectedNavItem}
             </Typography>
+            <Typography component="h1" variant="h6" color="inherit" noWrap className={classes.title}>
+              {userType}
+            </Typography>
             <IconButton 
               color="inherit"
               onClick={logout}
@@ -174,16 +184,23 @@ const DashboardNav = ( props ) => {
           </div>
           <Divider />
           <List>
-            <List><DealerNavItems handleListItemClick={handleListItemClick} selectedIndex={selectedIndex} ></DealerNavItems></List>
+            <List>
+              {userType === 'Dealer'? 
+                <DealerNavItems handleListItemClick={handleListItemClick} selectedIndex={selectedIndex} ></DealerNavItems>
+              :null}
+              {userType === 'Buyer' ?
+                <BuyerNavItems handleListItemClick={handleListItemClick} selectedIndex={selectedIndex} ></BuyerNavItems>
+                : null}
+            </List>
           </List>
           <Divider />
         </Drawer>
         <main className={classes.content}>
           <div className={classes.appBarSpacer} />
           {SelectedNavItem==='Market'?<Market></Market>:null}
-          {SelectedNavItem === 'PlacedBids' ? <PlacedBids></PlacedBids> : null}
-          {SelectedNavItem === 'CarStock' ? <CarStock></CarStock> : null}
+          {SelectedNavItem === 'CarDetails' ? <CarDetails></CarDetails> : null}
           {SelectedNavItem === 'AddCar' ? <AddCar></AddCar> : null}
+          {SelectedNavItem === 'getQuote' ? <GetQuote></GetQuote> : null}
         </main>
       </div>
     </div>

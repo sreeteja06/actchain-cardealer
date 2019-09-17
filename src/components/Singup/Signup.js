@@ -13,11 +13,13 @@ import Button from '@material-ui/core/Button';
 import CssBaseline from '@material-ui/core/CssBaseline';
 import TextField from '@material-ui/core/TextField';
 import FormControlLabel from '@material-ui/core/FormControlLabel';
-import Checkbox from '@material-ui/core/Checkbox';
 import Grid from '@material-ui/core/Grid';
 import { makeStyles } from '@material-ui/core/styles';
 import Container from '@material-ui/core/Container';
 import { NavLink } from 'react-router-dom'
+import FormLabel from '@material-ui/core/FormLabel';
+import Radio from '@material-ui/core/Radio';
+import RadioGroup from '@material-ui/core/RadioGroup';
 
 const useStyles = makeStyles( theme => ( {
     '@global': {
@@ -50,11 +52,17 @@ const useStyles = makeStyles( theme => ( {
     }
 } ) );
 
+
 export default function SignUp(props) {
+    function handleChangeType( event ) {
+        setRadioValue( event.target.value );
+        props.usertype( event.target.value )
+    }
+    const [radioValue, setRadioValue] = React.useState( 'buyer' );
     const classes = useStyles();
 
     return (
-        <Container component="main" maxWidth="xs">
+        <Container component="main" maxWidth="xs" style={{ marginTop: "-50px" }}>
             <CssBaseline />
             <div className={classes.paper}>
                 <form className={classes.form} noValidate>
@@ -122,10 +130,23 @@ export default function SignUp(props) {
                                 onChange={props.password}
                             />
                         </Grid>
+                        <Grid item xs={12} sm={6}>
+                            <FormLabel component="legend">Type</FormLabel>
+                            <RadioGroup aria-label="Type" name="Type" value={radioValue} onChange={handleChangeType}>
+                                <FormControlLabel value="buyer" control={<Radio />} label="Buyer" style={{ display: 'inline-block', width: '150px' }} />
+                                <FormControlLabel value="dealer" control={<Radio />} label="Dealer" style={{ display: 'inline-block', width: '150px', marginTop: '-50px',marginLeft: '150px' }}/>
+                            </RadioGroup>
+                        </Grid>
                         <Grid item xs={12}>
-                            <FormControlLabel
-                                control={<Checkbox value="allowExtraEmails" color="primary" />}
-                                label="I want to receive inspiration, marketing promotions and updates via email."
+                            <TextField
+                                variant="outlined"
+                                required
+                                fullWidth
+                                name="ID"
+                                label={radioValue==='buyer'?'SocialSecurity Number':'Dealer Registraction No'}
+                                type="text"
+                                id="ID"
+                                onChange={props.ID}
                             />
                         </Grid>
                     </Grid>
