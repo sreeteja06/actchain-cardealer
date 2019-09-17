@@ -1,5 +1,5 @@
 const mongoose = require( 'mongoose' );
-let accessSchema = new mongoose.Schema({
+let requestSchema = new mongoose.Schema({
     
     carID:{
         type:  mongoose.Schema.Types.ObjectId,
@@ -22,4 +22,4 @@ let accessSchema = new mongoose.Schema({
         }
     }]  
 });
-module.exports = mongoose.model( 'request', accessSchema );
+module.exports = mongoose.model( 'request', requestSchema );
