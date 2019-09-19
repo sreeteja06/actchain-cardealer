@@ -39,5 +39,9 @@ router.post(
         res.send( car );}
         )}
 ));
- 
+//get car
+router.get('/getCar',awaitHandler(async(req,res)=>{
+    let data =  await car.findOne({_id: req.query.carID});  
+  res.send(data);
+}))
 module.exports = router

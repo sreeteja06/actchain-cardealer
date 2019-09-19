@@ -1,11 +1,11 @@
 {
     "test": {
-        "PORT": 4000,
+        "PORT": 4003,
         "MONGODB_URI": "mongodb://localhost:27017/actchain-cardealer",
         "JWT_SECRET": "poijasdf98435jpgfdpoij3"
     },
     "development": {
-        "PORT": 4000,
+        "PORT": 4003,
         "MONGODB_URI": "mongodb://localhost:27017/actchain-cardealer",
         "JWT_SECRET": "pojiaj234oi234oij234oij4"
     }
