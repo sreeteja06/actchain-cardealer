@@ -19,6 +19,10 @@ let requestSchema = new mongoose.Schema({
         Pricequote: {
             type: Number,
             required: true
+        },
+        rank :{
+            type:Number,
+            required : true,    
         }
     }]  
 });
