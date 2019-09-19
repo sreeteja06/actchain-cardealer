@@ -157,7 +157,7 @@ export default function NativeSelects() {
                 <Button
                     style={{ "backgroundColor": "rgb(25,123,189)", "color": "white", "padding": "10px" }}
                     onClick={e => getQuotaButtonClick( e )}>
-                    Get Quota
+                    Get Quote
                     <SendIcon />
                 </Button>
             </Grid>

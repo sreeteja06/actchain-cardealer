@@ -17,11 +17,10 @@ import DialogContent from '@material-ui/core/DialogContent';
 import DialogTitle from '@material-ui/core/DialogTitle';
 
 export default function FormDialog( props ) {
-
+    const [validationError, setValidationError] = React.useState( false );
     // const handleClickOpen = () => {
     //     setOpen( true );
     // };
-
     const handleCancel = () => {
         props.setOpen( false );
     };
@@ -30,10 +29,31 @@ export default function FormDialog( props ) {
     };
     console.log( props.values );
 
+    var countDecimals = function ( value ) {
+        if ( Math.floor( value ) === value ) return 0;
+        return value.toString().split( "." )[1].length || 0;
+    }
+
+    const inputHandler = event => {
+        console.log(event.target.value.length)
+        if( event.target.value.length === 0 ){
+            setValidationError( true )
+            return 0;
+        }
+        let value = parseFloat(event.target.value);
+        if( countDecimals(value) > 1 ){
+            setValidationError(true)
+        } else if ( countDecimals( value ) <= 1 ){
+            setValidationError(false)
+        }
+    }
+
+    // VBA script
+
     return (
         <div>
             <Dialog open={props.open} onClose={handleCancel} aria-labelledby="form-dialog-title">
-                <DialogTitle id="form-dialog-title">Quote Your Price</DialogTitle>
+                <DialogTitle id="form-dialog-title">Quote Your Discount</DialogTitle>
                 <DialogContent>
                     Name:<h6>{props.values.name}</h6>
                     Manufacturer:<h6>{props.values.manufacturer}</h6>
@@ -44,10 +64,12 @@ export default function FormDialog( props ) {
                     <TextField
                         autoFocus
                         margin="dense"
-                        id="price"
-                        label="Quote Price"
-                        type="text"
+                        id="discount"
+                        label="Quote Discount"
+                        type="number"
                         fullWidth
+                        error={validationError}
+                        onChange={e=>inputHandler(e)}
                     />
                 </DialogContent>
                 <DialogActions>

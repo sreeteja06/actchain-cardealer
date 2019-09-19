@@ -13,7 +13,7 @@ import ListItem from '@material-ui/core/ListItem';
 import ListItemIcon from '@material-ui/core/ListItemIcon';
 import ListItemText from '@material-ui/core/ListItemText';
 import DashboardIcon from '@material-ui/icons/DashboardOutlined';
-// import PeopleIcon from '@material-ui/icons/PeopleOutlined';
+import PeopleIcon from '@material-ui/icons/SubscriptionsOutlined';
 import BarChartIcon from '@material-ui/icons/BarChartOutlined';
 import AddIcon from '@material-ui/icons/AddOutlined';
 
@@ -37,15 +37,15 @@ export const DealerNavItems = ( props ) => (
             </ListItemIcon>
             <ListItemText primary="Cars Stock" />
         </ListItem>
-        {/* <ListItem button
-            onClick={event => props.handleListItemClick( event, 3, "Customers" )}
+        <ListItem button
+            onClick={event => props.handleListItemClick( event, 3, "Subscribe" )}
             selected={props.selectedIndex === 3}
         >
             <ListItemIcon style={{ "color": '#FFFFFF' }}>
                 <PeopleIcon />
             </ListItemIcon>
-            <ListItemText primary="Customers" />
-        </ListItem> */}
+            <ListItemText primary="Subscribe" />
+        </ListItem>
         <ListItem button
             onClick={event => props.handleListItemClick( event, 4, "AddCar" )}
             selected={props.selectedIndex === 4}

@@ -27,6 +27,8 @@ import { DealerNavItems, BuyerNavItems } from './listitems';
 import CarDetails from '../CarDetails/CarDetails'
 import AddCar from '../AddCar/AddCar'
 import GetQuote from '../GetQuote/GetQuote'
+import BuyerTable from '../BuyerTable/BuyerTable'
+import DealerSubscribe from '../DealerSubscribe/DealerSubscribe';
 
 const drawerWidth = 240;
 
@@ -113,7 +115,12 @@ const useStyles = makeStyles( theme => ( {
 } ) );
 
 const DashboardNav = ( props ) => {
-  const userType = 'Dealer' //use cookie or sessions later
+  const userType = props.location.state.role //use cookie or sessions later
+  const XToken = localStorage.getItem('carDealer_X_auth')
+  if(!XToken){
+    props.history.push( '/' )
+  }
+  console.log("TCL: DashboardNav -> XToken", XToken)
   let firstCard = 'Market'
   if(userType === 'Buyer'){
       firstCard = 'Dashboard'
@@ -139,6 +146,7 @@ const DashboardNav = ( props ) => {
     setSelectedNavItem( navItem );
   }
   function logout(){
+    localStorage.removeItem('carDealer_X_auth');
     props.history.push('/')
   }
   return (
@@ -200,7 +208,9 @@ const DashboardNav = ( props ) => {
           {SelectedNavItem==='Market'?<Market></Market>:null}
           {SelectedNavItem === 'CarDetails' ? <CarDetails></CarDetails> : null}
           {SelectedNavItem === 'AddCar' ? <AddCar></AddCar> : null}
+          {SelectedNavItem === 'Dashboard' ? <BuyerTable></BuyerTable> : null}
           {SelectedNavItem === 'getQuote' ? <GetQuote></GetQuote> : null}
+          {SelectedNavItem === 'Subscribe' ? <DealerSubscribe></DealerSubscribe> : null}
         </main>
       </div>
     </div>

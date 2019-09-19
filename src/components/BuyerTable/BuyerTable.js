@@ -4,37 +4,19 @@
       / ___/ ___/ _ \/ _ \ 
      (__  ) /  /  __/  __/ 
     /____/_/   \___/\___  
- * File Created: Sunday, 15th September 2019 5:44:43 pm
+ * File Created: Tuesday, 17th September 2019 4:25:02 pm
  * Author: SreeTeja06 (sreeteja.muthyala@gmail.com)
 
  */
 import React from 'react';
 import MUIDataTable from "mui-datatables";
 import { Button } from '@material-ui/core'
-import QuoteDialog from '../QuoteDialog/QuoteDialog';
 
 
-const Market = () => {
-    const [open, setOpen] = React.useState( false );
-    const [dialogProps, setDialogProps] = React.useState( {
-        name: "",
-        manufacturer: "",
-        model:"",
-        trim: "",
-        year: "",
-        MSRP: ""
-    } )
-    const QuoteDiscount = ( e ) => {
+const BuyerTable = () => {
+    
+    const AcceptDiscount = ( e ) => {
         console.log( e )
-        setOpen(true);
-        setDialogProps({
-            name: e[1],
-            manufacturer: e[2],
-            model: e[3],
-            trim: e[4],
-            year: e[5],
-            MSRP: e[6]
-        })
     }
     const columns = [
         {
@@ -95,16 +77,24 @@ const Market = () => {
             }
         },
         {
-            name: "rank",
-            label: "Rank",
+            name: "discount",
+            label: "Discount",
             options: {
                 filter: true,
                 sort: true,
             }
         },
         {
-            name: "Quote Discount",
-            label: "Quote Discount",
+            name: "discountBy",
+            label: "DiscountBy",
+            options: {
+                filter: true,
+                sort: true,
+            }
+        },
+        {
+            name: "Accept Deal",
+            label: "AcceptDeal",
             options: {
                 filter: false,
                 sort: false,
@@ -112,8 +102,8 @@ const Market = () => {
                     return (
                         <Button
                             style={{ "backgroundColor": "rgb(25,123,189)", "color": "white" }}
-                            onClick={e => QuoteDiscount( tableMeta.rowData )}>
-                            Quote Discount
+                            onClick={e => AcceptDiscount( tableMeta.rowData )}>
+                            Accept Deal
                         </Button>
                     );
                 }
@@ -121,12 +111,12 @@ const Market = () => {
         },
     ];
 
-    function createData( name, manufacturer,model, trim, year, MSRP ) {
-        return { name, manufacturer,model, trim, year, MSRP };
+    function createData( name, manufacturer, model, trim, year, MSRP ) {
+        return { name, manufacturer, model, trim, year, MSRP };
     }
 
     const data = [
-        createData( 'Customer1', "Audi","model1", "LXI", 2019, 4.3 ),
+        createData( 'Customer1', "Audi", "model1", "LXI", 2019, 4.3 ),
         createData( 'Customer2', "Benz", "model1", "VDI", 2015, 4.9 ),
         createData( 'Customer13', "Ferrari", "model1", "XR", 1992, 6.0 ),
         createData( 'Customer5', "Lambo", "model1", "PRO", 2014, 4.0 ),
@@ -151,14 +141,13 @@ const Market = () => {
 
     return (
         <div>
-        <MUIDataTable
-            data={data}
-            columns={columns}
-            options={options}
-        />
-        <QuoteDialog open={open} setOpen={setOpen} values={dialogProps}></QuoteDialog>
+            <MUIDataTable
+                data={data}
+                columns={columns}
+                options={options}
+            />
         </div>
     )
 }
 
-export default Market
+export default BuyerTable

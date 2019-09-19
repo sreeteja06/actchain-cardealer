@@ -1,59 +1,37 @@
 import React, { Component } from 'react';
 import Card from '../../components/Cards/Card'
-import { Redirect } from 'react-router-dom'
-// import axios from 'axios'
+import axios from '../../axios'
 import Layout from '../../Layout/Layout';
 
 class LoginContainer extends Component {
-    state = {  
-        label: 'Something',
-        header: 'Header',
-        username: '',
-        password: '',
-        redirect: false,
+    state = {
+       label: 'Something',
      }
-     orgUsername = '';
-     organization = '';
+     username=''
+     password= ''
+     role= ''
 
      LoginHandler = async (e) => {
        e.preventDefault()
       //  console.log(`${this.state.username} ${this.state.password}`)
-      //   let response = await axios.post( "http://ec2-18-223-209-42.us-east-2.compute.amazonaws.com/users/login", {
-      //      email: this.state.username,
-      //      password: this.state.password
-      //   })
-      //   this.orgUsername = response.data[0].productdata[0].roles[0].username;
-      //   this.organization = response.data[0].productdata[0].roles[0].organization;
-        this.setState({
-           redirect: true
+        let response = await axios.post( "users/login", {
+           email: this.username,
+           password: this.password
         })
+        this.role = response.data.role;
+        localStorage.setItem( 'carDealer_X_auth', response.data.tokens[response.data.tokens.length-1].token)
+        this.props.history.push({pathname: '/dashboard', state: {role: this.role}})
      }
 
      getEmail = (e) => {
-        this.setState({
-           username: e.target.value
-        })
+         this.username = e.target.value
      }
 
      getPassword = (e) => {
-        this.setState({
-            password: e.target.value
-        })
+            this.password =  e.target.value
      }
 
     render() { 
-        if(this.state.redirect){
-           console.log('redirecting');
-            return <Redirect 
-            to={{
-                  pathname: "/dashboard",
-                  // state: {
-                  //    username: this.orgUsername,
-                  //    organization: this.organization
-                  // }
-               }}
-            />
-        }
         return ( 
             <div>
                <Layout>

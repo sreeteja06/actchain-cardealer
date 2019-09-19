@@ -58,7 +58,7 @@ export default function SignUp(props) {
         setRadioValue( event.target.value );
         props.usertype( event.target.value )
     }
-    const [radioValue, setRadioValue] = React.useState( 'buyer' );
+    const [radioValue, setRadioValue] = React.useState( 'Buyer' );
     const classes = useStyles();
 
     return (
@@ -133,8 +133,8 @@ export default function SignUp(props) {
                         <Grid item xs={12} sm={6}>
                             <FormLabel component="legend">Type</FormLabel>
                             <RadioGroup aria-label="Type" name="Type" value={radioValue} onChange={handleChangeType}>
-                                <FormControlLabel value="buyer" control={<Radio />} label="Buyer" style={{ display: 'inline-block', width: '150px' }} />
-                                <FormControlLabel value="dealer" control={<Radio />} label="Dealer" style={{ display: 'inline-block', width: '150px', marginTop: '-50px',marginLeft: '150px' }}/>
+                                <FormControlLabel value="Buyer" control={<Radio />} label="Buyer" style={{ display: 'inline-block', width: '150px' }} />
+                                <FormControlLabel value="Dealer" control={<Radio />} label="Dealer" style={{ display: 'inline-block', width: '150px', marginTop: '-50px',marginLeft: '150px' }}/>
                             </RadioGroup>
                         </Grid>
                         <Grid item xs={12}>
@@ -143,7 +143,7 @@ export default function SignUp(props) {
                                 required
                                 fullWidth
                                 name="ID"
-                                label={radioValue==='buyer'?'SocialSecurity Number':'Dealer Registraction No'}
+                                label={radioValue==='Buyer'?'SocialSecurity Number':'Dealer Registraction No'}
                                 type="text"
                                 id="ID"
                                 onChange={props.ID}

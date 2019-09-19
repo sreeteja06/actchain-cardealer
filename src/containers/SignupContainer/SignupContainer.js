@@ -10,8 +10,7 @@
  */
 import React, { Component } from 'react';
 import Card from '../../components/Cards/Card'
-import { Redirect } from 'react-router-dom'
-// import axios from 'axios'
+import axios from '../../axios'
 import Layout from '../../Layout/Layout';
 
 class LoginContainer extends Component {
@@ -25,23 +24,22 @@ class LoginContainer extends Component {
         lastname: '',
         phone: '',
         ID: '',
-        type: ''
+        type: 'Buyer'
     }
-    orgUsername = '';
-    organization = '';
 
     SignupHandler = async ( e ) => {
         e.preventDefault()
-        console.log( `${JSON.stringify(this.state)}` )
-        // let response = await axios.post( "http://ec2-18-223-209-42.us-east-2.compute.amazonaws.com/users/login", {
-        //     email: this.state.username,
-        //     password: this.state.password
-        // } )
-        // this.orgUsername = response.data[0].productdata[0].roles[0].username;
-        // this.organization = response.data[0].productdata[0].roles[0].organization;
-        // this.setState( {
-        //     redirect: true
-        // } )
+        // console.log( `${JSON.stringify(this.state)}` )
+        let response = await axios.post( "users", {
+            "email": this.state.email,
+            "password": this.state.password,
+            "role": this.state.type,
+            "ID": this.state.ID,
+            "firstName": this.state.firstname,
+            "lastName": this.state.lastname
+        } )
+        localStorage.setItem( 'carDealer_X_auth', response.data.user.tokens[response.data.user.tokens.length - 1].token )
+        this.props.history.push( { pathname: '/dashboard', state: { role: this.state.type } } )
     }
 
     getEmail = ( e ) => {
@@ -75,30 +73,18 @@ class LoginContainer extends Component {
     }
 
     getId = ( e ) => {
-        this.setState({
+        this.setState( {
             ID: e.target.value
-        })
+        } )
     }
 
-    getType = (value) => {
-        this.setState({
+    getType = ( value ) => {
+        this.setState( {
             type: value
-        })
+        } )
     }
 
     render() {
-        if ( this.state.redirect ) {
-            console.log( 'redirecting' );
-            return <Redirect
-                to={{
-                    pathname: "/dashboard",
-                    state: {
-                        username: this.orgUsername,
-                        organization: this.organization
-                    }
-                }}
-            />
-        }
         return (
             <div>
                 <Layout>
