@@ -23,14 +23,11 @@ router.post(
     awaitHandler( async ( req, res ) => {
         
        let carData = new car({
-        carName : req.body.carName,
         manufacturer: req.body.manufacturer,
         model: req.body.model,
         trim: req.body.trim,
         year: req.body.year,
         Msrp : req.body.Msrp,
-        
-
     });
        carData.save(function(err) {
         if (err) throw err;
@@ -44,4 +41,10 @@ router.get('/getCar',awaitHandler(async(req,res)=>{
     let data =  await car.findOne({_id: req.query.carID});  
   res.send(data);
 }))
+
+router.get( '/getAllCars', awaitHandler( async ( req, res ) => {
+    let data = await car.find( );
+    res.send( data );
+} ) )
+
 module.exports = router
