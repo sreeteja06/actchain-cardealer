@@ -9,9 +9,7 @@
 
  */
 import axios from 'axios';
-let XTOKEN = localStorage.getItem('carDealer_X_auth')
 export default axios.create( {
     baseURL: 'http://localhost:4003/',
     // timeout: 1000,
-    headers: { 'x-auth': XTOKEN }
 } );

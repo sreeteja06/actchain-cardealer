@@ -22,13 +22,14 @@ import IconButton from '@material-ui/core/IconButton';
 import LogoutIcon from '@material-ui/icons/PowerSettingsNewOutlined';
 import MenuIcon from '@material-ui/icons/Menu';
 import ChevronLeftIcon from '@material-ui/icons/ChevronLeft';
-import Market from '../Market/Market';
+import Market from '../../containers/MarketContainer/MarketContainer';
 import { DealerNavItems, BuyerNavItems } from './listitems';
 import CarDetails from '../CarDetails/CarDetails'
 import AddCar from '../AddCar/AddCar'
 import GetQuote from '../GetQuote/GetQuote'
 import BuyerTable from '../BuyerTable/BuyerTable'
 import DealerSubscribe from '../DealerSubscribe/DealerSubscribe';
+import axios from '../../axios'
 
 const drawerWidth = 240;
 
@@ -120,7 +121,6 @@ const DashboardNav = ( props ) => {
   if(!XToken){
     props.history.push( '/' )
   }
-  console.log("TCL: DashboardNav -> XToken", XToken)
   let firstCard = 'Market'
   if(userType === 'Buyer'){
       firstCard = 'Dashboard'
@@ -145,8 +145,13 @@ const DashboardNav = ( props ) => {
     setSelectedIndex( index );
     setSelectedNavItem( navItem );
   }
-  function logout(){
-    localStorage.removeItem('carDealer_X_auth');
+  async function logout(){
+    await axios.delete( '/users/logout', {
+      headers: {
+        'x-auth': localStorage.getItem( 'carDealer_X_auth' )
+      }
+    })
+    localStorage.clear();
     props.history.push('/')
   }
   return (

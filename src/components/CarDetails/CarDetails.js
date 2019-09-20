@@ -10,8 +10,43 @@
  */
 import React from 'react';
 import MUIDataTable from "mui-datatables";
+import axios from '../../axios'
+import SnakBar from '../SnackBar/SnackBar'
 
-export default function addCar() {
+export default function AddCar() {
+    const [data, setData] = React.useState( [] );
+    const [showSnakBar, setShowSnakBar] = React.useState( false )
+    const [snakBarMessage, setSnakBarMessage] = React.useState()
+    const [snakBarVarient, setSnakBarVarient] = React.useState( 'success' )
+
+    React.useEffect( () => {
+        const fetchData = async () => {
+            try {
+                if ( showSnakBar ) {
+                    await setShowSnakBar( false );
+                }
+                const result = await axios(
+                    `car/getAllCars`, {
+                    headers: {
+                        'x-auth': localStorage.getItem( 'carDealer_X_auth' )
+                    }
+                }
+                );
+                if(result.status === 200){
+                    setData( result.data )
+                }else{
+                    setSnakBarMessage( "error getting car details" )
+                    setSnakBarVarient( 'error' );
+                    setShowSnakBar( true )
+                }
+            } catch ( e ) {
+                setSnakBarMessage( "error getting car details" )
+                setSnakBarVarient( 'error' );
+                setShowSnakBar( true )
+            }
+        };
+        fetchData();
+    }, [] );
 
     const columns = [
         {
@@ -21,7 +56,7 @@ export default function addCar() {
                 filter: true,
                 sort: true,
             }
-        }, 
+        },
         {
             name: "model",
             label: "Model",
@@ -47,33 +82,13 @@ export default function addCar() {
             }
         },
         {
-            name: "MSRP",
+            name: "Msrp",
             label: "MSRP",
             options: {
                 filter: true,
                 sort: true,
             }
         }
-    ];
-
-    function createData( model, manufacturer, trim, year, MSRP ) {
-        return { model, manufacturer, trim, year, MSRP };
-    }
-
-    const data = [
-        createData( 'Cupcake', "Audi", "LXI", 2019, 5.3 ),
-        createData( 'Donut', "Benz", "VDI", 2015, 5.3 ),
-        createData( 'Eclair', "Ferrari", "XR", 1992, 5.3 ),
-        createData( 'Frozen yoghurt', "Lambo", "PRO", 2014, 5.3 ),
-        createData( 'Gingerbread', "HG", 16.0, 1999, 5.3 ),
-        createData( 'Honeycomb', "VW", 3.2, 2000, 5.3 ),
-        createData( 'Ice cream sandwich', "BMW", 9.0, 2004, 5.3 ),
-        createData( 'Jelly Bean', "Bugati", 0.0, 1996, 5.3 ),
-        createData( 'KitKat', "Skoda", 26.0, 2012, 5.3 ),
-        createData( 'Lollipop', "Yamaha", 0.2, 2010, 5.3 ),
-        createData( 'Marshmallow', "Astro Martin", 0, 2016, 5.3 ),
-        createData( 'Nougat', "KIA", 19.0, 1991, 5.3 ),
-        createData( 'Oreo', "Ford", 18.0, 1993, 5.3 ),
     ];
 
     const options = {
@@ -85,10 +100,15 @@ export default function addCar() {
     };
 
     return (
-        <MUIDataTable
-            data={data}
-            columns={columns}
-            options={options}
-        />
+        <div>
+            <MUIDataTable
+                data={data}
+                columns={columns}
+                options={options}
+            />
+            {showSnakBar ? <SnakBar message={snakBarMessage} variant={snakBarVarient} className={{
+                "margin": "theme.spacing( 1 )"
+            }}></SnakBar> : null}
+        </div>
     )
 }

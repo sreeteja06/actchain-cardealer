@@ -14,6 +14,7 @@ import TextField from '@material-ui/core/TextField';
 import { Grid } from '@material-ui/core'
 import { Button } from '@material-ui/core'
 import AddIcon from '@material-ui/icons/AddOutlined';
+import SnakBar from '../SnackBar/SnackBar'
 
 const useStyles = makeStyles( theme => ( {
     root: {
@@ -53,12 +54,21 @@ const onChangeManu = ( value, type ) => {
     car[type] = value
 }
 
-const addCarButtonClick = () => {
-    console.log( car )
-}
 
 export default function AddCar() {
     const classes = useStyles();
+    const [showSnakBar, setShowSnakBar] = React.useState(false)
+    const [snakBarMessage, setSnakBarMessage] = React.useState()
+    const [snakBarVarient, setSnakBarVarient] = React.useState('success')
+
+    const addCarButtonClick = async (e) => {
+        setSnakBarMessage("successfully subscribed to car manufacturer")
+        if(showSnakBar){
+            await setShowSnakBar( false );
+        }
+        console.log( car )
+        await setShowSnakBar(true);
+    }
 
     return (
         <form className={classes.root} noValidate>
@@ -84,6 +94,7 @@ export default function AddCar() {
                     <AddIcon />
                 </Button>
             </Grid>
+            {showSnakBar ? <SnakBar message={snakBarMessage} variant={snakBarVarient} className={classes.margin}></SnakBar>:null}
         </form>
     );
 }

@@ -14,6 +14,8 @@ import TextField from '@material-ui/core/TextField';
 import { Grid } from '@material-ui/core'
 import { Button } from '@material-ui/core'
 import AddIcon from '@material-ui/icons/AddOutlined';
+import axios from '../../axios';
+import SnakBar from '../SnackBar/SnackBar'
 
 const useStyles = makeStyles( theme => ( {
     root: {
@@ -53,16 +55,47 @@ let car = {
     msrp: '20000'
 }
 
-const onChangeManu = (value, type) => {
-    car[type] = value
-}
-
-const addCarButtonClick = () => {
-    console.log(car)
-}
 
 export default function AddCar() {
     const classes = useStyles();
+    const [showSnakBar, setShowSnakBar] = React.useState( false )
+    const [snakBarMessage, setSnakBarMessage] = React.useState()
+    const [snakBarVarient, setSnakBarVarient] = React.useState( 'success' )
+    
+    const addCarButtonClick = async () => {
+        try{
+        if ( showSnakBar ) {
+            await setShowSnakBar( false );
+        }
+        let response = await axios.post( '/car/createCar', {
+            "manufacturer": car.manufacturer,
+            "model": car.model,
+            "trim": car.trim,
+            "year": car.year,
+            "Msrp": car.msrp
+        }, {
+            headers: {
+                'x-auth': localStorage.getItem( 'carDealer_X_auth' )
+            }
+        } )
+        if ( response.status === 200 ){
+            setSnakBarMessage( "successfully added car model" )
+        }else{
+            setSnakBarMessage( "error adding car model" )
+            setSnakBarVarient('error');
+        }
+        await setShowSnakBar(true)
+        }catch(e){
+            console.error(e);
+            setSnakBarMessage( "error adding car model" )
+            setSnakBarVarient( 'error' );
+            await setShowSnakBar( true )
+        }
+    }
+
+    const onChangeManu = ( value, type ) => {
+        car[type] = value
+    }
 
     return (
         <form className={classes.root} noValidate>
@@ -79,7 +112,7 @@ export default function AddCar() {
                     variant="outlined"
                     defaultValue="BMW"
                     id="Manufacturer"
-                    onChange = {e => onChangeManu(e.target.value, "manufacturer")}
+                    onChange={e => onChangeManu( e.target.value, "manufacturer" )}
                 />
                 <ValidationTextField
                     className={classes.margin}
@@ -118,12 +151,13 @@ export default function AddCar() {
                     onChange={e => onChangeManu( e.target.value, "msrp" )}
                 />
                 <Button
-                    style={{ "backgroundColor": "rgb(25,123,189)", "color": "white", "padding": "10px"}}
-                    onClick={e => addCarButtonClick(e)}>
+                    style={{ "backgroundColor": "rgb(25,123,189)", "color": "white", "padding": "10px" }}
+                    onClick={e => addCarButtonClick( e )}>
                     Add Car
-                    <AddIcon/>
+                    <AddIcon />
                 </Button>
             </Grid>
+            {showSnakBar ? <SnakBar message={snakBarMessage} variant={snakBarVarient} className={classes.margin}></SnakBar> : null}
         </form>
     );
 }

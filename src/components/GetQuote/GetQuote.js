@@ -9,158 +9,162 @@
 
  */
 import React from 'react';
-import { makeStyles } from '@material-ui/core/styles';
-import InputLabel from '@material-ui/core/InputLabel';
-import FormControl from '@material-ui/core/FormControl';
-import Select from '@material-ui/core/Select';
-import { Grid } from '@material-ui/core'
+import MUIDataTable from "mui-datatables";
+import axios from '../../axios'
 import { Button } from '@material-ui/core'
-import SendIcon from '@material-ui/icons/Send';
+import SnakBar from '../SnackBar/SnackBar'
+import { resolveTxt } from 'dns';
 
-const useStyles = makeStyles( theme => ( {
-    root: {
-        display: 'flex',
-        flexWrap: 'wrap',
-    },
-    formControl: {
-        margin: theme.spacing( 1 ),
-        minWidth: 150,
-    },
-    selectEmpty: {
-        marginTop: theme.spacing( 2 ),
-    },
-    gridMargin: {
-        marginTop: '7%'
-    }
-} ) );
+export default function GetQuote() {
+    const [data, setData] = React.useState( [] );
+    const [showSnakBar, setShowSnakBar] = React.useState( false )
+    const [snakBarMessage, setSnakBarMessage] = React.useState()
+    const [snakBarVarient, setSnakBarVarient] = React.useState( 'success' )
 
-export default function NativeSelects() {
-    const classes = useStyles();
-    const [state, setState] = React.useState( {
-        manufacturer: 'BMW',
-        model: 'S07',
-        trim: 'Lxi',
-        year: '2007'
-    } );
-
-    const inputLabel = React.useRef( null );
-    const [labelWidth, setLabelWidth] = React.useState( 0 );
     React.useEffect( () => {
-        setLabelWidth( inputLabel.current.offsetWidth );
+        const fetchData = async () => {
+            try {
+                if ( showSnakBar ) {
+                    await setShowSnakBar( false );
+                }
+                const result = await axios(
+                    `car/getAllCars`, {
+                    headers: {
+                        'x-auth': localStorage.getItem( 'carDealer_X_auth' )
+                    }
+                }
+                );
+                if ( result.status === 200 ) {
+                    setData( result.data )
+                } else {
+                    setSnakBarMessage( "error getting car details" )
+                    setSnakBarVarient( 'error' );
+                    setShowSnakBar( true )
+                }
+            } catch ( e ) {
+                setSnakBarMessage( "error getting car details" )
+                setSnakBarVarient( 'error' );
+                setShowSnakBar( true )
+            }
+        };
+        fetchData();
     }, [] );
 
-    const handleChange = name => event => {
-        setState( {
-            ...state,
-            [name]: event.target.value,
-        } );
+    const getQuote = async ( e ) => {
+        try {
+            if ( showSnakBar ) {
+                await setShowSnakBar( false );
+            }
+            let result = await axios.post( '/customer/requestACar', {
+                carID: e[0]
+            }, {
+                headers: {
+                    'x-auth': localStorage.getItem( 'carDealer_X_auth' )
+                }
+            } )
+            if ( result.status !== 200 ){
+                setSnakBarMessage( "error asking quote" )
+                setSnakBarVarient( 'error' );
+                setShowSnakBar( true )
+            } else{
+                setSnakBarMessage( "success asking quote" )
+                setSnakBarVarient( 'success' );
+                setShowSnakBar( true )
+            }
+        } catch ( e ) {
+            setSnakBarMessage( "error asking quote" )
+            setSnakBarVarient( 'error' );
+            setShowSnakBar( true )
+        }
+    }
+
+    const columns = [
+        {
+            name: "_id",
+            label: "Car ID",
+            options: {
+                filter: true,
+                sort: true,
+                display: false
+            }
+        },
+        {
+            name: "manufacturer",
+            label: "Manufacturer",
+            options: {
+                filter: true,
+                sort: true,
+            }
+        },
+        {
+            name: "model",
+            label: "Model",
+            options: {
+                filter: true,
+                sort: true,
+            }
+        },
+        {
+            name: "trim",
+            label: "Trim",
+            options: {
+                filter: true,
+                sort: true,
+            }
+        },
+        {
+            name: "year",
+            label: "Year",
+            options: {
+                filter: true,
+                sort: true,
+            }
+        },
+        {
+            name: "Msrp",
+            label: "MSRP",
+            options: {
+                filter: true,
+                sort: true,
+            }
+        },
+        {
+            name: "GetQuote",
+            label: "Get Quote",
+            options: {
+                filter: false,
+                sort: false,
+                customBodyRender: ( value, tableMeta, updateValue ) => {
+                    return (
+                        <Button
+                            style={{ "backgroundColor": "rgb(25,123,189)", "color": "white" }}
+                            onClick={e => getQuote( tableMeta.rowData )}>
+                            Get Quote
+                        </Button>
+                    );
+                }
+            }
+        },
+    ];
+
+    const options = {
+        filterType: 'checkbox',
+        selectableRows: 'none',
+        responsive: 'scrollFullHeight',
+        rowsPerPage: 5,
+        rowsPerPageOptions: [5, 10, 20, 30, 50, 100]
     };
 
-    const getQuotaButtonClick = (e) => {
-        console.log(state)
-    }
-
-    const manufacturers = ['manu1', 'manu2', 'manu3', 'manu4'];
-    const renderManuList = () => {
-        let list = [];
-        for ( let i = 0; i < manufacturers.length; i++ ) {
-            list.push( <option value={manufacturers[i]}>{manufacturers[i]}</option> )
-        }
-        return list;
-    }
-
     return (
-        <div className={classes.root}>
-            <Grid
-                className={classes.gridMargin}
-                container
-                direction="column"
-                justify="center"
-                alignItems="center">
-                    {/* \\\\\\\\\\\\\\\\\\ */}
-                <FormControl variant="outlined" className={classes.formControl}>
-                    <InputLabel ref={inputLabel} required htmlFor="outlined-age-native-simple">
-                        Manufacturer
-                </InputLabel>
-                    <Select
-                        native
-                        value={state.manufacturer}
-                        onChange={handleChange( 'manufacturer' )}
-                        labelWidth={labelWidth}
-                        inputProps={{
-                            name: 'Manufacturer',
-                            id: 'outlined-age-native-simple',
-                        }}
-                    >
-                        <option value="" />
-                        {renderManuList()}
-                    </Select>
-                </FormControl>
-
-                <FormControl variant="outlined" className={classes.formControl}>
-                    <InputLabel ref={inputLabel} required htmlFor="outlined-age-native-simple1">
-                        Model
-                </InputLabel>
-                    <Select
-                        native
-                        value={state.model}
-                        onChange={handleChange( 'model' )}
-                        labelWidth={labelWidth}
-                        inputProps={{
-                            name: 'model',
-                            id: 'outlined-age-native-simple1',
-                        }}
-                    >
-                        <option value="" />
-                        {renderManuList()}
-                    </Select>
-                </FormControl>
-
-                <FormControl variant="outlined" className={classes.formControl}>
-                    <InputLabel ref={inputLabel} required htmlFor="outlined-age-native-simple2">
-                        Trim
-                </InputLabel>
-                    <Select
-                        native
-                        value={state.trim}
-                        onChange={handleChange( 'trim' )}
-                        labelWidth={labelWidth}
-                        inputProps={{
-                            name: 'trim',
-                            id: 'outlined-age-native-simple2',
-                        }}
-                    >
-                        <option value="" />
-                        {renderManuList()}
-                    </Select>
-                </FormControl>
-
-                <FormControl variant="outlined" className={classes.formControl}>
-                    <InputLabel ref={inputLabel} required htmlFor="outlined-age-native-simple3">
-                        Year
-                </InputLabel>
-                    <Select
-                        native
-                        value={state.year}
-                        onChange={handleChange( 'year' )}
-                        labelWidth={labelWidth}
-                        inputProps={{
-                            name: 'year',
-                            id: 'outlined-age-native-simple3',
-                        }}
-                    >
-                        <option value="" />
-                        {renderManuList()}
-                    </Select>
-                </FormControl>
-                {/* \\\\\\\\\\\\\\\\\\ */}
-                <Button
-                    style={{ "backgroundColor": "rgb(25,123,189)", "color": "white", "padding": "10px" }}
-                    onClick={e => getQuotaButtonClick( e )}>
-                    Get Quote
-                    <SendIcon />
-                </Button>
-            </Grid>
+        <div>
+            <MUIDataTable
+                data={data}
+                columns={columns}
+                options={options}
+            />
+            {showSnakBar ? <SnakBar message={snakBarMessage} variant={snakBarVarient} className={{
+                "margin": "theme.spacing( 1 )"
+            }}></SnakBar> : null}
         </div>
-    );
+    )
 }

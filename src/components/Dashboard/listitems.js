@@ -35,7 +35,7 @@ export const DealerNavItems = ( props ) => (
             <ListItemIcon style={{ "color": '#FFFFFF' }}>
                 <BarChartIcon />
             </ListItemIcon>
-            <ListItemText primary="Cars Stock" />
+            <ListItemText primary="Cars" />
         </ListItem>
         <ListItem button
             onClick={event => props.handleListItemClick( event, 3, "Subscribe" )}
@@ -65,14 +65,14 @@ export const BuyerNavItems = (props) => (
             <ListItemIcon style={{ "color": '#FFFFFF' }}>
                 <DashboardIcon />
             </ListItemIcon>
-            <ListItemText primary="Current month" />
+            <ListItemText primary="Dashboard" />
         </ListItem>
         <ListItem button onClick={event => props.handleListItemClick( event, 1, "getQuote" )}
             selected={props.selectedIndex === 1}>
             <ListItemIcon style={{ "color": '#FFFFFF' }}>
                 <AddIcon />
             </ListItemIcon>
-            <ListItemText primary="Last quarter" />
+            <ListItemText primary="Get Quote" />
         </ListItem>
     </div>
 );

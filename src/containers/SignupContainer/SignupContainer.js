@@ -12,6 +12,7 @@ import React, { Component } from 'react';
 import Card from '../../components/Cards/Card'
 import axios from '../../axios'
 import Layout from '../../Layout/Layout';
+import SnakBar from '../../components/SnackBar/SnackBar'
 
 class LoginContainer extends Component {
     state = {
@@ -24,22 +25,48 @@ class LoginContainer extends Component {
         lastname: '',
         phone: '',
         ID: '',
-        type: 'Buyer'
+        type: 'Buyer',
+        showSnakBar: false,
+        snakBarMessage: '',
+        snakBarVarient: 'warn'
     }
 
     SignupHandler = async ( e ) => {
         e.preventDefault()
         // console.log( `${JSON.stringify(this.state)}` )
-        let response = await axios.post( "users", {
-            "email": this.state.email,
-            "password": this.state.password,
-            "role": this.state.type,
-            "ID": this.state.ID,
-            "firstName": this.state.firstname,
-            "lastName": this.state.lastname
-        } )
-        localStorage.setItem( 'carDealer_X_auth', response.data.user.tokens[response.data.user.tokens.length - 1].token )
-        this.props.history.push( { pathname: '/dashboard', state: { role: this.state.type } } )
+        try {
+            if ( this.state.showSnakBar ) {
+                await this.setState( {
+                    showSnakBar: false
+                } )
+            }
+            let response = await axios.post( "users", {
+                "email": this.state.email,
+                "password": this.state.password,
+                "role": this.state.type,
+                "ID": this.state.ID,
+                "firstName": this.state.firstname,
+                "lastName": this.state.lastname
+            } )
+            if ( response.status === 200 ) {
+                localStorage.setItem( 'carDealer_X_auth', response.data.user.tokens[response.data.user.tokens.length - 1].token )
+                localStorage.setItem( 'carDealer_userid', response.data.user._id )
+                this.props.history.push( { pathname: '/dashboard', state: { role: this.state.type } } )
+            } else {
+                this.setState( {
+                    showSnakBar: true,
+                    snakBarMessage: 'error logging in',
+                    snakBarVarient: 'error'
+                } )
+            }
+        } catch ( e ) {
+            this.setState( {
+                showSnakBar: true,
+                snakBarMessage: 'can not load data',
+                snakBarVarient: 'error'
+            } )
+        }
+
     }
 
     getEmail = ( e ) => {
@@ -99,6 +126,9 @@ class LoginContainer extends Component {
                         ID={this.getId}
                         usertype={this.getType} />
                 </Layout>
+                {this.state.showSnakBar ? <SnakBar message={this.state.snakBarMessage} variant={this.state.snakBarVarient} className={{
+                    "margin": "theme.spacing( 1 )"
+                }}></SnakBar> : null}
             </div>
         );
     }
