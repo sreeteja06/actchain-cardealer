@@ -5,6 +5,7 @@ require( '../config/config' );
 let customerDB = require( '../models/customer' );
 let carDB = require( '../models/car' );
 let requestDB = require('../models/request')
+const { authenticate } = require('../middleware/authentication');
 const awaitHandler = fn => {
     return async ( req, res, next ) => {
         try {
@@ -20,12 +21,12 @@ router.get('/',awaitHandler(async(req,res)=>{
 }))
 
 router.post(
-    '/requestACar',
+    '/requestACar', authenticate,
     awaitHandler( async ( req, res ) => {
          
        let requestData = new requestDB({
         carID : req.body.carID,
-        customerID: req.body.customerID,
+        customerID: req.user._id,
         
     });
        requestData.save(function(err) {

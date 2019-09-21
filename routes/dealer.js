@@ -3,8 +3,10 @@ let router = express.Router()
 let { mongoose } = require( '../db/mongoose' );
 require( '../config/config' );
 let dealerDB = require( '../models/dealer' );
+let userDB = require( '../models/user' )
 let car = require( '../models/car' );
 let requestDB = require( '../models/request' )
+let { authenticate } = require( '../middleware/authentication' )
 const awaitHandler = fn => {
     return async ( req, res, next ) => {
         try {
@@ -21,14 +23,16 @@ router.get( '/', awaitHandler( async ( req, res ) => {
 } ) )
 
 router.post(
-    '/quoteDiscount',
+    '/quoteDiscount', authenticate,
     awaitHandler( async ( req, res ) => {
-        let dealer = req.body.dealerID, point;
+        console.log(req.body)
+        let dealer = req.user._id, point;
+        console.log("TCL: dealer", dealer)
         let flag = false;
         var quote = { "dealerID": dealer, "Pricequote": req.body.Pricequote };
         let requested = await requestDB.findOne( { _id: req.body.requestID } );
         for ( let i = 0; i < requested.quotes.length; i++ ) {
-            if ( requested.quotes[i].dealerID == dealer ) {
+            if ( requested.quotes[i].dealerID == dealer.toString() ) {
                 flag = true;
                 point = i;
             }
@@ -45,9 +49,10 @@ router.post(
         for ( let i = 0; i < n; i++ ) {
             for ( let j = 1; j < ( n - i ); j++ ) {
                 if ( requested.quotes[j - 1].Pricequote < requested.quotes[j].Pricequote ) {
-                    let temp = requested.quotes[j - 1];
-                    requested.quotes[j - 1] = requested.quotes[j];
-                    requested.quotes[j] = temp;
+                    // let temp = requested.quotes[j - 1];
+                    // requested.quotes[j - 1] = requested.quotes[j];
+                    // requested.quotes[j] = temp;
+                    [requested.quotes[j], requested.quotes[j - 1]] = [requested.quotes[j - 1], requested.quotes[j]]
                 }
             }
         }
@@ -59,25 +64,28 @@ router.post(
         requested.save( function ( err ) {
             if ( err ) throw err;
             console.log( 'car successfully saved.' );
-            res.send( requested );
         } )
+        res.send( requested );
     } ) );
-router.get( '/market', awaitHandler( async ( req, res ) => {
+router.get( '/market', authenticate, awaitHandler( async ( req, res ) => {
     let requested = await requestDB.find();
     let detailsArray = [];
     let details = {};
     for ( let i = 0; i < requested.length; i++ ) {
+        details = {};
         details.requestID = ( requested[i]._id );
         details.carID = ( requested[i].carID );
         let carData = await car.findOne( { _id: requested[i].carID } );
+        let userData = await userDB.findOne( { _id: requested[i].customerID } );
+        details.name = userData.firstName + " " + userData.lastName
         details.manufacturer = carData.manufacturer;
         details.model = carData.model;
         details.trim = carData.trim;
         details.year = carData.year;
         details.Msrp = carData.Msrp;
-        if ( requested.quotes ) {
-            for ( let m = 0; m < requested.quotes.length; m++ ) {
-                if ( requested[i].quotes[m].dealerID == "5d834eef2534416e35682c46" ) { //!replace with dynamic dealerid(userid of dealer)
+        if ( requested[i].quotes ) {
+            for ( let m = 0; m < requested[i].quotes.length; m++ ) {
+                if ( requested[i].quotes[m].dealerID == req.user._id.toString() ) { //!replace with dynamic dealerid(userid of dealer)
                     details.rank = requested[i].quotes[m].rank;
                 }
             }
