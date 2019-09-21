@@ -69,7 +69,7 @@ router.post(
         res.send( requested );
     } ) );
 router.get( '/market', authenticate, awaitHandler( async ( req, res ) => {
-    let requested = await requestDB.find();
+    let requested = await requestDB.find({sold: false});
     let detailsArray = [];
     let details = {};
     for ( let i = 0; i < requested.length; i++ ) {
