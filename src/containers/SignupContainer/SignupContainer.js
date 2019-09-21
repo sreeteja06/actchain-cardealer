@@ -13,8 +13,16 @@ import Card from '../../components/Cards/Card'
 import axios from '../../axios'
 import Layout from '../../Layout/Layout';
 import SnakBar from '../../components/SnackBar/SnackBar'
+import OTPDialog from '../../components/OTPverifyDialog/OTPverifyDialog'
 
 class LoginContainer extends Component {
+
+    constructor( props ) {
+        super( props )
+
+        this.setOpen = this.setOpen.bind( this )
+    }
+
     state = {
         label: 'Something',
         header: 'Header',
@@ -28,7 +36,8 @@ class LoginContainer extends Component {
         type: 'Buyer',
         showSnakBar: false,
         snakBarMessage: '',
-        snakBarVarient: 'warn'
+        snakBarVarient: 'warn',
+        open: false
     }
 
     SignupHandler = async ( e ) => {
@@ -40,7 +49,7 @@ class LoginContainer extends Component {
                     showSnakBar: false
                 } )
             }
-            let response = await axios.post( "users", {
+            let response = await axios.post( "/users/signup", {
                 "email": this.state.email,
                 "password": this.state.password,
                 "role": this.state.type,
@@ -49,20 +58,19 @@ class LoginContainer extends Component {
                 "lastName": this.state.lastname
             } )
             if ( response.status === 200 ) {
-                localStorage.setItem( 'carDealer_X_auth', response.data.user.tokens[response.data.user.tokens.length - 1].token )
-                localStorage.setItem( 'carDealer_userid', response.data.user._id )
-                this.props.history.push( { pathname: '/dashboard', state: { role: this.state.type } } )
+                localStorage.setItem( 'carDealer_userid', response.data )
+                this.setOpen(true);
             } else {
                 this.setState( {
                     showSnakBar: true,
-                    snakBarMessage: 'error logging in',
+                    snakBarMessage: 'error signing up',
                     snakBarVarient: 'error'
                 } )
             }
         } catch ( e ) {
             this.setState( {
                 showSnakBar: true,
-                snakBarMessage: 'can not load data',
+                snakBarMessage: 'error signing up',
                 snakBarVarient: 'error'
             } )
         }
@@ -111,6 +119,17 @@ class LoginContainer extends Component {
         } )
     }
 
+    setOpen = ( value ) => {
+        this.setState({
+            open: value
+        })
+    }
+
+    verified = (type) => {
+        this.setOpen(false)
+        this.props.history.push( { pathname: '/dashboard', state: { role: type } } )
+    }
+
     render() {
         return (
             <div>
@@ -129,6 +148,7 @@ class LoginContainer extends Component {
                 {this.state.showSnakBar ? <SnakBar message={this.state.snakBarMessage} variant={this.state.snakBarVarient} className={{
                     "margin": "theme.spacing( 1 )"
                 }}></SnakBar> : null}
+                <OTPDialog open={this.state.open} setOpen={this.setOpen} verified={this.verified} values={{"email":this.state.email}}></OTPDialog>
             </div>
         );
     }

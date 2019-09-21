@@ -54,6 +54,7 @@ const useStyles = makeStyles( theme => ( {
 
 
 export default function SignUp(props) {
+
     function handleChangeType( event ) {
         setRadioValue( event.target.value );
         props.usertype( event.target.value )

@@ -46,7 +46,7 @@ export default function AddCar() {
             }
         };
         fetchData();
-    }, [] );
+    }, [showSnakBar, data] );
 
     const columns = [
         {
