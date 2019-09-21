@@ -10,6 +10,7 @@
  */
 let express = require( 'express' )
 let router = express.Router()
+let nodemailer = require('nodemailer')
 
 let { mongoose } = ( '../db/mongoose' );
 
@@ -41,7 +42,36 @@ router.post('/users/signup', awaitHandler( ( req, res ) => {
         OTP: Math.round( Math.random() * 1000000 ),
         ID: req.body.ID
     }
-    console.log("TCL: OTP", body.OTP)
+    console.log(body.email + ": OTP = " +  body.OTP)
+    //using nodemailer to send the otp to mail
+    var transporter = nodemailer.createTransport( {
+        host: "smtp.office365.com", // hostname
+        secureConnection: false, // TLS requires secureConnection to be false
+        port: 587, // port for secure SMTP
+        tls: {
+            ciphers: 'SSLv3'
+        },
+        auth: {
+            user: 'sreeteja@activa.one',
+            pass: process.env.EPASS
+        }
+    } );
+
+    var mailOptions = {
+        from: 'sreeteja@activa.one',
+        to: body.email,
+        subject: 'OTP for Actchain Car Dealer ',
+        text: 'OTP is '+body.OTP
+    };
+
+    transporter.sendMail( mailOptions, function ( error, info ) {
+        if ( error ) {
+            console.log( error );
+        } else {
+            console.log( 'Email sent: ' + info.response );
+        }
+    } );
+    //end of nodemailer
     let tempUser = new tempUserModel( body );
     tempUser.save(function(err){
         if(err){
