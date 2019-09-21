@@ -68,8 +68,8 @@ router.post(
         } )
         res.send( requested );
     } ) );
-router.get( '/market', authenticate ,awaitHandler( async ( req, res ) => {
-    let requested = await requestDB.find();
+router.get( '/market', authenticate, awaitHandler( async ( req, res ) => {
+    let requested = await requestDB.find({sold: false});
     let detailsArray = [];
     let details = {};
     let dealerData = await dealerDB.findOne({_user:req.query.dealerID});

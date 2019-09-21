@@ -74,5 +74,12 @@ export const BuyerNavItems = (props) => (
             </ListItemIcon>
             <ListItemText primary="Get Quote" />
         </ListItem>
+        <ListItem button onClick={event => props.handleListItemClick( event, 2, "BroughtCars" )}
+            selected={props.selectedIndex === 2}>
+            <ListItemIcon style={{ "color": '#FFFFFF' }}>
+                <BarChartIcon />
+            </ListItemIcon>
+            <ListItemText primary="Brought Cars" />
+        </ListItem>
     </div>
 );
