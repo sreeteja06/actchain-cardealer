@@ -39,6 +39,6 @@ services:
     depends_on:
       - cardealer_api
     ports:
-      - 3003:3003
+      - 3003:80
     networks: 
       - cardealer

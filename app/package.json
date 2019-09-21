@@ -15,7 +15,7 @@
     "sendotp-promise": "^1.0.5"
   },
   "scripts": {
-    "start": "PORT=3003 react-scripts start",
+    "start": "react-scripts start",
     "build": "react-scripts build",
     "test": "react-scripts test",
     "eject": "react-scripts eject",
@@ -25,8 +25,6 @@
   "eslintConfig": {
     "extends": "react-app"
   },
-  "proxy": "http://cardealer_api:4003",
-  "homepage": "https://sreeteja06.github.io/actchain-cardealer",
   "browserslist": {
     "production": [
       ">0.2%",

@@ -10,6 +10,6 @@
  */
 import axios from 'axios';
 export default axios.create( {
-    // baseURL: '',
+    baseURL: '/api',
     // timeout: 1000,
 } );
