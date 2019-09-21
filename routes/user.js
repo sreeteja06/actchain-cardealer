@@ -16,12 +16,14 @@ let { mongoose } = ( '../db/mongoose' );
 let User = require( '../models/user' );
 let Dealer = require( '../models/dealer' );
 let Customer = require( '../models/customer' );
+let tempUserModel = require('../models/tempUser');
 let { authenticate } = require( '../middleware/authentication' );
 require( '../config/config' );
 
 const awaitHandler = fn => {
     return async ( req, res, next ) => {
         try {
+            res.setHeader( 'Content-Type', 'application/json; charset=utf-8' );
             await fn( req, res, next );
         } catch ( err ) {
             next( err );
@@ -29,41 +31,66 @@ const awaitHandler = fn => {
     };
 };
 
-router.post( '/users', awaitHandler( ( req, res ) => {
+router.post('/users/signup', awaitHandler( ( req, res ) => {
     let body = {
         email: req.body.email,
         password: req.body.password,
         role: req.body.role,
         firstName: req.body.firstName,
         lastName: req.body.lastName,
+        OTP: Math.round( Math.random() * 1000000 ),
+        ID: req.body.ID
     }
-    let userData = {};
-    let user = new User( body );
-    user.save().then( () => {
-        return user.generateAuthToken();
-    } ).then(async ( token ) => {
-        let Obj
-        if ( req.body.role === 'Dealer' ) {
-            userData = {
-                dealerRegId: req.body.ID,
-                _user: user._id
-            }
-            let dealer = new Dealer( userData )
-            Obj = await dealer.save();
+    console.log("TCL: OTP", body.OTP)
+    let tempUser = new tempUserModel( body );
+    tempUser.save(function(err){
+        if(err){
+            res.end(500)
         }
-        else if( req.body.role === 'Buyer' ) {
-            userData = {
-                SSN: req.body.ID,
-                _user:user._id
-            }
-            let customer = new Customer( userData );
-            Obj = await customer.save();
+    })
+    res.send(tempUser._id);
+} ))
+
+router.post( '/users/verify', awaitHandler(async ( req, res ) => {
+    let tempUser = await tempUserModel.findOne({_id: req.body.tempuserID})
+    if(tempUser.OTP != req.body.OTP){
+        res.status( 401 ).end();
+    } else{
+        let body = {
+            email: tempUser.email,
+            password: req.body.password,
+            role: tempUser.role,
+            firstName: tempUser.firstName,
+            lastName: tempUser.lastName,
         }
-        res.header( 'x-auth', token ).send( {user, Obj} );
-    } ).catch( ( e ) => {
-        console.log(e)
-        res.status( 400 ).send( e );
-    } )
+        let userData = {};
+        let user = new User( body );
+        user.save().then( () => {
+            return user.generateAuthToken();
+        } ).then( async ( token ) => {
+            let Obj
+            if ( tempUser.role === 'Dealer' ) {
+                userData = {
+                    dealerRegId: tempUser.ID,
+                    _user: user._id
+                }
+                let dealer = new Dealer( userData )
+                Obj = await dealer.save();
+            }
+            else if ( tempUser.role === 'Buyer' ) {
+                userData = {
+                    SSN: tempUser.ID,
+                    _user: user._id
+                }
+                let customer = new Customer( userData );
+                Obj = await customer.save();
+            }
+            res.header( 'x-auth', token ).send( { user, Obj } );
+        } ).catch( ( e ) => {
+            console.log( e )
+            res.status( 400 ).send( e );
+        } )
+    }
 } ) );
 
 router.post( '/users/login', awaitHandler( ( req, res ) => {
