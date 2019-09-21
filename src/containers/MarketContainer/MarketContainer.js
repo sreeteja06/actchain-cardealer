@@ -16,6 +16,13 @@ import SelectInput from '@material-ui/core/Select/SelectInput';
 import SnakBar from '../../components/SnackBar/SnackBar'
 
 class MarketContainer extends Component {
+
+    constructor( props ) {
+        super( props )
+
+        this.refreshData = this.refreshData.bind( this )
+    }
+
     state = {
         data: [],
         showSnakBar: false,
@@ -31,7 +38,7 @@ class MarketContainer extends Component {
                 })
             }
             const result = await axios(
-                `/dealer/market?userID=${ localStorage.getItem( 'carDealer_userid' ) }`,{
+                `/dealer/market`,{
                     headers: {
                         'x-auth': localStorage.getItem( 'carDealer_X_auth' )
                     }
@@ -57,8 +64,12 @@ class MarketContainer extends Component {
         }
     };
 
+    async refreshData() {
+        await this.fetchData();
+    }
+
     async componentDidMount() {
-        await this.fetchData()
+        await this.fetchData();
     }
 
     // sleep = ( milliseconds ) => {
@@ -74,7 +85,7 @@ class MarketContainer extends Component {
     render() {
         return (
             <div>
-                <Market data={this.state.data}></Market>
+                <Market data={this.state.data} refreshMarket={this.refreshData} ></Market>
                 {this.state.showSnakBar ? <SnakBar message={this.state.snakBarMessage} variant={this.state.snakBarVarient} className={{
                     "margin": "theme.spacing( 1 )"
                 }}></SnakBar> : null}

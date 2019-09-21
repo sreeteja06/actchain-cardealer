@@ -13,7 +13,6 @@ import MUIDataTable from "mui-datatables";
 import axios from '../../axios'
 import { Button } from '@material-ui/core'
 import SnakBar from '../SnackBar/SnackBar'
-import { resolveTxt } from 'dns';
 
 export default function GetQuote() {
     const [data, setData] = React.useState( [] );

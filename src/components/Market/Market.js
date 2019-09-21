@@ -141,7 +141,7 @@ const Market = ( props ) => {
                 columns={columns}
                 options={options}
             />
-            <QuoteDialog open={open} setOpen={setOpen} values={dialogProps}></QuoteDialog>
+            <QuoteDialog open={open} setOpen={setOpen} refreshMarket={props.refreshMarket} values={dialogProps}></QuoteDialog>
 
         </div>
     )

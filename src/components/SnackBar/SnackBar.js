@@ -22,6 +22,7 @@ import Snackbar from '@material-ui/core/Snackbar';
 import SnackbarContent from '@material-ui/core/SnackbarContent';
 import WarningIcon from '@material-ui/icons/Warning';
 import { makeStyles } from '@material-ui/core/styles';
+import Slide from '@material-ui/core/Slide'
 
 const variantIcon = {
     success: CheckCircleIcon,
@@ -85,6 +86,10 @@ export default function CustomizedSnackbars(props) {
         setOpen( false );
     };
 
+    function Transition( props ) {
+        return <Slide {...props} direction="left" />;
+    }
+
     return (
         <div>
             {/* <Button variant="outlined" className={classes.margin} onClick={handleClick}> */}
@@ -98,6 +103,7 @@ export default function CustomizedSnackbars(props) {
                 open={open}
                 autoHideDuration={6000}
                 onClose={handleClose}
+                TransitionComponent={Transition}
             >
                 <SnackbarContent
                     className={clsx( classes[variant], className )}

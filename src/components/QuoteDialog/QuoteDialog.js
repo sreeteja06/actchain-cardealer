@@ -51,6 +51,7 @@ export default function FormDialog( props ) {
                 } )
                 if ( result.status === 200 ) {
                     setSnakBarMessage( "successfully quoted discount" )
+                    props.refreshMarket();
                 }
                 else {
                     setSnakBarMessage( "error quoting discount" )
