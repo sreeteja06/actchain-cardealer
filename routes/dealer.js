@@ -44,6 +44,7 @@ router.post(
             console.log( "succesfully updated" );
             requested.quotes[point].Pricequote = req.body.Pricequote;
         }
+        console.log(requested.quotes)
         //sorting the array
         let n = requested.quotes.length;
         for ( let i = 0; i < n; i++ ) {
@@ -60,7 +61,7 @@ router.post(
         for ( let k = 0; k < requested.quotes.length; k++ ) {
             requested.quotes[k].rank = k + 1;
         }
-
+        requested.markModified('quotes');
         requested.save( function ( err ) {
             if ( err ) throw err;
             console.log( 'car successfully saved.' );
