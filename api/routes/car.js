@@ -5,6 +5,7 @@ require( '../config/config' );
 let customerDB = require( '../models/customer' );
 let car = require( '../models/car' );
 let requestDB = require('../models/request')
+let { authenticate } = require('../middleware/authentication')
 const awaitHandler = fn => {
     return async ( req, res, next ) => {
         try {

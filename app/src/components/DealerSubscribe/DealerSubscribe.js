@@ -15,6 +15,9 @@ import { Grid } from '@material-ui/core'
 import { Button } from '@material-ui/core'
 import AddIcon from '@material-ui/icons/AddOutlined';
 import SnakBar from '../SnackBar/SnackBar'
+import axios from '../../axios'
+import Paper from '@material-ui/core/Paper';
+import Typography from '@material-ui/core/Typography';
 
 const useStyles = makeStyles( theme => ( {
     root: {
@@ -26,6 +29,12 @@ const useStyles = makeStyles( theme => ( {
     },
     gridMargin: {
         marginTop: '7%'
+    },
+    paperroot: {
+        padding: theme.spacing( 2, 2 ),
+        marginLeft: "50px",
+        marginRight: "50px",
+        marginTop: "20px"
     }
 } ) );
 
@@ -43,7 +52,7 @@ const ValidationTextField = withStyles( {
             borderLeftWidth: 6,
             padding: '4px !important', // override inline-style
         },
-    },
+    }
 } )( TextField );
 
 let car = {
@@ -55,19 +64,82 @@ const onChangeManu = ( value, type ) => {
 }
 
 
-export default function AddCar() {
+export default function Subscribe() {
     const classes = useStyles();
-    const [showSnakBar, setShowSnakBar] = React.useState(false)
+    const [subscriptions, setSubscriptions] = React.useState( [] );
+    const [showSnakBar, setShowSnakBar] = React.useState( false )
     const [snakBarMessage, setSnakBarMessage] = React.useState()
-    const [snakBarVarient, setSnakBarVarient] = React.useState('success')
+    const [snakBarVarient, setSnakBarVarient] = React.useState( 'success' )
 
-    const addCarButtonClick = async (e) => {
-        setSnakBarMessage("successfully subscribed to car manufacturer")
-        if(showSnakBar){
-            await setShowSnakBar( false );
+    React.useEffect( () => {
+        const fetchData = async () => {
+            try {
+                if ( showSnakBar ) {
+                    await setShowSnakBar( false );
+                }
+                const result = await axios(
+                    `dealer/subscriptions`, {
+                    headers: {
+                        'x-auth': localStorage.getItem( 'carDealer_X_auth' )
+                    }
+                }
+                );
+                if ( result.status === 200 ) {
+                    setSubscriptions( result.data )
+                } else {
+                    setSnakBarMessage( "error getting car details" )
+                    setSnakBarVarient( 'error' );
+                    setShowSnakBar( true )
+                }
+            } catch ( e ) {
+                setSnakBarMessage( "error getting car details" )
+                setSnakBarVarient( 'error' );
+                setShowSnakBar( true )
+            }
+        };
+        fetchData();
+    }, [] );
+
+    const showSubscriptions = () => {
+        let manu = [];
+        for ( let i = 0; i < subscriptions.length; i++ ) {
+            manu.push(
+                <Paper className={classes.paperroot}>
+                    <Typography variant="h5" component="h3">
+                        {subscriptions[i]}
+                    </Typography>
+                </Paper>
+            )
         }
-        console.log( car )
-        await setShowSnakBar(true);
+        return manu;
+    }
+
+    const addCarButtonClick = async ( e ) => {
+        try {
+            if ( showSnakBar ) {
+                await setShowSnakBar( false );
+            }
+            let result = await axios.post( '/dealer/addSubscription', {
+                subscribe: car.manufacturer
+            }, {
+                headers: {
+                    'x-auth': localStorage.getItem( 'carDealer_X_auth' )
+                }
+            } )
+            if ( result.status === 200 ) {
+                setSnakBarMessage( "successfully subscribed to " + car.manufacturer )
+            }
+            else {
+                setSnakBarMessage( "error subscribing to " + car.manufacturer )
+                setSnakBarVarient( 'error' );
+            }
+            await setShowSnakBar( true )
+        } catch ( e ) {
+            console.error( e );
+            setSnakBarMessage( "error subscribing to " + car.manufacturer )
+            setSnakBarVarient( 'error' );
+            await setShowSnakBar( true )
+        }
     }
 
     return (
@@ -94,7 +166,22 @@ export default function AddCar() {
                     <AddIcon />
                 </Button>
             </Grid>
-            {showSnakBar ? <SnakBar message={snakBarMessage} variant={snakBarVarient} className={classes.margin}></SnakBar>:null}
+            <Grid
+                className={classes.gridMargin}
+                container
+                direction="column"
+                justify="center"
+                alignItems="center">
+            <Typography variant="h5" component="h3">Dealer Subscriptions</Typography>
+            </Grid>
+            <Grid
+                container
+                direction="row"
+                justify="center"
+                alignItems="center">
+                {showSubscriptions()}
+            </Grid>
+            {showSnakBar ? <SnakBar message={snakBarMessage} variant={snakBarVarient} className={classes.margin}></SnakBar> : null}
         </form>
     );
 }
