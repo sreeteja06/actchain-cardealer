@@ -25,6 +25,7 @@
   "eslintConfig": {
     "extends": "react-app"
   },
+  "proxy": "http://cardealer_api:4003",
   "homepage": "https://sreeteja06.github.io/actchain-cardealer",
   "browserslist": {
     "production": [
