@@ -47,7 +47,7 @@ export default function GetQuote() {
             }
         };
         fetchData();
-    }, [showSnakBar] );
+    }, [] );
 
     const getQuote = async ( e ) => {
         try {

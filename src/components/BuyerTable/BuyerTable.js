@@ -47,7 +47,7 @@ const BuyerTable = () => {
             }
         };
         fetchData();
-    }, [showSnakBar, data] );
+    }, [] );
 
 
     const AcceptDiscount = ( e ) => {
