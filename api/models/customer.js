@@ -11,6 +11,10 @@ let CustomerSchema = new mongoose.Schema({
         type: mongoose.Schema.Types.ObjectId,
         required: true,
     },
+    ownedCars: {
+        type:Array,
+        
+    }
 });
 
 

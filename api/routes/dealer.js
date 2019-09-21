@@ -92,6 +92,7 @@ router.get( '/market', authenticate, awaitHandler( async ( req, res ) => {
             }
         }
         detailsArray.push( details );
+        deatils={}
         // console.log(details);
     }
     res.send( detailsArray );

@@ -1,17 +1,17 @@
-const mongoose = require( 'mongoose' );
+const mongoose = require('mongoose');
 let requestSchema = new mongoose.Schema({
-    
-    carID:{
-        type:  mongoose.Schema.Types.ObjectId,
+
+    carID: {
+        type: mongoose.Schema.Types.ObjectId,
         required: true,
-        
+
     },
-    customerID:{
-        type:  mongoose.Schema.Types.ObjectId,
+    customerID: {
+        type: mongoose.Schema.Types.ObjectId,
         required: true,
-       
+
     },
-    quotes:[{
+    quotes: [{
         dealerID: {
             type: mongoose.Schema.Types.ObjectId,
             required: true,
@@ -20,10 +20,15 @@ let requestSchema = new mongoose.Schema({
             type: Number,
             required: true
         },
-        rank :{
-            type:Number,
-            required : true,    
+        rank: {
+            type: Number,
+            required: true,
         }
-    }]  
+    }],
+    sold: {
+        type: Boolean,
+        required: true,
+        default: false
+    }
 });
-module.exports = mongoose.model( 'request', requestSchema );
+module.exports = mongoose.model('request', requestSchema);
