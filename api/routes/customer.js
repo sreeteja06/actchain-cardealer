@@ -22,12 +22,14 @@ router.get('/', awaitHandler(async (req, res) => {
 }))
 
 router.post(
-    '/requestACar', authenticate,
+    '/requestACar',authenticate,
     awaitHandler(async (req, res) => {
 
         let requestData = new requestDB({
             carID: req.body.carID,
-            customerID: req.user._id,
+            // customerID: req.user._id,
+            customerID: req.body.customerID,
+            
 
         });
         requestData.save(function (err) {
@@ -60,7 +62,7 @@ router.get('/requestedCars', authenticate, awaitHandler(async (req, res) => {
 }))
 
 router.post(
-    '/acceptDeal',
+    '/acceptDeal',authenticate,
     awaitHandler(async (req, res) => {
 
         let requestData = await requestDB.findOne({ _id: req.body.requestID });
@@ -82,7 +84,7 @@ router.post(
     }
     ));
 //to get a single request details for testing
-router.get('/getARequestDetails', awaitHandler(async (req, res) => {
+router.get('/getARequestDetails',authenticate, awaitHandler(async (req, res) => {
     let data = await requestDB.findOne({_id:req.query.requestID} );
     res.send(data);
 }))

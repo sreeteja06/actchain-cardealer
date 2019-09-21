@@ -68,17 +68,25 @@ router.post(
         } )
         res.send( requested );
     } ) );
-router.get( '/market', authenticate, awaitHandler( async ( req, res ) => {
+router.get( '/market', authenticate ,awaitHandler( async ( req, res ) => {
     let requested = await requestDB.find();
     let detailsArray = [];
     let details = {};
+    let dealerData = await dealerDB.findOne({_user:req.query.dealerID});
+    let access=[];
+    access = dealerData.manufacturerAccess;
+    console.log(access);
     for ( let i = 0; i < requested.length; i++ ) {
-        details = {};
+        let carData = await car.findOne( { _id: requested[i].carID } );
+        
+        let userData = await userDB.findOne( { _id: requested[i].customerID } );
+        console.log(userData);
+        if(access.includes(carData.manufacturer)){
+            details={};
+            console.log("entered");
         details.requestID = ( requested[i]._id );
         details.carID = ( requested[i].carID );
-        let carData = await car.findOne( { _id: requested[i].carID } );
-        let userData = await userDB.findOne( { _id: requested[i].customerID } );
-        details.name = userData.firstName + " " + userData.lastName
+        details.name = userData.firstName + " " + userData.lastName;
         details.manufacturer = carData.manufacturer;
         details.model = carData.model;
         details.trim = carData.trim;
@@ -86,15 +94,25 @@ router.get( '/market', authenticate, awaitHandler( async ( req, res ) => {
         details.Msrp = carData.Msrp;
         if ( requested[i].quotes ) {
             for ( let m = 0; m < requested[i].quotes.length; m++ ) {
-                if ( requested[i].quotes[m].dealerID == req.user._id.toString() ) { //!replace with dynamic dealerid(userid of dealer)
+                if ( requested[i].quotes[m].dealerID == "5d83725d8efb995c14ac4604" ) { //!replace with dynamic dealerid(userid of dealer)
                     details.rank = requested[i].quotes[m].rank;
                 }
             }
         }
         detailsArray.push( details );
         deatils={}
-        // console.log(details);
-    }
+    }}
     res.send( detailsArray );
+} ) )
+
+router.post( '/addSubscription', authenticate ,awaitHandler( async ( req, res ) => {
+    let dealerData = await dealerDB.findOne({_id:req.body.dealerID}); // replace req.body.dealer with user._id
+    dealerData.manufacturerAccess.push(req.body.subscribe);
+    dealerData.save(function(err){
+        if (err) throw err;
+        console.log('car successfully saved.');
+        res.send(dealerData);
+    })
+  
 } ) )
 module.exports = router

@@ -19,7 +19,7 @@ router.get('/',awaitHandler(async(req,res)=>{
 }))
 
 router.post(
-    '/createCar',
+    '/createCar',authenticate,
     awaitHandler( async ( req, res ) => {
         
        let carData = new car({
@@ -33,16 +33,16 @@ router.post(
         if (err) throw err;
          
         console.log('car successfully saved.');
-        res.send( car );}
+        res.send( carData );}
         )}
 ));
 //get car
-router.get('/getCar',awaitHandler(async(req,res)=>{
+router.get('/getCar',authenticate,awaitHandler(async(req,res)=>{
     let data =  await car.findOne({_id: req.query.carID});  
   res.send(data);
 }))
 
-router.get( '/getAllCars', awaitHandler( async ( req, res ) => {
+router.get( '/getAllCars',authenticate, awaitHandler( async ( req, res ) => {
     let data = await car.find( );
     res.send( data );
 } ) )
