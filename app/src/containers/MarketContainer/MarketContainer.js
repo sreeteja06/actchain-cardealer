@@ -12,6 +12,7 @@ import React, { Component } from 'react';
 import Market from '../../components/Market/Market'
 import axios from '../../axios';
 import SnakBar from '../../components/SnackBar/SnackBar'
+import LinearProgress from '@material-ui/core/LinearProgress';
 
 class MarketContainer extends Component {
 
@@ -25,7 +26,8 @@ class MarketContainer extends Component {
         data: [],
         showSnakBar: false,
         snakBarMessage: '',
-        snakBarVarient: 'warn'
+        snakBarVarient: 'warn',
+        loaded: false
     }
 
     fetchData = async () => {
@@ -60,6 +62,9 @@ class MarketContainer extends Component {
                 snakBarVarient: 'error'
             } )
         }
+        this.setState({
+            loaded: true
+        })
     };
 
     async refreshData() {
@@ -83,7 +88,10 @@ class MarketContainer extends Component {
     render() {
         return (
             <div>
-                <Market data={this.state.data} refreshMarket={this.refreshData} ></Market>
+                {!this.state.loaded 
+                ? <LinearProgress color="secondary" />
+                :
+                <Market data={this.state.data} refreshMarket={this.refreshData} ></Market>}
                 {this.state.showSnakBar ? <SnakBar message={this.state.snakBarMessage} variant={this.state.snakBarVarient} className={{
                     "margin": "theme.spacing( 1 )"
                 }}></SnakBar> : null}

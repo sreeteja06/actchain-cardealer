@@ -12,12 +12,14 @@ import React from 'react';
 import MUIDataTable from "mui-datatables";
 import axios from '../../axios'
 import SnakBar from '../SnackBar/SnackBar'
+import LinearProgress from '@material-ui/core/LinearProgress';
 
 export default function AddCar() {
     const [data, setData] = React.useState( [] );
     const [showSnakBar, setShowSnakBar] = React.useState( false )
     const [snakBarMessage, setSnakBarMessage] = React.useState()
     const [snakBarVarient, setSnakBarVarient] = React.useState( 'success' )
+    const [loaded, setLoaded] = React.useState(false);
 
     React.useEffect( () => {
         const fetchData = async () => {
@@ -44,6 +46,7 @@ export default function AddCar() {
                 setSnakBarVarient( 'error' );
                 setShowSnakBar( true )
             }
+            setLoaded(true)
         };
         fetchData();
     }, [] );
@@ -101,11 +104,14 @@ export default function AddCar() {
 
     return (
         <div>
+            {!loaded
+            ? <LinearProgress color="secondary" />
+            :
             <MUIDataTable
                 data={data}
                 columns={columns}
                 options={options}
-            />
+            />}
             {showSnakBar ? <SnakBar message={snakBarMessage} variant={snakBarVarient} className={{
                 "margin": "theme.spacing( 1 )"
             }}></SnakBar> : null}

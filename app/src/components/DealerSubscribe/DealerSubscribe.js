@@ -18,6 +18,7 @@ import SnakBar from '../SnackBar/SnackBar'
 import axios from '../../axios'
 import Paper from '@material-ui/core/Paper';
 import Typography from '@material-ui/core/Typography';
+import CircularProgress from '@material-ui/core/CircularProgress';
 
 const useStyles = makeStyles( theme => ( {
     root: {
@@ -70,6 +71,7 @@ export default function Subscribe() {
     const [showSnakBar, setShowSnakBar] = React.useState( false )
     const [snakBarMessage, setSnakBarMessage] = React.useState()
     const [snakBarVarient, setSnakBarVarient] = React.useState( 'success' )
+    const [loaded, setLoaded] = React.useState(false)
 
     React.useEffect( () => {
         const fetchData = async () => {
@@ -96,6 +98,7 @@ export default function Subscribe() {
                 setSnakBarVarient( 'error' );
                 setShowSnakBar( true )
             }
+            setLoaded(true)
         };
         fetchData();
     }, [] );
@@ -179,7 +182,10 @@ export default function Subscribe() {
                 direction="row"
                 justify="center"
                 alignItems="center">
-                {showSubscriptions()}
+            {!loaded ? <CircularProgress className={classes.progress} color="secondary" /> 
+            :
+            showSubscriptions()
+            }
             </Grid>
             {showSnakBar ? <SnakBar message={snakBarMessage} variant={snakBarVarient} className={classes.margin}></SnakBar> : null}
         </form>

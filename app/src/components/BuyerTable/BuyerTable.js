@@ -13,12 +13,14 @@ import MUIDataTable from "mui-datatables";
 import { Button } from '@material-ui/core'
 import SnakBar from '../SnackBar/SnackBar'
 import axios from '../../axios'
+import LinearProgress from '@material-ui/core/LinearProgress';
 
 const BuyerTable = (props) => {
     const [data, setData] = React.useState( [] );
     const [showSnakBar, setShowSnakBar] = React.useState( false )
     const [snakBarMessage, setSnakBarMessage] = React.useState()
     const [snakBarVarient, setSnakBarVarient] = React.useState( 'success' )
+    const [loaded, setLoaded] = React.useState( false );
 
     React.useEffect( () => {
         const fetchData = async () => {
@@ -45,6 +47,7 @@ const BuyerTable = (props) => {
                 setSnakBarVarient( 'error' );
                 setShowSnakBar( true )
             }
+            setLoaded( true )
         };
         fetchData();
     }, [] );
@@ -177,11 +180,14 @@ const BuyerTable = (props) => {
 
     return (
         <div>
-            <MUIDataTable
-                data={data}
-                columns={columns}
-                options={options}
-            />
+            {!loaded
+                ? <LinearProgress color="secondary" />
+                :
+                <MUIDataTable
+                    data={data}
+                    columns={columns}
+                    options={options}
+                />}
             {showSnakBar ? <SnakBar message={snakBarMessage} variant={snakBarVarient} className={{
                 "margin": "theme.spacing( 1 )"
             }}></SnakBar> : null}
