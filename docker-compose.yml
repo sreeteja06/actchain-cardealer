@@ -24,6 +24,8 @@ services:
       - ./api:/usr/src/app
     ports:
       - 4003:4003
+    environment:
+      - EPASS=passofemail
     depends_on:
       - cardealer_mongo
     networks: 

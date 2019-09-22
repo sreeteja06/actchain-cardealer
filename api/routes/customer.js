@@ -28,10 +28,7 @@ router.post(
 
         let requestData = new requestDB( {
             carID: req.body.carID,
-            // customerID: req.user._id,
-            customerID: req.body.customerID,
-            
-
+            customerID: req.user._id,
         } );
         requestData.save( function ( err ) {
             if ( err ) throw err;
