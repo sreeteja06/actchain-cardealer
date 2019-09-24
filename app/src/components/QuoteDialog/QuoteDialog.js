@@ -23,22 +23,22 @@ export default function FormDialog( props ) {
     const [showSnakBar, setShowSnakBar] = React.useState( false )
     const [snakBarMessage, setSnakBarMessage] = React.useState()
     const [snakBarVarient, setSnakBarVarient] = React.useState( 'success' )
+    const [value, setValue] = React.useState()
     // const handleClickOpen = () => {
     //     setOpen( true );
     // };
     const handleCancel = () => {
         props.setOpen( false );
     };
-    let value;
     const handleSubmit = async () => {
         try {
             if ( showSnakBar ) {
                 await setShowSnakBar( false );
             }
             if ( validationError ) {
-                await setShowSnakBar( true );
                 setSnakBarVarient( 'warning' )
                 setSnakBarMessage( "only supported upto 1 decimals" )
+                await setShowSnakBar( true );
             }
             if ( !validationError ) {
                 let result = await axios.post( '/dealer/quoteDiscount', {
@@ -50,6 +50,7 @@ export default function FormDialog( props ) {
                     }
                 } )
                 if ( result.status === 200 ) {
+                    setSnakBarVarient( 'success' );
                     setSnakBarMessage( "successfully quoted discount" )
                     props.refreshMarket();
                 }
@@ -74,16 +75,24 @@ export default function FormDialog( props ) {
     }
 
     const inputHandler = event => {
+        let tempValue
         if ( event.target.value.length === 0 ) {
             setValidationError( true )
             return 0;
         }
-        value = parseFloat( event.target.value );
-        if ( countDecimals( value ) > 1 ) {
+        tempValue = parseFloat( event.target.value );
+        if ( countDecimals( tempValue ) > 1 ) {
             setValidationError( true )
-        } else if ( countDecimals( value ) <= 1 ) {
+        } else if ( countDecimals( tempValue ) <= 1 ) {
             setValidationError( false )
         }
+        if ( tempValue > 100 ) {
+            setValidationError( true )
+        }
+        if ( !tempValue){
+            setValidationError( true )
+        }
+        setValue(tempValue)
     }
 
     // VBA script
