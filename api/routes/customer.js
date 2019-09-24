@@ -111,7 +111,7 @@ router.get( '/getBroughtCars', authenticate, awaitHandler( async ( req, res ) =>
 router.get( '/getQuotableCars', authenticate, awaitHandler( async ( req, res ) => {
     let data = await carDB.find();
     for ( let i = 0; i < data.length; i++ ) {
-        let flag = requestDB.findOne( { carID: data[i]._id, customerID: req.user._id, sold: false } );
+        let flag = await requestDB.findOne( { carID: data[i]._id, customerID: req.user._id, sold: false } );
         let quotable = true
         if ( flag ) {
             quotable = false
