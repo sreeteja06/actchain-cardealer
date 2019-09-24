@@ -14,6 +14,7 @@ class LoginContainer extends Component {
   username = ''
   password = ''
   role = ''
+  dashBoardName = ''
 
   LoginHandler = async ( e ) => {
     e.preventDefault()
@@ -31,9 +32,10 @@ class LoginContainer extends Component {
       console.log( response )
       if ( response.status === 200 ) {
         this.role = response.data.role;
+        this.dashBoardName = response.data.firstName + response.data.lastName
         await localStorage.setItem( 'carDealer_X_auth', response.data.tokens[response.data.tokens.length - 1].token )
         await localStorage.setItem( 'carDealer_userid', response.data._id )
-        this.props.history.push( { pathname: '/dashboard', state: { role: this.role } } )
+        this.props.history.push( { pathname: '/dashboard', state: { role: this.role, dashBoardName: this.dashBoardName } } )
       } else {
         this.setState( {
           showSnakBar: true,

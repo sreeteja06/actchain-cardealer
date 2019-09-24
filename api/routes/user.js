@@ -77,8 +77,8 @@ router.post('/users/signup', awaitHandler( ( req, res ) => {
         if(err){
             res.end(500)
         }
+        res.send(tempUser._id);
     })
-    res.send(tempUser._id);
 } ))
 
 router.post( '/users/verify', awaitHandler(async ( req, res ) => {

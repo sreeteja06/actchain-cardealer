@@ -29,7 +29,7 @@ export default function GetQuote() {
                     await setShowSnakBar( false );
                 }
                 const result = await axios(
-                    `car/getAllCars`, {
+                    `customer/getQuotableCars`, {
                     headers: {
                         'x-auth': localStorage.getItem( 'carDealer_X_auth' )
                     }
@@ -131,6 +131,15 @@ export default function GetQuote() {
             }
         },
         {
+            name: "quotable",
+            label: "quotable",
+            options: {
+                filter: true,
+                sort: true,
+                display: false
+            }
+        },
+        {
             name: "GetQuote",
             label: "Get Quote",
             options: {
@@ -140,7 +149,8 @@ export default function GetQuote() {
                     return (
                         <Button
                             style={{ "backgroundColor": "rgb(25,123,189)", "color": "white" }}
-                            onClick={e => getQuote( tableMeta.rowData )}>
+                            onClick={e => getQuote( tableMeta.rowData )}
+                            disabled={tableMeta.rowData[6]}>
                             Get Quote
                         </Button>
                     );

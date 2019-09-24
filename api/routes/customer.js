@@ -25,7 +25,11 @@ router.get( '/', awaitHandler( async ( req, res ) => {
 router.post(
     '/requestACar', authenticate,
     awaitHandler( async ( req, res ) => {
-
+        const carDetails = await requestDB.findOne( { carID: req.body.carID, sold: false } );
+        if ( carDetails ) {
+            res.status( 400 ).send( "you already asked for a quote" );
+            return;
+        }
         let requestData = new requestDB( {
             carID: req.body.carID,
             customerID: req.user._id,
@@ -48,7 +52,8 @@ router.get( '/requestedCars', authenticate, awaitHandler( async ( req, res ) => 
         obj.requestID = requestsByCustomer[i]._id;
         if ( requestsByCustomer[i].quotes[0] ) {
             obj.discount = requestsByCustomer[i].quotes[0].Pricequote;
-            obj.dealerName = ( await userDB.findOne( { _id: requestsByCustomer[i].quotes[0].dealerID } ) ).firstName
+            let tempDealer = await userDB.findOne( { _id: requestsByCustomer[i].quotes[0].dealerID } )
+            obj.dealerName = tempDealer.firstName + tempDealer.lastName
         }
         let car = await carDB.findOne( { _id: requestsByCustomer[i].carID } )
         obj.manufacturer = car.manufacturer
@@ -90,7 +95,8 @@ router.get( '/getBroughtCars', authenticate, awaitHandler( async ( req, res ) =>
     for ( let i = 0; i < broughtCars.length; i++ ) {
         obj = {}
         obj.discount = ( await requestDB.findOne( { _id: broughtCars[i].requestID } ) ).quotes[0].Pricequote
-        obj.dealerName = ( await userDB.findOne( { _id: broughtCars[i].dealerID } ) ).firstName
+        let tempDealer = await userDB.findOne( { _id: requestsByCustomer[i].quotes[0].dealerID } )
+        obj.dealerName = tempDealer.firstName + tempDealer.lastName
         let car = await carDB.findOne( { _id: broughtCars[i].carID } )
         obj.manufacturer = car.manufacturer
         obj.model = car.model
@@ -100,6 +106,20 @@ router.get( '/getBroughtCars', authenticate, awaitHandler( async ( req, res ) =>
         arr.push(obj)
     }
     res.send(arr);
+} ) )
+
+router.get( '/getQuotableCars', authenticate, awaitHandler( async ( req, res ) => {
+    let data = await carDB.find();
+    for ( let i = 0; i < data.length; i++ ) {
+        let flag = requestDB.findOne( { carID: data[i]._id, customerID: req.user._id, sold: false } );
+        let quotable = true
+        if ( flag ) {
+            quotable = false
+        }
+        let temp = { ...data[i]._doc }
+        data[i] = { ...temp, quotable: quotable }
+    }
+    res.send( data );
 } ) )
 //to get a single request details for testing
 router.get( '/getARequestDetails', awaitHandler( async ( req, res ) => {
