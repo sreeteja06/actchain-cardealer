@@ -118,6 +118,7 @@ const useStyles = makeStyles( theme => ( {
 
 const DashboardNav = ( props ) => {
   const userType = props.location.state.role //use cookie or sessions later
+  const dashboardName = props.location.state.dashBoardName
   const XToken = localStorage.getItem('carDealer_X_auth')
   if(!XToken){
     props.history.push( '/' )
@@ -171,10 +172,10 @@ const DashboardNav = ( props ) => {
               <MenuIcon />
             </IconButton>
             <Typography component="h1" variant="h6" color="inherit" noWrap className={classes.title}>
-              {SelectedNavItem}
+              {SelectedNavItem === 'CarDetails' ? 'Cars For Sale' : SelectedNavItem}
             </Typography>
             <Typography component="h1" variant="h6" color="inherit" noWrap className={classes.title}>
-              {userType}
+              {dashboardName}
             </Typography>
             <IconButton 
               color="inherit"
@@ -217,7 +218,7 @@ const DashboardNav = ( props ) => {
           {SelectedNavItem === 'Dashboard' ? <BuyerTable></BuyerTable> : null}
           {SelectedNavItem === 'getQuote' ? <GetQuote></GetQuote> : null}
           {SelectedNavItem === 'Subscribe' ? <DealerSubscribe></DealerSubscribe> : null}
-          {SelectedNavItem === 'BroughtCars' ? <BroughtCars></BroughtCars> : null}
+          {SelectedNavItem === 'BoughtCars' ? <BroughtCars></BroughtCars> : null}
         </main>
       </div>
     </div>

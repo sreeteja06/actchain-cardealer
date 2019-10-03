@@ -125,12 +125,15 @@ router.get( '/market', authenticate, awaitHandler( async ( req, res ) => {
 
 router.post( '/addSubscription', authenticate, awaitHandler( async ( req, res ) => {
     let dealerData = await dealerDB.findOne( { _user: req.user._id } ); // replace req.body.dealer with user._id
-    dealerData.manufacturerAccess.push( req.body.subscribe );
-    dealerData.save( function ( err ) {
-        if ( err ) throw err;
-        console.log( 'car successfully saved.' );
-        res.send( dealerData );
-    } )
+    if(!dealerData.manufacturerAccess.includes(req.body.subscribe)){
+        dealerData.manufacturerAccess.push( req.body.subscribe );
+        dealerData.save( function ( err ) {
+            if ( err ) throw err;
+            res.send( dealerData );
+        } )
+    }else {
+        res.end(501)
+     }
 } ) )
 
 router.get( '/subscriptions', authenticate, awaitHandler( async ( req, res ) => {

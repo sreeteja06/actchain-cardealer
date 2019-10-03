@@ -29,7 +29,7 @@ export default function GetQuote() {
                     await setShowSnakBar( false );
                 }
                 const result = await axios(
-                    `car/getAllCars`, {
+                    `customer/getQuotableCars`, {
                     headers: {
                         'x-auth': localStorage.getItem( 'carDealer_X_auth' )
                     }
@@ -73,10 +73,21 @@ export default function GetQuote() {
                 setSnakBarVarient( 'success' );
                 setShowSnakBar( true )
             }
+            const result1 = await axios(
+                `customer/getQuotableCars`, {
+                headers: {
+                    'x-auth': localStorage.getItem( 'carDealer_X_auth' )
+                }
+            }
+            );
+            if ( result1.status === 200 ) {
+                setData( result1.data )
+            }
         } catch ( e ) {
             setSnakBarMessage( "error asking quote" )
             setSnakBarVarient( 'error' );
             setShowSnakBar( true )
+            setLoaded( true )
         }
     }
 
@@ -131,16 +142,32 @@ export default function GetQuote() {
             }
         },
         {
+            name: "quotable",
+            label: "quotable",
+            options: {
+                filter: true,
+                sort: true,
+                display: false
+            }
+        },
+        {
             name: "GetQuote",
             label: "Get Quote",
             options: {
                 filter: false,
                 sort: false,
                 customBodyRender: ( value, tableMeta, updateValue ) => {
+                    let styleObj;
+                    if ( !tableMeta.rowData[6] ){
+                        styleObj = { "backgroundColor": "grey", "color": "white" }
+                    }else {
+                        styleObj = { "backgroundColor": "rgb(25,123,189)", "color": "white" }
+                    }
                     return (
                         <Button
-                            style={{ "backgroundColor": "rgb(25,123,189)", "color": "white" }}
-                            onClick={e => getQuote( tableMeta.rowData )}>
+                            style={styleObj}
+                            onClick={e => getQuote( tableMeta.rowData )}
+                            disabled={!tableMeta.rowData[6]}>
                             Get Quote
                         </Button>
                     );

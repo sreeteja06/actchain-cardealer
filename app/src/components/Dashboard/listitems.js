@@ -74,12 +74,12 @@ export const BuyerNavItems = (props) => (
             </ListItemIcon>
             <ListItemText primary="Get Quote" />
         </ListItem>
-        <ListItem button onClick={event => props.handleListItemClick( event, 2, "BroughtCars" )}
+        <ListItem button onClick={event => props.handleListItemClick( event, 2, "BoughtCars" )}
             selected={props.selectedIndex === 2}>
             <ListItemIcon style={{ "color": '#FFFFFF' }}>
                 <BarChartIcon />
             </ListItemIcon>
-            <ListItemText primary="Brought Cars" />
+            <ListItemText primary="Bought Cars" />
         </ListItem>
     </div>
 );
