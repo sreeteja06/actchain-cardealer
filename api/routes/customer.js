@@ -23,9 +23,13 @@ router.get( '/', awaitHandler( async ( req, res ) => {
 } ) )
 
 router.post(
-    '/requestACar', authenticate,
+    '/requestACar',authenticate,
     awaitHandler( async ( req, res ) => {
-
+        const carDetails = await requestDB.findOne({carID:req.body.carID,sold:false});
+        if(carDetails){
+            res.status(400).send("you already asked for a quote");
+            return ; 
+        }
         let requestData = new requestDB( {
             carID: req.body.carID,
             customerID: req.user._id,
@@ -62,14 +66,20 @@ router.get( '/requestedCars', authenticate, awaitHandler( async ( req, res ) => 
 } ) )
 
 router.post(
-    '/acceptDeal',
+    '/acceptDeal',authenticate,
     awaitHandler( async ( req, res ) => {
 
         let requestData = await requestDB.findOne( { _id: req.body.requestID } );
         requestData.sold = true;
+        let dealerData = await dealerDB.findOne({_user :requestData.quotes[0].dealerID });
         let customerData = await customerDB.findOne( { _user: requestData.customerID } ); // can get customer from x-auth
         customerData.ownedCars.push( { carID: requestData.carID, requestID: requestData._id, dealerID: requestData.quotes[0].dealerID } );
+        dealerData.soldCars.push({ carID: requestData.carID, requestID: requestData._id,customerID:requestData.customerID});
         await customerData.save( function ( err ) {
+            if ( err ) throw err;
+        }
+        )
+        await dealerData.save( function ( err ) {
             if ( err ) throw err;
         }
         )
@@ -104,6 +114,21 @@ router.get( '/getBroughtCars', authenticate, awaitHandler( async ( req, res ) =>
 //to get a single request details for testing
 router.get( '/getARequestDetails', awaitHandler( async ( req, res ) => {
     let data = await requestDB.findOne( { _id: req.query.requestID } );
+    res.send( data );
+} ) )
+
+router.get( '/getQuotableCars', awaitHandler( async ( req, res ) => {
+    let data = await carDB.find();
+    for(let i=0;i<data.length;i++){
+    let flag = await requestDB.findOne({carID: data[i]._id, customerID: req.query.customerID,sold:false} );
+    let quotable = false
+    if(flag){
+        quotable = true
+    }
+    let temp = {...data[i]._doc}
+   
+    data[i] = {...temp,quotable:quotable}
+    }
     res.send( data );
 } ) )
 module.exports = router

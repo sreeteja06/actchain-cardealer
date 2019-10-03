@@ -18,6 +18,26 @@ const awaitHandler = fn => {
 };
 
 
+router.get( '/getSoldCars', authenticate, awaitHandler( async ( req, res ) => {
+    let soldCars = ( await dealerDB.findOne( { _user: req.user._id } ) ).soldCars
+    console.log( soldCars );
+    let arr = []
+    let obj = {}
+    for ( let i = 0; i < soldCars.length; i++ ) {
+        obj = {}
+        obj.discount = ( await requestDB.findOne( { _id: soldCars[i].requestID } ) ).quotes[0].Pricequote
+        obj.customerName = ( await userDB.findOne( { _id: soldCars[i].dealerID } ) ).firstName
+        let car = await carDB.findOne( { _id: soldCars[i].carID } )
+        obj.manufacturer = car.manufacturer
+        obj.model = car.model
+        obj.trim = car.trim
+        obj.year = car.year
+        obj.Msrp = car.Msrp
+        arr.push(obj)
+    }
+    res.send(arr);
+} ) )
+
 router.get( '/', awaitHandler( async ( req, res ) => {
     res.send( 'You are in dealer route' )
 } ) )
