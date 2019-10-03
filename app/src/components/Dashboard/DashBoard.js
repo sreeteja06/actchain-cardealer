@@ -30,6 +30,7 @@ import GetQuote from '../GetQuote/GetQuote'
 import BuyerTable from '../BuyerTable/BuyerTable'
 import DealerSubscribe from '../DealerSubscribe/DealerSubscribe';
 import BroughtCars from '../BroughtCars/BroughtCars'
+import CarsSold from '../CarsSold/CarsSold'
 import axios from '../../axios'
 
 const drawerWidth = 240;
@@ -219,6 +220,7 @@ const DashboardNav = ( props ) => {
           {SelectedNavItem === 'getQuote' ? <GetQuote></GetQuote> : null}
           {SelectedNavItem === 'Subscribe' ? <DealerSubscribe></DealerSubscribe> : null}
           {SelectedNavItem === 'BoughtCars' ? <BroughtCars></BroughtCars> : null}
+          {SelectedNavItem === 'CarsSold' ? <CarsSold></CarsSold> : null}
         </main>
       </div>
     </div>

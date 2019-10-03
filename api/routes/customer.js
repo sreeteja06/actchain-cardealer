@@ -3,6 +3,7 @@ let router = express.Router()
 let { mongoose } = require( '../db/mongoose' );
 require( '../config/config' );
 let customerDB = require( '../models/customer' );
+let dealerDB = require( '../models/dealer' );
 let carDB = require( '../models/car' );
 let requestDB = require( '../models/request' );
 let userDB = require( '../models/user' );
@@ -84,7 +85,7 @@ router.post(
             if ( err ) throw err;
         }
         )
-        requestData.save( function ( err ) {
+        await requestData.save( function ( err ) {
             if ( err ) throw err;
             console.log( 'car successfully saved.' );
             res.send( requestData );
@@ -101,7 +102,7 @@ router.get( '/getBroughtCars', authenticate, awaitHandler( async ( req, res ) =>
     for ( let i = 0; i < broughtCars.length; i++ ) {
         obj = {}
         obj.discount = ( await requestDB.findOne( { _id: broughtCars[i].requestID } ) ).quotes[0].Pricequote
-        let tempDealer = await userDB.findOne( { _id: requestsByCustomer[i].quotes[0].dealerID } )
+        let tempDealer = await userDB.findOne( { _id: broughtCars[i].dealerID } )
         obj.dealerName = tempDealer.firstName + tempDealer.lastName
         let car = await carDB.findOne( { _id: broughtCars[i].carID } )
         obj.manufacturer = car.manufacturer

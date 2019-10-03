@@ -4,7 +4,7 @@ let { mongoose } = require( '../db/mongoose' );
 require( '../config/config' );
 let dealerDB = require( '../models/dealer' );
 let userDB = require( '../models/user' )
-let car = require( '../models/car' );
+let carDB = require( '../models/car' );
 let requestDB = require( '../models/request' )
 let { authenticate } = require( '../middleware/authentication' )
 const awaitHandler = fn => {
@@ -26,7 +26,8 @@ router.get( '/getSoldCars', authenticate, awaitHandler( async ( req, res ) => {
     for ( let i = 0; i < soldCars.length; i++ ) {
         obj = {}
         obj.discount = ( await requestDB.findOne( { _id: soldCars[i].requestID } ) ).quotes[0].Pricequote
-        obj.customerName = ( await userDB.findOne( { _id: soldCars[i].dealerID } ) ).firstName
+        let tempBuyer = ( await userDB.findOne( { _id: soldCars[i].customerID } ) )
+        obj.customerName = tempBuyer.firstName + " " + tempBuyer.lastName
         let car = await carDB.findOne( { _id: soldCars[i].carID } )
         obj.manufacturer = car.manufacturer
         obj.model = car.model
@@ -96,7 +97,7 @@ router.get( '/market', authenticate, awaitHandler( async ( req, res ) => {
     let access = [];
     access = dealerData.manufacturerAccess;
     for ( let i = 0; i < requested.length; i++ ) {
-        let carData = await car.findOne( { _id: requested[i].carID } );
+        let carData = await carDB.findOne( { _id: requested[i].carID } );
 
         let userData = await userDB.findOne( { _id: requested[i].customerID } );
         if ( access.includes( carData.manufacturer ) ) {
