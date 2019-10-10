@@ -105,8 +105,16 @@ const Market = ( props ) => {
             }
         },
         {
-            name: "Quote Discount",
-            label: "Quote Discount",
+            name: "Pricequote",
+            label: "Offer",
+            options: {
+                filter: true,
+                sort: true,
+            }
+        },
+        {
+            name: "Quote Offer",
+            label: "Quote Offer",
             options: {
                 filter: false,
                 sort: false,
@@ -116,7 +124,7 @@ const Market = ( props ) => {
                             <Button
                                 style={{ "backgroundColor": "rgb(25,123,189)", "color": "white" }}
                                 onClick={e => QuoteDiscount( tableMeta.rowData )}>
-                                Quote Discount
+                                Quote Offer
                         </Button>
                         </div>
                     );

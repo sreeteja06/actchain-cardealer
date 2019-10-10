@@ -24,6 +24,7 @@ export default function FormDialog( props ) {
     const [snakBarMessage, setSnakBarMessage] = React.useState()
     const [snakBarVarient, setSnakBarVarient] = React.useState( 'success' )
     const [value, setValue] = React.useState()
+    const [offerCalculate, setOfferCalculate] = React.useState(null)
     // const handleClickOpen = () => {
     //     setOpen( true );
     // };
@@ -93,6 +94,8 @@ export default function FormDialog( props ) {
             setValidationError( true )
         }
         setValue(tempValue)
+        let effectivePrice = (props.values.MSRP * (100 - tempValue))/100
+        setOfferCalculate(effectivePrice)
     }
 
     // VBA script
@@ -100,7 +103,7 @@ export default function FormDialog( props ) {
     return (
         <div>
             <Dialog open={props.open} onClose={handleCancel} aria-labelledby="form-dialog-title">
-                <DialogTitle id="form-dialog-title">Quote Your Discount</DialogTitle>
+                <DialogTitle id="form-dialog-title">Quote Your Offer</DialogTitle>
                 <DialogContent>
                     Name:<h6>{props.values.name}</h6>
                     Manufacturer:<h6>{props.values.manufacturer}</h6>
@@ -118,6 +121,7 @@ export default function FormDialog( props ) {
                         error={validationError}
                         onChange={e => inputHandler( e )}
                     />
+                    Effective Price:<h6>{offerCalculate}</h6>
                 </DialogContent>
                 <DialogActions>
                     <Button onClick={handleCancel} color="primary">
