@@ -96,7 +96,7 @@ export default function GetQuote() {
             name: "_id",
             label: "Car ID",
             options: {
-                filter: true,
+                filter: false,
                 sort: true,
                 display: false
             }
@@ -113,7 +113,7 @@ export default function GetQuote() {
             name: "model",
             label: "Model",
             options: {
-                filter: true,
+                filter: false,
                 sort: true,
             }
         },
@@ -121,7 +121,7 @@ export default function GetQuote() {
             name: "trim",
             label: "Trim",
             options: {
-                filter: true,
+                filter: false,
                 sort: true,
             }
         },
@@ -129,7 +129,7 @@ export default function GetQuote() {
             name: "year",
             label: "Year",
             options: {
-                filter: true,
+                filter: false,
                 sort: true,
             }
         },
@@ -137,7 +137,7 @@ export default function GetQuote() {
             name: "Msrp",
             label: "MSRP",
             options: {
-                filter: true,
+                filter: false,
                 sort: true,
             }
         },
@@ -145,7 +145,7 @@ export default function GetQuote() {
             name: "quotable",
             label: "quotable",
             options: {
-                filter: true,
+                filter: false,
                 sort: true,
                 display: false
             }

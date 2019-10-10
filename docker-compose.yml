@@ -23,7 +23,6 @@ services:
     restart: always
     image: sreetejaact/actchain-cardealerapi
     volumes:
-      - usr/src/app/node_modules
       - ./api:/usr/src/app
     ports:
       - 4003:4003
@@ -41,7 +40,6 @@ services:
     image: sreetejaact/actchain-cardealerapp
     restart: always
     volumes:
-      - usr/src/app/node_modules
       - ./app:/usr/src/app
     depends_on:
       - cardealer_api
