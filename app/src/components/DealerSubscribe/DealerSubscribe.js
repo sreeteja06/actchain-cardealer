@@ -146,48 +146,60 @@ export default function Subscribe() {
     }
 
     return (
-        <form className={classes.root} noValidate>
-            <Grid
-                className={classes.gridMargin}
-                container
-                direction="column"
-                justify="center"
-                alignItems="center">
-                <ValidationTextField
-                    className={classes.margin}
-                    label="Manufacturer"
-                    required
-                    variant="outlined"
-                    defaultValue="BMW"
-                    id="Manufacturer"
-                    onChange={e => onChangeManu( e.target.value, "manufacturer" )}
-                />
-                <Button
-                    style={{ "backgroundColor": "rgb(25,123,189)", "color": "white", "padding": "10px" }}
-                    onClick={e => addCarButtonClick( e )}>
-                    Subscribe to manufacturer
-                    <AddIcon />
-                </Button>
-            </Grid>
-            <Grid
-                className={classes.gridMargin}
-                container
-                direction="column"
-                justify="center"
-                alignItems="center">
-            <Typography variant="h5" component="h3">Dealer Subscriptions</Typography>
-            </Grid>
-            <Grid
-                container
-                direction="row"
-                justify="center"
-                alignItems="center">
-            {!loaded ? <CircularProgress className={classes.progress} color="secondary" /> 
-            :
+      <form className={classes.root} noValidate>
+        <Grid
+          className={classes.gridMargin}
+          container
+          direction="column"
+          justify="center"
+          alignItems="center"
+        >
+          <ValidationTextField
+            className={classes.margin}
+            label="Manufacturer"
+            required
+            variant="outlined"
+            defaultValue="BMW"
+            id="Manufacturer"
+            onChange={e => onChangeManu(e.target.value, "manufacturer")}
+          />
+          <Button
+            style={{
+              backgroundColor: "#70b359",
+              color: "white",
+              padding: "10px"
+            }}
+            onClick={e => addCarButtonClick(e)}
+          >
+            Subscribe to manufacturer
+            <AddIcon />
+          </Button>
+        </Grid>
+        <Grid
+          className={classes.gridMargin}
+          container
+          direction="column"
+          justify="center"
+          alignItems="center"
+        >
+          <Typography variant="h5" component="h3">
+            Dealer Subscriptions
+          </Typography>
+        </Grid>
+        <Grid container direction="row" justify="center" alignItems="center">
+          {!loaded ? (
+            <CircularProgress className={classes.progress} color="secondary" />
+          ) : (
             showSubscriptions()
-            }
-            </Grid>
-            {showSnakBar ? <SnakBar message={snakBarMessage} variant={snakBarVarient} className={classes.margin}></SnakBar> : null}
-        </form>
+          )}
+        </Grid>
+        {showSnakBar ? (
+          <SnakBar
+            message={snakBarMessage}
+            variant={snakBarVarient}
+            className={classes.margin}
+          ></SnakBar>
+        ) : null}
+      </form>
     );
 }

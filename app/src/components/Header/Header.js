@@ -2,8 +2,8 @@ import React from 'react';
 import Logo from '../../assets/img/Logo/actchain_logo.png'
 
 const headerStyle = {
-    color:{backgroundColor:'rgb(25,123,189)'}
-}
+  color: { backgroundColor: "#70b359" }
+};
 
 const Header = (props) => {
     return ( 

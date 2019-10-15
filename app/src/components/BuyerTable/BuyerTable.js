@@ -159,11 +159,12 @@ const BuyerTable = (props) => {
                 sort: false,
                 customBodyRender: ( value, tableMeta, updateValue ) => {
                     return (
-                        <Button
-                            style={{ "backgroundColor": "rgb(25,123,189)", "color": "white" }}
-                            onClick={e => AcceptDiscount( tableMeta.rowData )}>
-                            Accept Deal
-                        </Button>
+                      <Button
+                        style={{ backgroundColor: "#70b359", color: "white" }}
+                        onClick={e => AcceptDiscount(tableMeta.rowData)}
+                      >
+                        Accept Deal
+                      </Button>
                     );
                 }
             }

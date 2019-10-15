@@ -120,13 +120,14 @@ const Market = ( props ) => {
                 sort: false,
                 customBodyRender: ( value, tableMeta, updateValue ) => {
                     return (
-                        <div>
-                            <Button
-                                style={{ "backgroundColor": "rgb(25,123,189)", "color": "white" }}
-                                onClick={e => QuoteDiscount( tableMeta.rowData )}>
-                                Quote Offer
+                      <div>
+                        <Button
+                          style={{ backgroundColor: "#70b359", color: "white" }}
+                          onClick={e => QuoteDiscount(tableMeta.rowData)}
+                        >
+                          Quote Offer
                         </Button>
-                        </div>
+                      </div>
                     );
                 }
             }

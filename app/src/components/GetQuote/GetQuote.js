@@ -161,7 +161,10 @@ export default function GetQuote() {
                     if ( !tableMeta.rowData[6] ){
                         styleObj = { "backgroundColor": "grey", "color": "white" }
                     }else {
-                        styleObj = { "backgroundColor": "rgb(25,123,189)", "color": "white" }
+                        styleObj = {
+                          backgroundColor: "#70b359",
+                          color: "white"
+                        };
                     }
                     return (
                         <Button
