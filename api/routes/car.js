@@ -83,4 +83,30 @@ router.get('/getAllCars', authenticate, awaitHandler(async (req, res) => {
     res.send(data);
 }))
 
+router.get( '/getManufs', authenticate, awaitHandler( async ( req, res ) => {
+    let data = await car.find().distinct('manufacturer');
+    res.send( data );
+} ) )
+
+router.get( '/getModels', authenticate, awaitHandler( async ( req, res ) => {
+    let data = await car.find( { manufacturer: req.query.manufacturer } ).distinct( 'model' );
+    res.send( data );
+} ) )
+
+router.get( '/getTrims', authenticate, awaitHandler( async ( req, res ) => {
+    let data = await car.find( { manufacturer: req.query.manufacturer, model: req.query.model } ).distinct( 'trim' );
+    res.send( data );
+} ) )
+
+router.get( '/getYears', authenticate, awaitHandler( async ( req, res ) => {
+    let data = await car.find( { manufacturer: req.query.manufacturer, model: req.query.model, trim:req.body.trim } ).distinct( 'year' );
+    res.send( data );
+} ) )
+
+router.get( '/getBestDeal', authenticate, awaitHandler( async ( req, res ) => {
+    let data = await car.findOne( { manufacturer: req.query.manufacturer, model: req.query.model, trim: req.body.trim, year: req.body.year } );
+    let carCosts = carCostsDB.find( { carID: data._id } ).sort( {carCost: 1}).limit(1);
+    res.send( carCosts );
+} ) )
+
 module.exports = router
