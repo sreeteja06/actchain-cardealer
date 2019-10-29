@@ -27,11 +27,24 @@ router.post(
         model: req.body.model,
         trim: req.body.trim,
         year: req.body.year});
-        if(data._id){
+        if(data._id){//if car already exists check the carCostDB 
             let data1 = await carCostsDB.findOne({carID:data._id,dealerID:req.user._id});
-            if(data1._id){
+            if(data1._id){ //if in carCostDB also has a record update its cost
                 data1.carCost = req.body.cost;
+                data1.save(function(err){
+                    if(err) throw err;
+                });
             }
+            else { //if no record in carCostDB then insert a new record
+                let newCar = new carCostsDB({
+                    carID:data._id,
+                    dealerID:req.user._id,
+                    carCost:req.body.cost
+                })
+                newCar.save(function(err){
+                    if(err) throw err;
+                });
+              }
         }     
        let carData = new car({
         manufacturer: req.body.manufacturer,
@@ -40,11 +53,19 @@ router.post(
         year: req.body.year,
          });
        carData.save(function(err) {
-        if (err) throw err;
-         
-        console.log('car successfully saved.');
-        res.send( carData );}
-        )}
+        if (err) throw err; }
+        
+        )
+        let newCar = new carCostsDB({
+            carID:data._id,
+            dealerID:req.user._id,
+            carCost:req.body.cost
+        })
+        newCar.save(function(err){
+            if(err) throw err;
+            console.log("record saved in costCarDB")
+            res.send(newCar);
+        });}
 ));
 //get car
 router.get('/getCar',authenticate,awaitHandler(async(req,res)=>{
