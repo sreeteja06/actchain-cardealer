@@ -52,12 +52,12 @@ export const DealerNavItems = ( props ) => (
 
 export const BuyerNavItems = (props) => (
     <div>
-        <ListItem button onClick={event => props.handleListItemClick( event, 1, "getQuote" )}
+        <ListItem button onClick={event => props.handleListItemClick( event, 1, "buyCar" )}
             selected={props.selectedIndex === 1}>
             <ListItemIcon style={{ "color": '#FFFFFF' }}>
                 <AddIcon />
             </ListItemIcon>
-            <ListItemText primary="Get Quote" />
+            <ListItemText primary="Buy Car" />
         </ListItem>
         <ListItem button onClick={event => props.handleListItemClick( event, 2, "BoughtCars" )}
             selected={props.selectedIndex === 2}>

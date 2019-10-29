@@ -72,7 +72,7 @@ export default function AddCar() {
             "model": car.model,
             "trim": car.trim,
             "year": car.year,
-            "Msrp": car.msrp
+            "cost": car.msrp
         }, {
             headers: {
                 'x-auth': localStorage.getItem( 'carDealer_X_auth' )

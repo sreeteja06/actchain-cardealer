@@ -123,7 +123,7 @@ const DashboardNav = ( props ) => {
   }
   let firstCard = 'CarDetails'
   if(userType === 'Buyer'){
-    firstCard = 'getQuote'
+    firstCard = 'buyCar'
   }
   let [SelectedNavItem, setSelectedNavItem] = React.useState(firstCard);
   
@@ -212,7 +212,7 @@ const DashboardNav = ( props ) => {
           <div className={classes.appBarSpacer} />
           {SelectedNavItem === 'CarDetails' ? <CarDetails></CarDetails> : null}
           {SelectedNavItem === 'AddCar' ? <AddCar></AddCar> : null}
-          {SelectedNavItem === 'getQuote' ? <GetQuote></GetQuote> : null}
+          {SelectedNavItem === 'buyCar' ? <GetQuote></GetQuote> : null}
           {SelectedNavItem === 'BoughtCars' ? <BroughtCars></BroughtCars> : null}
           {SelectedNavItem === 'CarsSold' ? <CarsSold></CarsSold> : null}
         </main>
