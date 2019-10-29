@@ -95,26 +95,6 @@ router.post(
     }
     ) );
 
-router.get( '/getBroughtCars', authenticate, awaitHandler( async ( req, res ) => {
-    let broughtCars = ( await customerDB.findOne( { _user: req.user._id } ) ).ownedCars
-    console.log( broughtCars );
-    let arr = []
-    let obj = {}
-    for ( let i = 0; i < broughtCars.length; i++ ) {
-        obj = {}
-        obj.discount = ( await requestDB.findOne( { _id: broughtCars[i].requestID } ) ).quotes[0].Pricequote
-        let tempDealer = await userDB.findOne( { _id: broughtCars[i].dealerID } )
-        obj.dealerName = tempDealer.firstName + tempDealer.lastName
-        let car = await carDB.findOne( { _id: broughtCars[i].carID } )
-        obj.manufacturer = car.manufacturer
-        obj.model = car.model
-        obj.trim = car.trim
-        obj.year = car.year
-        obj.Msrp = car.Msrp
-        arr.push(obj)
-    }
-    res.send(arr);
-} ) )
 
 router.get( '/getQuotableCars', authenticate, awaitHandler( async ( req, res ) => {
     let data = await carDB.find();
