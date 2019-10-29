@@ -19,6 +19,7 @@ import InputBase from '@material-ui/core/InputBase';
 import { Grid, Typography } from '@material-ui/core'
 import { Button } from '@material-ui/core'
 import AddIcon from '@material-ui/icons/AddOutlined';
+import axios from '../../axios'
 
 const BootstrapInput = withStyles( theme => ( {
     root: {
@@ -75,31 +76,98 @@ export default function GetQuote() {
     const [trimTypes, setTrimTypes] = React.useState( [] );
     const [yearTypes, setYearTypes] = React.useState( [] );
     const [deal, setDeal] = React.useState(null);
-    const handleManufChange = event => {
+
+    React.useEffect( () => {
+        const fetchData = async () => {
+            try {
+                if ( showSnakBar ) {
+                    await setShowSnakBar( false );
+                }
+                const result = await axios(
+                    `car/getManufs`, {
+                    headers: {
+                        'x-auth': localStorage.getItem( 'carDealer_X_auth' )
+                    }
+                }
+                );
+                if ( result.status === 200 ) {
+                    console.log("manuf types"+ result.data );
+                    setManufTypes( result.data )
+                } else {
+                    setSnakBarMessage( "error getting car details" )
+                    setSnakBarVarient( 'error' );
+                    setShowSnakBar( true )
+                }
+            } catch ( e ) {
+                setSnakBarMessage( "error getting car details" )
+                setSnakBarVarient( 'error' );
+                setShowSnakBar( true )
+            }
+            setLoaded( true )
+        };
+        fetchData();
+    }, [] );
+
+    const handleManufChange = async(event) => {
         setManuf( event.target.value );
-        setModelTypes(['s6','s7'])
+        const result = await axios(
+            `car/getModels?manufacturer=${manuf}`, {
+            headers: {
+                'x-auth': localStorage.getItem( 'carDealer_X_auth' )
+            }
+        }
+        );
+        console.log( result.data );
+        setModelTypes( "model types" + result.data )
         setTrimTypes([])
         setYearTypes([])
         setModel( '' );
         setTrim( '' );
         setYear( '' );
     };
-    const handleModelChange = event => {
+    const handleModelChange = async ( event ) => {
         setModel( event.target.value );
-        setTrimTypes( ['g6','g7'] )
+        const result = await axios(
+            `car/getTrims?manufacturer=${ manuf}&model=${model}`, {
+            headers: {
+                'x-auth': localStorage.getItem( 'carDealer_X_auth' )
+            }
+        }
+        );
+        console.log( "trim types" + result.data );
+        setTrimTypes( result.data )
         setYearTypes( [] )
         setTrim( '' );
         setYear( '' );
     };
-    const handleTrimChange = event => {
+    const handleTrimChange = async ( event ) => {
         setTrim( event.target.value );
-        setYearTypes( [2006, 2007] )
+        const result = await axios(
+            `car/getYears?manufacturer=${ manuf }&model=${ model}&trim=${trim}`, {
+            headers: {
+                'x-auth': localStorage.getItem( 'carDealer_X_auth' )
+            }
+        }
+        );
+        console.log( "year types" +  result.data );
+        setYearTypes( result.data )
         setYear( '' );        
     };
-    const handleYearChange = event => {
+    const handleYearChange = async ( event ) => {
         setYear( event.target.value );
+        const result = await axios(
+            `car/getBestDeal?manufacturer=${ manuf }&model=${ model }&trim=${ trim}&year=${year}`, {
+            headers: {
+                'x-auth': localStorage.getItem( 'carDealer_X_auth' )
+            }
+        }
+        );
+        console.log( "best deal" + result.data);
         setDeal({price:"100",dealer:"dealer1"})
     };
+    const buyCar = () => {
+        console.log("buy car clicked")
+    }
     return (
         <div>
             <Grid
@@ -192,7 +260,7 @@ export default function GetQuote() {
                 <Typography style={{ "marginTop": "10px" }}>Dealer Name: {deal.dealer}</Typography>
                 <Button
                     style={{ "backgroundColor": "#70b359", "color": "white", "padding": "10px", "marginTop": "30px" }}
-                    // onClick={e => addCarButtonClick( e )}
+                        onClick={buyCar}
                     >
                     Buy Car
                     <AddIcon />
