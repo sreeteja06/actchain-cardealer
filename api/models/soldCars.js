@@ -15,5 +15,5 @@ let soldCarsSchema = new mongoose.Schema({
     }
    
 });
-soldCarsSchema.index({carID:1,dealerID:1},{unique :true})
+
 module.exports = mongoose.model('soldCars', soldCarsSchema);
