@@ -29,7 +29,7 @@ const BroughtCars = () => {
                     await setShowSnakBar( false );
                 }
                 const result = await axios(
-                    `customer/getBroughtCars`, {
+                    `customer/getBoughtCars`, {
                     headers: {
                         'x-auth': localStorage.getItem( 'carDealer_X_auth' )
                     }
@@ -57,15 +57,6 @@ const BroughtCars = () => {
         console.log( e )
     }
     const columns = [
-        {
-            name: "requestID",
-            label: "requestID",
-            options: {
-                filter: false,
-                sort: false,
-                display: false
-            }
-        },
         {
             name: "manufacturer",
             label: "Manufacturer",
@@ -99,8 +90,8 @@ const BroughtCars = () => {
             }
         },
         {
-            name: "Msrp",
-            label: "MSRP",
+            name: "cost",
+            label: "Bought at",
             options: {
                 filter: true,
                 sort: true,

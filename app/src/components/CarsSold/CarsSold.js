@@ -57,15 +57,6 @@ const BroughtCars = () => {
     }
     const columns = [
         {
-            name: "requestID",
-            label: "requestID",
-            options: {
-                filter: false,
-                sort: false,
-                display: false
-            }
-        },
-        {
             name: "manufacturer",
             label: "Manufacturer",
             options: {
@@ -98,8 +89,8 @@ const BroughtCars = () => {
             }
         },
         {
-            name: "Msrp",
-            label: "MSRP",
+            name: "cost",
+            label: "Bought at",
             options: {
                 filter: true,
                 sort: true,

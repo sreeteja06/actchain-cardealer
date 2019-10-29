@@ -28,7 +28,7 @@ export default function AddCar() {
                     await setShowSnakBar( false );
                 }
                 const result = await axios(
-                    `car/getAllCars`, {
+                    `dealer/getDealerCars`, {
                     headers: {
                         'x-auth': localStorage.getItem( 'carDealer_X_auth' )
                     }
@@ -85,8 +85,8 @@ export default function AddCar() {
             }
         },
         {
-            name: "Msrp",
-            label: "MSRP",
+            name: "cost",
+            label: "price",
             options: {
                 filter: false,
                 sort: true,
