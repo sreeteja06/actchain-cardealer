@@ -11,14 +11,8 @@ let dealerSchema = new mongoose.Schema({
     _user: {
         type: mongoose.Schema.Types.ObjectId,
         required: true,
-    },
-    manufacturerAccess: {
-        type:Array
-    },
-    soldCars: {
-        type:Array,
-        
     }
+  
 });
 
 

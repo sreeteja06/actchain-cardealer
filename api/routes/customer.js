@@ -61,6 +61,7 @@ router.get( '/requestedCars', authenticate, awaitHandler( async ( req, res ) => 
         obj.trim = car.trim
         obj.year = car.year
         obj.Msrp = car.Msrp
+        obj.effectivePrice = (car.Msrp - ((car.Msrp/100)*requestsByCustomer[i].quotes[0].Pricequote));
         responseArray.push( obj )
     }
     res.send( responseArray );

@@ -5,7 +5,7 @@ require( '../config/config' );
 let dealerDB = require( '../models/dealer' );
 let userDB = require( '../models/user' )
 let car = require( '../models/car' );
-let requestDB = require( '../models/request' )
+let soldCarsDB = require( '../models/soldCars' )
 let { authenticate } = require( '../middleware/authentication' )
 const awaitHandler = fn => {
     return async ( req, res, next ) => {
@@ -19,14 +19,14 @@ const awaitHandler = fn => {
 
 
 router.get( '/getSoldCars', authenticate, awaitHandler( async ( req, res ) => {
-    let soldCars = ( await dealerDB.findOne( { _user: req.user._id } ) ).soldCars
+    let soldCars = ( await soldCars.find( { dealerID: req.user._id } ) )
     console.log( soldCars );
     let arr = []
     let obj = {}
     for ( let i = 0; i < soldCars.length; i++ ) {
         obj = {}
-        obj.discount = ( await requestDB.findOne( { _id: soldCars[i].requestID } ) ).quotes[0].Pricequote
-        obj.customerName = ( await userDB.findOne( { _id: soldCars[i].dealerID } ) ).firstName
+        obj.soldCarsID = soldCars[i]._id;
+        obj.customerName = ( await userDB.findOne( { _id: soldCars[i].soldTo } ) ).firstName
         let car = await carDB.findOne( { _id: soldCars[i].carID } )
         obj.manufacturer = car.manufacturer
         obj.model = car.model
@@ -88,7 +88,7 @@ router.post(
         } )
         res.send( requested );
     } ) );
-router.get( '/market', authenticate, awaitHandler( async ( req, res ) => {
+router.get( '/addCar', authenticate, awaitHandler( async ( req, res ) => {
     let requested = await requestDB.find( { sold: false } );
     let detailsArray = [];
     let details = {};
@@ -113,6 +113,7 @@ router.get( '/market', authenticate, awaitHandler( async ( req, res ) => {
                 for ( let m = 0; m < requested[i].quotes.length; m++ ) {
                     if ( requested[i].quotes[m].dealerID == req.user._id.toString() ) { //!replace with dynamic dealerid(userid of dealer)
                         details.rank = requested[i].quotes[m].rank;
+                        details.Pricequote = requested[i].quotes[m].Pricequote;
                     }
                 }
             }
@@ -123,22 +124,5 @@ router.get( '/market', authenticate, awaitHandler( async ( req, res ) => {
     res.send( detailsArray );
 } ) )
 
-router.post( '/addSubscription', authenticate, awaitHandler( async ( req, res ) => {
-    let dealerData = await dealerDB.findOne( { _user: req.user._id } ); // replace req.body.dealer with user._id
-    if(!dealerData.manufacturerAccess.includes(req.body.subscribe)){
-        dealerData.manufacturerAccess.push( req.body.subscribe );
-        dealerData.save( function ( err ) {
-            if ( err ) throw err;
-            res.send( dealerData );
-        } )
-    }else {
-        res.end(501)
-     }
-} ) )
 
-router.get( '/subscriptions', authenticate, awaitHandler( async ( req, res ) => {
-    let dealerData = await dealerDB.findOne( { _user: req.user._id } );
-    let subscriptions = dealerData.manufacturerAccess;
-    res.send(subscriptions);
-} ) )
 module.exports = router

@@ -5,6 +5,7 @@ require( '../config/config' );
 let customerDB = require( '../models/customer' );
 let car = require( '../models/car' );
 let requestDB = require('../models/request')
+let carCostsDB = require('../models/carCost')
 let { authenticate } = require('../middleware/authentication')
 const awaitHandler = fn => {
     return async ( req, res, next ) => {
@@ -22,14 +23,22 @@ router.get('/',awaitHandler(async(req,res)=>{
 router.post(
     '/createCar',authenticate,
     awaitHandler( async ( req, res ) => {
-        
+       let data =  await car.findOne({ manufacturer: req.body.manufacturer,
+        model: req.body.model,
+        trim: req.body.trim,
+        year: req.body.year});
+        if(data._id){
+            let data1 = await carCostsDB.findOne({carID:data._id,dealerID:req.user._id});
+            if(data1._id){
+                data1.carCost = req.body.cost;
+            }
+        }     
        let carData = new car({
         manufacturer: req.body.manufacturer,
         model: req.body.model,
         trim: req.body.trim,
         year: req.body.year,
-        Msrp : req.body.Msrp,
-    });
+         });
        carData.save(function(err) {
         if (err) throw err;
          

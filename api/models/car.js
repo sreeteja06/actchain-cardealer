@@ -17,13 +17,10 @@ let carSchema = new mongoose.Schema({
         
         type: Number,
         required: true
-    },
-    Msrp:{
-        type:Number,
-        required:true
-    },
+    }
+  
 });
-
+carSchema.index({manufacturer:1,model:1,trim:1,year:1},{unique:true});
 
 module.exports = mongoose.model( 'car', carSchema );
 //request model carid,customerId
