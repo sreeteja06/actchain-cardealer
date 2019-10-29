@@ -16,7 +16,9 @@ import FormControl from '@material-ui/core/FormControl';
 import Select from '@material-ui/core/Select';
 import NativeSelect from '@material-ui/core/NativeSelect';
 import InputBase from '@material-ui/core/InputBase';
-import { Grid } from '@material-ui/core'
+import { Grid, Typography } from '@material-ui/core'
+import { Button } from '@material-ui/core'
+import AddIcon from '@material-ui/icons/AddOutlined';
 
 const BootstrapInput = withStyles( theme => ( {
     root: {
@@ -148,6 +150,15 @@ export default function GetQuote() {
                         <MenuItem value={30}>Thirty</MenuItem>
                     </Select>
                 </FormControl>
+                <Typography style={{ "marginTop": "10px" }}>Lowest Dealer Price: 10000</Typography>
+                <Typography style={{ "marginTop": "10px" }}>Dealer Name: Dealer 1</Typography>
+                <Button
+                    style={{ "backgroundColor": "#70b359", "color": "white", "padding": "10px", "marginTop": "30px" }}
+                    // onClick={e => addCarButtonClick( e )}
+                    >
+                    Buy Car
+                    <AddIcon />
+                </Button>
             </Grid>
         </div>
     );

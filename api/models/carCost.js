@@ -9,7 +9,7 @@ let carCostsSchema = new mongoose.Schema({
         required: true,
     },
     carCost:{
-        type:Int16Array,
+        type: Number,
         required:true
     }
    
