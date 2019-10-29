@@ -16,18 +16,10 @@ import DashboardIcon from '@material-ui/icons/DashboardOutlined';
 import PeopleIcon from '@material-ui/icons/SubscriptionsOutlined';
 import BarChartIcon from '@material-ui/icons/BarChartOutlined';
 import AddIcon from '@material-ui/icons/AddOutlined';
+import CarICon from '@material-ui/icons/DirectionsCarOutlined'
 
 export const DealerNavItems = ( props ) => (
     <div>
-        <ListItem button 
-        onClick={event => props.handleListItemClick( event, 0, "Market" )}
-            selected={props.selectedIndex === 0}
-        >
-            <ListItemIcon style={{ "color": '#FFFFFF' }}>
-                <DashboardIcon />
-            </ListItemIcon>
-            <ListItemText primary="Market" />
-        </ListItem>
         <ListItem button
             onClick={event => props.handleListItemClick( event, 2, "CarDetails" )}
             selected={props.selectedIndex === 2}
@@ -38,17 +30,17 @@ export const DealerNavItems = ( props ) => (
             <ListItemText primary="Cars" />
         </ListItem>
         <ListItem button
-            onClick={event => props.handleListItemClick( event, 3, "Subscribe" )}
+            onClick={event => props.handleListItemClick( event, 3, "CarsSold" )}
             selected={props.selectedIndex === 3}
         >
             <ListItemIcon style={{ "color": '#FFFFFF' }}>
-                <PeopleIcon />
+                <CarICon />
             </ListItemIcon>
-            <ListItemText primary="Subscribe" />
+            <ListItemText primary="CarsSold" />
         </ListItem>
         <ListItem button
-            onClick={event => props.handleListItemClick( event, 4, "AddCar" )}
-            selected={props.selectedIndex === 4}
+            onClick={event => props.handleListItemClick( event, 5, "AddCar" )}
+            selected={props.selectedIndex === 5}
         >
             <ListItemIcon style={{ "color": '#FFFFFF' }}>
                 <AddIcon />
@@ -60,13 +52,6 @@ export const DealerNavItems = ( props ) => (
 
 export const BuyerNavItems = (props) => (
     <div>
-        <ListItem button onClick={event => props.handleListItemClick( event, 0, "Dashboard" )}
-            selected={props.selectedIndex === 0}>
-            <ListItemIcon style={{ "color": '#FFFFFF' }}>
-                <DashboardIcon />
-            </ListItemIcon>
-            <ListItemText primary="Dashboard" />
-        </ListItem>
         <ListItem button onClick={event => props.handleListItemClick( event, 1, "getQuote" )}
             selected={props.selectedIndex === 1}>
             <ListItemIcon style={{ "color": '#FFFFFF' }}>

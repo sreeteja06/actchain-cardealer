@@ -4,199 +4,151 @@
       / ___/ ___/ _ \/ _ \ 
      (__  ) /  /  __/  __/ 
     /____/_/   \___/\___  
- * File Created: Tuesday, 17th September 2019 1:50:25 pm
+ * File Created: Tuesday, 29th October 2019 11:27:00 am
  * Author: SreeTeja06 (sreeteja.muthyala@gmail.com)
 
  */
 import React from 'react';
-import MUIDataTable from "mui-datatables";
-import axios from '../../axios'
-import { Button } from '@material-ui/core'
-import SnakBar from '../SnackBar/SnackBar'
-import LinearProgress from '@material-ui/core/LinearProgress';
+import { makeStyles, withStyles } from '@material-ui/core/styles';
+import InputLabel from '@material-ui/core/InputLabel';
+import MenuItem from '@material-ui/core/MenuItem';
+import FormControl from '@material-ui/core/FormControl';
+import Select from '@material-ui/core/Select';
+import NativeSelect from '@material-ui/core/NativeSelect';
+import InputBase from '@material-ui/core/InputBase';
+import { Grid } from '@material-ui/core'
+
+const BootstrapInput = withStyles( theme => ( {
+    root: {
+        'label + &': {
+            marginTop: theme.spacing( 3 ),
+        },
+    },
+    input: {
+        borderRadius: 4,
+        position: 'relative',
+        backgroundColor: theme.palette.background.paper,
+        border: '1px solid #ced4da',
+        fontSize: 16,
+        padding: '10px 26px 10px 12px',
+        transition: theme.transitions.create( ['border-color', 'box-shadow'] ),
+        // Use the system font instead of the default Roboto font.
+        fontFamily: [
+            '-apple-system',
+            'BlinkMacSystemFont',
+            '"Segoe UI"',
+            'Roboto',
+            '"Helvetica Neue"',
+            'Arial',
+            'sans-serif',
+            '"Apple Color Emoji"',
+            '"Segoe UI Emoji"',
+            '"Segoe UI Symbol"',
+        ].join( ',' ),
+        '&:focus': {
+            borderRadius: 4,
+            borderColor: '#80bdff',
+            boxShadow: '0 0 0 0.2rem rgba(0,123,255,.25)',
+        },
+    },
+} ) )( InputBase );
+
+const useStyles = makeStyles( theme => ( {
+    margin: {
+        margin: theme.spacing( 1 ),
+    },
+    gridMargin: {
+        marginTop: '7%'
+    }
+} ) );
 
 export default function GetQuote() {
-    const [data, setData] = React.useState( [] );
-    const [showSnakBar, setShowSnakBar] = React.useState( false )
-    const [snakBarMessage, setSnakBarMessage] = React.useState()
-    const [snakBarVarient, setSnakBarVarient] = React.useState( 'success' )
-    const [loaded, setLoaded] = React.useState( false );
-
-    React.useEffect( () => {
-        const fetchData = async () => {
-            try {
-                if ( showSnakBar ) {
-                    await setShowSnakBar( false );
-                }
-                const result = await axios(
-                    `customer/getQuotableCars`, {
-                    headers: {
-                        'x-auth': localStorage.getItem( 'carDealer_X_auth' )
-                    }
-                }
-                );
-                if ( result.status === 200 ) {
-                    setData( result.data )
-                } else {
-                    setSnakBarMessage( "error getting car details" )
-                    setSnakBarVarient( 'error' );
-                    setShowSnakBar( true )
-                }
-            } catch ( e ) {
-                setSnakBarMessage( "error getting car details" )
-                setSnakBarVarient( 'error' );
-                setShowSnakBar( true )
-            }
-            setLoaded( true )
-        };
-        fetchData();
-    }, [] );
-
-    const getQuote = async ( e ) => {
-        try {
-            if ( showSnakBar ) {
-                await setShowSnakBar( false );
-            }
-            let result = await axios.post( '/customer/requestACar', {
-                carID: e[0]
-            }, {
-                headers: {
-                    'x-auth': localStorage.getItem( 'carDealer_X_auth' )
-                }
-            } )
-            if ( result.status !== 200 ){
-                setSnakBarMessage( "error asking quote" )
-                setSnakBarVarient( 'error' );
-                setShowSnakBar( true )
-            } else{
-                setSnakBarMessage( "success asking quote" )
-                setSnakBarVarient( 'success' );
-                setShowSnakBar( true )
-            }
-            const result1 = await axios(
-                `customer/getQuotableCars`, {
-                headers: {
-                    'x-auth': localStorage.getItem( 'carDealer_X_auth' )
-                }
-            }
-            );
-            if ( result1.status === 200 ) {
-                setData( result1.data )
-            }
-        } catch ( e ) {
-            setSnakBarMessage( "error asking quote" )
-            setSnakBarVarient( 'error' );
-            setShowSnakBar( true )
-            setLoaded( true )
-        }
-    }
-
-    const columns = [
-        {
-            name: "_id",
-            label: "Car ID",
-            options: {
-                filter: true,
-                sort: true,
-                display: false
-            }
-        },
-        {
-            name: "manufacturer",
-            label: "Manufacturer",
-            options: {
-                filter: true,
-                sort: true,
-            }
-        },
-        {
-            name: "model",
-            label: "Model",
-            options: {
-                filter: true,
-                sort: true,
-            }
-        },
-        {
-            name: "trim",
-            label: "Trim",
-            options: {
-                filter: true,
-                sort: true,
-            }
-        },
-        {
-            name: "year",
-            label: "Year",
-            options: {
-                filter: true,
-                sort: true,
-            }
-        },
-        {
-            name: "Msrp",
-            label: "MSRP",
-            options: {
-                filter: true,
-                sort: true,
-            }
-        },
-        {
-            name: "quotable",
-            label: "quotable",
-            options: {
-                filter: true,
-                sort: true,
-                display: false
-            }
-        },
-        {
-            name: "GetQuote",
-            label: "Get Quote",
-            options: {
-                filter: false,
-                sort: false,
-                customBodyRender: ( value, tableMeta, updateValue ) => {
-                    let styleObj;
-                    if ( !tableMeta.rowData[6] ){
-                        styleObj = { "backgroundColor": "grey", "color": "white" }
-                    }else {
-                        styleObj = { "backgroundColor": "rgb(25,123,189)", "color": "white" }
-                    }
-                    return (
-                        <Button
-                            style={styleObj}
-                            onClick={e => getQuote( tableMeta.rowData )}
-                            disabled={!tableMeta.rowData[6]}>
-                            Get Quote
-                        </Button>
-                    );
-                }
-            }
-        },
-    ];
-
-    const options = {
-        filterType: 'checkbox',
-        selectableRows: 'none',
-        responsive: 'scrollFullHeight',
-        rowsPerPage: 5,
-        rowsPerPageOptions: [5, 10, 20, 30, 50, 100]
+    const classes = useStyles();
+    const [age, setAge] = React.useState( '' );
+    const handleChange = event => {
+        setAge( event.target.value );
     };
-
     return (
         <div>
-            {!loaded
-                ? <LinearProgress color="secondary" />
-                :
-                <MUIDataTable
-                    data={data}
-                    columns={columns}
-                    options={options}
-                />}
-            {showSnakBar ? <SnakBar message={snakBarMessage} variant={snakBarVarient} className={{
-                "margin": "theme.spacing( 1 )"
-            }}></SnakBar> : null}
+            <Grid
+                className={classes.gridMargin}
+                container
+                direction="column"
+                justify="center"
+                alignItems="center">
+                <InputLabel id="demo-customized-select-label">Select Manufacturer</InputLabel>
+                <FormControl className={classes.margin}>
+                    <Select
+                        style={{ width: "300px" }}
+                        labelId="demo-customized-select-label"
+                        id="demo-customized-select"
+                        value={age}
+                        onChange={handleChange}
+                        input={<BootstrapInput />}
+                    >
+                        <MenuItem value="">
+                            <em>None</em>
+                        </MenuItem>
+                        <MenuItem value={10}>Ten</MenuItem>
+                        <MenuItem value={20}>Twenty</MenuItem>
+                        <MenuItem value={30}>Thirty</MenuItem>
+                    </Select>
+                </FormControl>
+                <InputLabel id="demo-customized-select-label">Select Model</InputLabel>
+                <FormControl className={classes.margin}>
+                    <Select
+                        style={{ width: "300px" }}
+                        labelId="demo-customized-select-label"
+                        id="demo-customized-select"
+                        value={age}
+                        onChange={handleChange}
+                        input={<BootstrapInput />}
+                    >
+                        <MenuItem value="">
+                            <em>None</em>
+                        </MenuItem>
+                        <MenuItem value={10}>Ten</MenuItem>
+                        <MenuItem value={20}>Twenty</MenuItem>
+                        <MenuItem value={30}>Thirty</MenuItem>
+                    </Select>
+                </FormControl>
+                <InputLabel id="demo-customized-select-label">Select Trim</InputLabel>
+                <FormControl className={classes.margin}>
+                    <Select
+                        style={{ width: "300px" }}
+                        labelId="demo-customized-select-label"
+                        id="demo-customized-select"
+                        value={age}
+                        onChange={handleChange}
+                        input={<BootstrapInput />}
+                    >
+                        <MenuItem value="">
+                            <em>None</em>
+                        </MenuItem>
+                        <MenuItem value={10}>Ten</MenuItem>
+                        <MenuItem value={20}>Twenty</MenuItem>
+                        <MenuItem value={30}>Thirty</MenuItem>
+                    </Select>
+                </FormControl>
+                <InputLabel id="demo-customized-select-label">Select Year</InputLabel>
+                <FormControl className={classes.margin}>
+                    <Select
+                        style={{ width: "300px" }}
+                        labelId="demo-customized-select-label"
+                        id="demo-customized-select"
+                        value={age}
+                        onChange={handleChange}
+                        input={<BootstrapInput />}
+                    >
+                        <MenuItem value="">
+                            <em>None</em>
+                        </MenuItem>
+                        <MenuItem value={10}>Ten</MenuItem>
+                        <MenuItem value={20}>Twenty</MenuItem>
+                        <MenuItem value={30}>Thirty</MenuItem>
+                    </Select>
+                </FormControl>
+            </Grid>
         </div>
-    )
+    );
 }

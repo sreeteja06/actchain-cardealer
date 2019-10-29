@@ -64,7 +64,7 @@ export default function AddCar() {
             name: "model",
             label: "Model",
             options: {
-                filter: true,
+                filter: false,
                 sort: true,
             }
         },
@@ -72,7 +72,7 @@ export default function AddCar() {
             name: "trim",
             label: "Trim",
             options: {
-                filter: true,
+                filter: false,
                 sort: true,
             }
         },
@@ -80,7 +80,7 @@ export default function AddCar() {
             name: "year",
             label: "Year",
             options: {
-                filter: true,
+                filter: false,
                 sort: true,
             }
         },
@@ -88,7 +88,7 @@ export default function AddCar() {
             name: "Msrp",
             label: "MSRP",
             options: {
-                filter: true,
+                filter: false,
                 sort: true,
             }
         }

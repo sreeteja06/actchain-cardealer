@@ -42,7 +42,7 @@ const Card = (props) => {
                             />:null}
                         </div>
                         <div className="col-md-6 text-center">
-                            <img  src={Logo} alt="Actchain Logo"/>
+                            <img style={{height:'200px', marginTop:'80px', marginLeft:'-80px'}} src={Logo} alt="Actchain Logo"/>
                         </div>
                    </div>
                 </div>

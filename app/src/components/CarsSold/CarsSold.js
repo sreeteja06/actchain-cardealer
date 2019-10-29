@@ -4,18 +4,17 @@
       / ___/ ___/ _ \/ _ \ 
      (__  ) /  /  __/  __/ 
     /____/_/   \___/\___  
- * File Created: Tuesday, 17th September 2019 4:25:02 pm
+ * File Created: Thursday, 3rd October 2019 10:45:31 am
  * Author: SreeTeja06 (sreeteja.muthyala@gmail.com)
 
  */
 import React from 'react';
 import MUIDataTable from "mui-datatables";
-import { Button } from '@material-ui/core'
 import SnakBar from '../SnackBar/SnackBar'
 import axios from '../../axios'
 import LinearProgress from '@material-ui/core/LinearProgress';
 
-const BuyerTable = (props) => {
+const BroughtCars = () => {
     const [data, setData] = React.useState( [] );
     const [showSnakBar, setShowSnakBar] = React.useState( false )
     const [snakBarMessage, setSnakBarMessage] = React.useState()
@@ -29,7 +28,7 @@ const BuyerTable = (props) => {
                     await setShowSnakBar( false );
                 }
                 const result = await axios(
-                    `customer/requestedCars`, {
+                    `dealer/getSoldCars`, {
                     headers: {
                         'x-auth': localStorage.getItem( 'carDealer_X_auth' )
                     }
@@ -52,38 +51,9 @@ const BuyerTable = (props) => {
         fetchData();
     }, [] );
 
-    const AcceptDiscount = async ( value ) => {
-        try{
-            if(showSnakBar){
-                await setShowSnakBar( false )
-            }
-            if(!value[6]){
-                setSnakBarMessage( "Theres no deal to accept" )
-                setSnakBarVarient( 'error' );
-                await setShowSnakBar( true )
-                return 
-            }
-            let result = await axios.post( '/customer/acceptDeal', {
-                requestID: value[0],
-            }, {
-                headers: {
-                    'x-auth': localStorage.getItem( 'carDealer_X_auth' )
-                }
-            } )
-            if ( result.status === 200 ) {
-                setSnakBarMessage( "successfully accepted deal" )
-            }
-            else {
-                setSnakBarMessage( "error accepting deal" )
-                setSnakBarVarient( 'error' );
-            }
-            await setShowSnakBar( true )
-        }catch(e){
-            console.error( e );
-            setSnakBarMessage( "error accepting deal" )
-            setSnakBarVarient( 'error' );
-            await setShowSnakBar( true )
-        }
+
+    const AcceptDiscount = ( e ) => {
+        console.log( e )
     }
     const columns = [
         {
@@ -136,38 +106,13 @@ const BuyerTable = (props) => {
             }
         },
         {
-            name: "discount",
-            label: "Discount",
+            name: "customerName",
+            label: "sold to",
             options: {
                 filter: true,
                 sort: true,
             }
-        },
-        {
-            name: "dealerName",
-            label: "DiscountBy",
-            options: {
-                filter: true,
-                sort: true,
-            }
-        },
-        {
-            name: "Accept Deal",
-            label: "AcceptDeal",
-            options: {
-                filter: false,
-                sort: false,
-                customBodyRender: ( value, tableMeta, updateValue ) => {
-                    return (
-                        <Button
-                            style={{ "backgroundColor": "rgb(25,123,189)", "color": "white" }}
-                            onClick={e => AcceptDiscount( tableMeta.rowData )}>
-                            Accept Deal
-                        </Button>
-                    );
-                }
-            }
-        },
+        }
     ];
 
     const options = {
@@ -195,4 +140,4 @@ const BuyerTable = (props) => {
     )
 }
 
-export default BuyerTable
+export default BroughtCars

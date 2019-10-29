@@ -22,99 +22,97 @@ import IconButton from '@material-ui/core/IconButton';
 import LogoutIcon from '@material-ui/icons/PowerSettingsNewOutlined';
 import MenuIcon from '@material-ui/icons/Menu';
 import ChevronLeftIcon from '@material-ui/icons/ChevronLeft';
-import Market from '../../containers/MarketContainer/MarketContainer';
 import { DealerNavItems, BuyerNavItems } from './listitems';
 import CarDetails from '../CarDetails/CarDetails'
 import AddCar from '../AddCar/AddCar'
 import GetQuote from '../GetQuote/GetQuote'
-import BuyerTable from '../BuyerTable/BuyerTable'
-import DealerSubscribe from '../DealerSubscribe/DealerSubscribe';
 import BroughtCars from '../BroughtCars/BroughtCars'
+import CarsSold from '../CarsSold/CarsSold'
 import axios from '../../axios'
 
 const drawerWidth = 240;
 
-const useStyles = makeStyles( theme => ( {
+const useStyles = makeStyles(theme => ({
   root: {
-    display: 'flex',
+    display: "flex"
   },
   toolbar: {
     paddingRight: 24, // keep right padding when drawer closed
-    backgroundColor: "rgb(25,123,189)"
+    backgroundColor: "#70b359"
   },
   toolbarIcon: {
-    display: 'flex',
-    alignItems: 'center',
-    justifyContent: 'flex-end',
-    padding: '0 8px',
-    ...theme.mixins.toolbar,
+    display: "flex",
+    alignItems: "center",
+    justifyContent: "flex-end",
+    padding: "0 8px",
+    ...theme.mixins.toolbar
   },
   appBar: {
     zIndex: theme.zIndex.drawer + 1,
-    transition: theme.transitions.create( ['width', 'margin'], {
+    transition: theme.transitions.create(["width", "margin"], {
       easing: theme.transitions.easing.sharp,
-      duration: theme.transitions.duration.leavingScreen,
-    } ),
+      duration: theme.transitions.duration.leavingScreen
+    })
   },
   appBarShift: {
     marginLeft: drawerWidth,
-    width: `calc(100% - ${ drawerWidth }px)`,
-    transition: theme.transitions.create( ['width', 'margin'], {
+    width: `calc(100% - ${drawerWidth}px)`,
+    transition: theme.transitions.create(["width", "margin"], {
       easing: theme.transitions.easing.sharp,
-      duration: theme.transitions.duration.enteringScreen,
-    } ),
+      duration: theme.transitions.duration.enteringScreen
+    })
   },
   menuButton: {
-    marginRight: 36,
+    marginRight: 36
   },
   menuButtonHidden: {
-    display: 'none',
+    display: "none"
   },
   title: {
-    flexGrow: 1,
+    flexGrow: 1
   },
   drawerPaper: {
-    backgroundColor: "rgb(25,123,189)",
+    backgroundColor: "#70b359",
     color: "white",
-    position: 'relative',
-    whiteSpace: 'nowrap',
+    position: "relative",
+    whiteSpace: "nowrap",
     width: drawerWidth,
-    transition: theme.transitions.create( 'width', {
+    transition: theme.transitions.create("width", {
       easing: theme.transitions.easing.sharp,
-      duration: theme.transitions.duration.enteringScreen,
-    } ),
+      duration: theme.transitions.duration.enteringScreen
+    })
   },
   drawerPaperClose: {
-    overflowX: 'hidden',
-    transition: theme.transitions.create( 'width', {
+    overflowX: "hidden",
+    transition: theme.transitions.create("width", {
       easing: theme.transitions.easing.sharp,
-      duration: theme.transitions.duration.leavingScreen,
-    } ),
-    width: theme.spacing( 7 ),
-    [theme.breakpoints.up( 'sm' )]: {
-      width: theme.spacing( 9 ),
-    },
+      duration: theme.transitions.duration.leavingScreen
+    }),
+    width: theme.spacing(7),
+    [theme.breakpoints.up("sm")]: {
+      width: theme.spacing(9)
+    }
   },
   appBarSpacer: theme.mixins.toolbar,
   content: {
     flexGrow: 1,
-    height: '100vh',
-    overflow: 'auto',
+    height: "100vh",
+    overflow: "auto"
   },
   container: {
-    paddingTop: theme.spacing( 4 ),
-    paddingBottom: theme.spacing( 4 ),
+    paddingTop: theme.spacing(4),
+    paddingBottom: theme.spacing(4)
   },
   paper: {
-    padding: theme.spacing( 2 ),
-    display: 'flex',
-    overflow: 'auto',
-    flexDirection: 'column',
+    padding: theme.spacing(2),
+    display: "flex",
+    overflow: "auto",
+    flexDirection: "column"
   },
   fixedHeight: {
-    height: 240,
-  },
-} ) );
+    height: 240
+  }
+}));
 
 const DashboardNav = ( props ) => {
   const userType = props.location.state.role //use cookie or sessions later
@@ -123,9 +121,9 @@ const DashboardNav = ( props ) => {
   if(!XToken){
     props.history.push( '/' )
   }
-  let firstCard = 'Market'
+  let firstCard = 'CarDetails'
   if(userType === 'Buyer'){
-      firstCard = 'Dashboard'
+    firstCard = 'getQuote'
   }
   let [SelectedNavItem, setSelectedNavItem] = React.useState(firstCard);
   
@@ -212,13 +210,11 @@ const DashboardNav = ( props ) => {
         </Drawer>
         <main className={classes.content}>
           <div className={classes.appBarSpacer} />
-          {SelectedNavItem==='Market'?<Market></Market>:null}
           {SelectedNavItem === 'CarDetails' ? <CarDetails></CarDetails> : null}
           {SelectedNavItem === 'AddCar' ? <AddCar></AddCar> : null}
-          {SelectedNavItem === 'Dashboard' ? <BuyerTable></BuyerTable> : null}
           {SelectedNavItem === 'getQuote' ? <GetQuote></GetQuote> : null}
-          {SelectedNavItem === 'Subscribe' ? <DealerSubscribe></DealerSubscribe> : null}
           {SelectedNavItem === 'BoughtCars' ? <BroughtCars></BroughtCars> : null}
+          {SelectedNavItem === 'CarsSold' ? <CarsSold></CarsSold> : null}
         </main>
       </div>
     </div>

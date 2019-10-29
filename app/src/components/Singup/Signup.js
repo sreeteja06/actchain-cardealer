@@ -21,36 +21,36 @@ import FormLabel from '@material-ui/core/FormLabel';
 import Radio from '@material-ui/core/Radio';
 import RadioGroup from '@material-ui/core/RadioGroup';
 
-const useStyles = makeStyles( theme => ( {
-    '@global': {
-        body: {
-            backgroundColor: theme.palette.common.white,
-        },
-    },
-    paper: {
-        marginTop: theme.spacing( 8 ),
-        display: 'flex',
-        flexDirection: 'column',
-        alignItems: 'center',
-    },
-    avatar: {
-        margin: theme.spacing( 1 ),
-        backgroundColor: theme.palette.secondary.main,
-    },
-    form: {
-        width: '100%', // Fix IE 11 issue.
-        marginTop: theme.spacing( 3 )
-    },
-    submit: {
-        margin: theme.spacing( 3, 0, 2 ),
-        backgroundColor: "rgb(25,123,189)"
-    },
-    root: {
-        '&.Mui-focused fieldset': {
-            borderColor: 'green',
-        }
+const useStyles = makeStyles(theme => ({
+  "@global": {
+    body: {
+      backgroundColor: theme.palette.common.white
     }
-} ) );
+  },
+  paper: {
+    marginTop: theme.spacing(8),
+    display: "flex",
+    flexDirection: "column",
+    alignItems: "center"
+  },
+  avatar: {
+    margin: theme.spacing(1),
+    backgroundColor: theme.palette.secondary.main
+  },
+  form: {
+    width: "100%", // Fix IE 11 issue.
+    marginTop: theme.spacing(3)
+  },
+  submit: {
+    margin: theme.spacing(3, 0, 2),
+    backgroundColor: "#70b359"
+  },
+  root: {
+    "&.Mui-focused fieldset": {
+      borderColor: "green"
+    }
+  }
+}));
 
 
 export default function SignUp(props) {
