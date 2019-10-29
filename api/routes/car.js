@@ -5,7 +5,7 @@ require('../config/config');
 let customerDB = require('../models/customer');
 let car = require('../models/car');
 let requestDB = require('../models/request')
-let carCostDB = require('../models/carCost')
+let carCostsDB = require('../models/carCost')
 let { authenticate } = require('../middleware/authentication')
 const awaitHandler = fn => {
     return async (req, res, next) => {
@@ -30,13 +30,15 @@ router.post(
             year: req.body.year
         });
         if (data) {//if car already exists check the carCostDB 
-            let data1 = await carCostDB.findOne({ carID: data._id, dealerID: req.user._id });
-            if (data1) { //if in carCostDB also has a record update its cost
-                await carCostDB.findOneAndUpdate({_id:data1._id},{carCost:req.body.cost});
-                res.send("succesfully updated");
+            let data1 = await carCostsDB.findOne({ carID: data._id, dealerID: req.user._id });
+            if (data) { //if in carCostDB also has a record update its cost
+                data1.carCost = req.body.cost;
+                data1.save(function (err) {
+                    if (err) throw err;
+                });
             }
             else { //if no record in carCostDB then insert a new record
-                let newCar = new carCostDB({
+                let newCar = new carCostsDB({
                     carID: data._id,
                     dealerID: req.user._id,
                     carCost: req.body.cost
@@ -46,7 +48,6 @@ router.post(
                 });
             }
         }
-        else{
         let carData = new car({ //create new car
             manufacturer: req.body.manufacturer,
             model: req.body.model,
@@ -55,7 +56,7 @@ router.post(
         });
         carData.save(function (err, car) {
             if (err) throw err;
-            let newCar = new carCostDB({ //create new carCost
+            let newCar = new carCostsDB({ //create new carCost
                 carID: car._id,
                 dealerID: req.user._id,
                 carCost: req.body.cost
@@ -66,11 +67,11 @@ router.post(
                 res.send(newCar);
             });
         }
-        )}
+        )
     }
     ));
 
-
+    
 //get car
 router.get('/getCar', authenticate, awaitHandler(async (req, res) => {
     let data = await car.findOne({ _id: req.query.carID });
@@ -98,12 +99,12 @@ router.get( '/getTrims', authenticate, awaitHandler( async ( req, res ) => {
 } ) )
 
 router.get( '/getYears', authenticate, awaitHandler( async ( req, res ) => {
-    let data = await car.find( { manufacturer: req.query.manufacturer, model: req.query.model, trim:req.body.trim } ).distinct( 'year' );
+    let data = await car.find( { manufacturer: req.query.manufacturer, model: req.query.model, trim: req.query.trim } ).distinct( 'year' );
     res.send( data );
 } ) )
 
 router.get( '/getBestDeal', authenticate, awaitHandler( async ( req, res ) => {
-    let data = await car.findOne( { manufacturer: req.query.manufacturer, model: req.query.model, trim: req.body.trim, year: req.body.year } );
+    let data = await car.findOne( { manufacturer: req.query.manufacturer, model: req.query.model, trim: req.query.trim, year: req.query.year } );
     let carCosts = carCostsDB.find( { carID: data._id } ).sort( {carCost: 1}).limit(1);
     res.send( carCosts );
 } ) )
