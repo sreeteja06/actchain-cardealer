@@ -8,50 +8,79 @@
  * Author: SreeTeja06 (sreeteja.muthyala@gmail.com)
 
  */
-let express = require( 'express' )
+let express = require('express')
 let router = express.Router()
-let { mongoose } = require( '../db/mongoose' );
-require( '../config/config' );
-let customerDB = require( '../models/customer' );
-let dealerDB = require( '../models/dealer' );
-let carDB = require( '../models/car' );
-let requestDB = require( '../models/request' );
-let soldCarsDB = require( '../models/soldCars' )
-let userDB = require( '../models/user' );
-const { authenticate } = require( '../middleware/authentication' );
+let { mongoose } = require('../db/mongoose');
+require('../config/config');
+let customerDB = require('../models/customer');
+let dealerDB = require('../models/dealer');
+let carDB = require('../models/car');
+let requestDB = require('../models/request');
+let soldCarsDB = require('../models/soldCars')
+let carCostDB = require('../models/carCost');
+let userDB = require('../models/user');
+const { authenticate } = require('../middleware/authentication');
 const awaitHandler = fn => {
-    return async ( req, res, next ) => {
+    return async (req, res, next) => {
         try {
-            res.setHeader( 'Content-Type', 'application/json; charset=utf-8' );
-            await fn( req, res, next );
-        } catch ( err ) {
-            next( err );
+            res.setHeader('Content-Type', 'application/json; charset=utf-8');
+            await fn(req, res, next);
+        } catch (err) {
+            next(err);
         }
     };
 };
 
-router.get( '/', awaitHandler( async ( req, res ) => {
-    res.send( 'You are in customer route' )
-} ) )
+router.get('/', awaitHandler(async (req, res) => {
+    res.send('You are in customer route')
+}))
 
-router.get( '/getBroughtCars', authenticate, awaitHandler( async ( req, res ) => {
-    let BroughtCars = ( await soldCarsDB.find( { soldTO: req.user._id } ) )
-    console.log( BroughtCars );
+router.get('/getBoughtCars', authenticate, awaitHandler(async (req, res) => {
+    let BroughtCars = (await soldCarsDB.find({ soldTO: req.user._id }))
+    console.log(BroughtCars);
     let arr = []
     let obj = {}
-    for ( let i = 0; i < BroughtCars.length; i++ ) {
+    for (let i = 0; i < BroughtCars.length; i++) {
         obj = {}
-        let user = ( await userDB.findOne( { _id: BroughtCars[i].dealerID } ) )
-        obj.dealerName = user.firstName + " " + user.lastName
-        let car = await carDB.findOne( { _id: BroughtCars[i].carID } )
+        let user = (await userDB.findOne({ _id: BroughtCars[i].dealerID }))
+        obj.dealerName = user.firstName + " " + user.lastName;
+        let carCost = await carCostDB.findOne({ _id: BroughtCars[i].carCostID });
+        let car = await carDB.findOne({_id:carCost.carID});
         obj.manufacturer = car.manufacturer
         obj.model = car.model
         obj.trim = car.trim
         obj.year = car.year
         obj.Msrp = car.Msrp
-        arr.push( obj )
+        obj.cost = carCost.carCost;
+        arr.push(obj)
     }
-    res.send( arr );
-} ) )
+    res.send(arr);
+}))
+
+router.post('/BuyACar', authenticate, awaitHandler(async (req, res) => {
+    let data = await carCostDB.findOne({ _id: req.body.carCostID });
+    if (data) {
+        let data2 = await soldCarsDB.findOne({ carCostID: req.body.carCostID });
+        if (data2) {
+            res.send("already sold");
+        }
+        else {
+            let soldCar = new soldCarsDB({ //create new soldcar record
+                carCostID: req.body.carCostID,
+                soldTO: req.user._id,
+                dealerID: data.dealerID,
+                
+            });
+            soldCar.save(function (err) {
+                if (err) throw err;
+                res.send("succesfully appended to soldCars DB");
+            })
+        }
+    }
+    else {
+        res.send("carCostID not found")
+    }
+
+}))
 
 module.exports = router
