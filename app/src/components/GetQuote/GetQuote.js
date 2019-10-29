@@ -21,7 +21,7 @@ import { Button } from '@material-ui/core'
 import AddIcon from '@material-ui/icons/AddOutlined';
 import axios from '../../axios'
 import SnakBar from '../SnackBar/SnackBar'
-import LinearProgress from '@material-ui/core/LinearProgress';
+import LinearProgress from '@material-ui/core/CircularProgress';
 
 const BootstrapInput = withStyles( theme => ( {
     root: {
@@ -115,16 +115,19 @@ export default function GetQuote() {
     }, [] );
 
     const handleManufChange = async(event) => {
+        console.log("manuf " + event.target.value)   
         await setManuf( event.target.value );
+        setLoaded(false)
         const result = await axios(
-            `car/getModels?manufacturer=${manuf}`, {
+            `car/getModels?manufacturer=${ event.target.value}`, {
             headers: {
                 'x-auth': localStorage.getItem( 'carDealer_X_auth' )
             }
         }
         );
-        console.log( result.data );
-        await setModelTypes( "model types" + result.data )
+        setLoaded( true )
+        console.log( "model types" + result.data );
+        await setModelTypes( result.data )
         await setTrimTypes([])
         await setYearTypes([])
         await setModel( '' );
@@ -133,13 +136,15 @@ export default function GetQuote() {
     };
     const handleModelChange = async ( event ) => {
         await setModel( event.target.value );
+        setLoaded( false )
         const result = await axios(
-            `car/getTrims?manufacturer=${ manuf}&model=${model}`, {
+            `car/getTrims?manufacturer=${ manuf }&model=${ event.target.value}`, {
             headers: {
                 'x-auth': localStorage.getItem( 'carDealer_X_auth' )
             }
         }
         );
+        setLoaded( true )
         console.log( "trim types" + result.data );
         await setTrimTypes( result.data )
         await setYearTypes( [] )
@@ -148,6 +153,7 @@ export default function GetQuote() {
     };
     const handleTrimChange = async ( event ) => {
         await setTrim( event.target.value );
+        setLoaded( false )
         const result = await axios(
             `car/getYears?manufacturer=${ manuf }&model=${ model}&trim=${trim}`, {
             headers: {
@@ -155,12 +161,14 @@ export default function GetQuote() {
             }
         }
         );
+        setLoaded( true )
         console.log( "year types" +  result.data );
         await setYearTypes( result.data )
         await setYear( '' );        
     };
     const handleYearChange = async ( event ) => {
         await setYear( event.target.value );
+        setLoaded( false )
         const result = await axios(
             `car/getBestDeal?manufacturer=${ manuf }&model=${ model }&trim=${ trim}&year=${year}`, {
             headers: {
@@ -168,6 +176,7 @@ export default function GetQuote() {
             }
         }
         );
+        setLoaded( true )
         console.log( "best deal" + result.data);
         await setDeal({price:"100",dealer:"dealer1"})
     };
@@ -182,6 +191,7 @@ export default function GetQuote() {
                 direction="column"
                 justify="center"
                 alignItems="center">
+                {!loaded?<LinearProgress color="secondary"></LinearProgress>:null}
                 <InputLabel id="demo-customized-select-label">Select Manufacturer</InputLabel>
                 <FormControl className={classes.margin}>
                     <Select
