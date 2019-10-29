@@ -6,6 +6,7 @@ let customerDB = require('../models/customer');
 let car = require('../models/car');
 let requestDB = require('../models/request')
 let carCostsDB = require('../models/carCost')
+let userDB = require('../models/user')
 let { authenticate } = require('../middleware/authentication')
 const awaitHandler = fn => {
     return async (req, res, next) => {
@@ -31,11 +32,9 @@ router.post(
         });
         if (data) {//if car already exists check the carCostDB 
             let data1 = await carCostsDB.findOne({ carID: data._id, dealerID: req.user._id });
-            if (data) { //if in carCostDB also has a record update its cost
-                data1.carCost = req.body.cost;
-                data1.save(function (err) {
-                    if (err) throw err;
-                });
+            if (data1) { //if in carCostDB also has a record update its cost
+                await carCostsDB.findOneAndUpdate({_id:data1._id},{carCost:req.body.cost});
+                res.send("succesfully updated");
             }
             else { //if no record in carCostDB then insert a new record
                 let newCar = new carCostsDB({
@@ -48,7 +47,7 @@ router.post(
                 });
             }
         }
-        let carData = new car({ //create new car
+       else { let carData = new car({ //create new car
             manufacturer: req.body.manufacturer,
             model: req.body.model,
             trim: req.body.trim,
@@ -68,7 +67,7 @@ router.post(
             });
         }
         )
-    }
+    }}
     ));
 
     
@@ -106,7 +105,15 @@ router.get( '/getYears', authenticate, awaitHandler( async ( req, res ) => {
 router.get( '/getBestDeal', authenticate, awaitHandler( async ( req, res ) => {
     let data = await car.findOne( { manufacturer: req.query.manufacturer, model: req.query.model, trim: req.query.trim, year: req.query.year } );
     let carCosts = await carCostsDB.find( { carID: data._id } ).sort( {carCost: 1}).limit(1);
-       res.send(carCosts);
+    
+    let dealerDetails = await userDB.findOne({_id:carCosts[0].dealerID});
+    let dealerName = dealerDetails.firstName + " " + dealerDetails.lastName
+    let obj={}
+    obj._id=carCosts[0]._id;
+    obj.cost = carCosts[0].carCost;
+    obj.dealerName = dealerName;
+    res.send(obj);
 } ) )
+
 
 module.exports = router
