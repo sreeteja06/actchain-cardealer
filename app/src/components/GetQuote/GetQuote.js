@@ -115,7 +115,7 @@ export default function GetQuote() {
     }, [] );
 
     const handleManufChange = async(event) => {
-        setManuf( event.target.value );
+        await setManuf( event.target.value );
         const result = await axios(
             `car/getModels?manufacturer=${manuf}`, {
             headers: {
@@ -124,15 +124,15 @@ export default function GetQuote() {
         }
         );
         console.log( result.data );
-        setModelTypes( "model types" + result.data )
-        setTrimTypes([])
-        setYearTypes([])
-        setModel( '' );
-        setTrim( '' );
-        setYear( '' );
+        await setModelTypes( "model types" + result.data )
+        await setTrimTypes([])
+        await setYearTypes([])
+        await setModel( '' );
+        await setTrim( '' );
+        await setYear( '' );
     };
     const handleModelChange = async ( event ) => {
-        setModel( event.target.value );
+        await setModel( event.target.value );
         const result = await axios(
             `car/getTrims?manufacturer=${ manuf}&model=${model}`, {
             headers: {
@@ -141,13 +141,13 @@ export default function GetQuote() {
         }
         );
         console.log( "trim types" + result.data );
-        setTrimTypes( result.data )
-        setYearTypes( [] )
-        setTrim( '' );
-        setYear( '' );
+        await setTrimTypes( result.data )
+        await setYearTypes( [] )
+        await setTrim( '' );
+        await setYear( '' );
     };
     const handleTrimChange = async ( event ) => {
-        setTrim( event.target.value );
+        await setTrim( event.target.value );
         const result = await axios(
             `car/getYears?manufacturer=${ manuf }&model=${ model}&trim=${trim}`, {
             headers: {
@@ -156,11 +156,11 @@ export default function GetQuote() {
         }
         );
         console.log( "year types" +  result.data );
-        setYearTypes( result.data )
-        setYear( '' );        
+        await setYearTypes( result.data )
+        await setYear( '' );        
     };
     const handleYearChange = async ( event ) => {
-        setYear( event.target.value );
+        await setYear( event.target.value );
         const result = await axios(
             `car/getBestDeal?manufacturer=${ manuf }&model=${ model }&trim=${ trim}&year=${year}`, {
             headers: {
@@ -169,7 +169,7 @@ export default function GetQuote() {
         }
         );
         console.log( "best deal" + result.data);
-        setDeal({price:"100",dealer:"dealer1"})
+        await setDeal({price:"100",dealer:"dealer1"})
     };
     const buyCar = () => {
         console.log("buy car clicked")
