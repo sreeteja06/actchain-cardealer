@@ -9,7 +9,6 @@ let carCostsSchema = new mongoose.Schema({
         required: true,
     },
     carCost:{
-
         type: Number,
         required:true
     }

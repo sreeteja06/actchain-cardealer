@@ -88,7 +88,7 @@ router.post( '/users/verify', awaitHandler(async ( req, res ) => {
     } else{
         let body = {
             email: tempUser.email,
-            password: req.body.password,
+            password: req.body.password,    
             role: tempUser.role,
             firstName: tempUser.firstName,
             lastName: tempUser.lastName,

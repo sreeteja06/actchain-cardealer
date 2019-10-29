@@ -5,7 +5,7 @@ require('../config/config');
 let customerDB = require('../models/customer');
 let car = require('../models/car');
 let requestDB = require('../models/request')
-let carCostsDB = require('../models/carCost')
+let carCostDB = require('../models/carCost')
 let { authenticate } = require('../middleware/authentication')
 const awaitHandler = fn => {
     return async (req, res, next) => {
@@ -30,15 +30,13 @@ router.post(
             year: req.body.year
         });
         if (data) {//if car already exists check the carCostDB 
-            let data1 = await carCostsDB.findOne({ carID: data._id, dealerID: req.user._id });
-            if (data) { //if in carCostDB also has a record update its cost
-                data1.carCost = req.body.cost;
-                data1.save(function (err) {
-                    if (err) throw err;
-                });
+            let data1 = await carCostDB.findOne({ carID: data._id, dealerID: req.user._id });
+            if (data1) { //if in carCostDB also has a record update its cost
+                await carCostDB.findOneAndUpdate({_id:data1._id},{carCost:req.body.cost});
+                res.send("succesfully updated");
             }
             else { //if no record in carCostDB then insert a new record
-                let newCar = new carCostsDB({
+                let newCar = new carCostDB({
                     carID: data._id,
                     dealerID: req.user._id,
                     carCost: req.body.cost
@@ -48,6 +46,7 @@ router.post(
                 });
             }
         }
+        else{
         let carData = new car({ //create new car
             manufacturer: req.body.manufacturer,
             model: req.body.model,
@@ -56,7 +55,7 @@ router.post(
         });
         carData.save(function (err, car) {
             if (err) throw err;
-            let newCar = new carCostsDB({ //create new carCost
+            let newCar = new carCostDB({ //create new carCost
                 carID: car._id,
                 dealerID: req.user._id,
                 carCost: req.body.cost
@@ -67,11 +66,11 @@ router.post(
                 res.send(newCar);
             });
         }
-        )
+        )}
     }
     ));
 
-    
+
 //get car
 router.get('/getCar', authenticate, awaitHandler(async (req, res) => {
     let data = await car.findOne({ _id: req.query.carID });
