@@ -105,8 +105,8 @@ router.get( '/getYears', authenticate, awaitHandler( async ( req, res ) => {
 
 router.get( '/getBestDeal', authenticate, awaitHandler( async ( req, res ) => {
     let data = await car.findOne( { manufacturer: req.query.manufacturer, model: req.query.model, trim: req.query.trim, year: req.query.year } );
-    let carCosts = carCostsDB.find( { carID: data._id } ).sort( {carCost: 1}).limit(1);
-    res.send( carCosts );
+    let carCosts = await carCostsDB.find( { carID: data._id } ).sort( {carCost: 1}).limit(1);
+       res.send(carCosts);
 } ) )
 
 module.exports = router

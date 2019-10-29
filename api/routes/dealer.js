@@ -64,42 +64,4 @@ router.get( '/', awaitHandler( async ( req, res ) => {
 
 
 
-
-router.get( '/addCar', authenticate, awaitHandler( async ( req, res ) => {
-    let requested = await requestDB.find( { sold: false } );
-    let detailsArray = [];
-    let details = {};
-    let dealerData = await dealerDB.findOne( { _user: req.user._id } );
-    let access = [];
-    access = dealerData.manufacturerAccess;
-    for ( let i = 0; i < requested.length; i++ ) {
-        let carData = await carDB.findOne( { _id: requested[i].carID } );
-
-        let userData = await userDB.findOne( { _id: requested[i].customerID } );
-        if ( access.includes( carData.manufacturer ) ) {
-            details = {};
-            details.requestID = ( requested[i]._id );
-            details.carID = ( requested[i].carID );
-            details.name = userData.firstName + " " + userData.lastName;
-            details.manufacturer = carData.manufacturer;
-            details.model = carData.model;
-            details.trim = carData.trim;
-            details.year = carData.year;
-            details.Msrp = carData.Msrp;
-            if ( requested[i].quotes ) {
-                for ( let m = 0; m < requested[i].quotes.length; m++ ) {
-                    if ( requested[i].quotes[m].dealerID == req.user._id.toString() ) { //!replace with dynamic dealerid(userid of dealer)
-                        details.rank = requested[i].quotes[m].rank;
-                        details.Pricequote = requested[i].quotes[m].Pricequote;
-                    }
-                }
-            }
-            detailsArray.push( details );
-            deatils = {}
-        }
-    }
-    res.send( detailsArray );
-} ) )
-
-
 module.exports = router
