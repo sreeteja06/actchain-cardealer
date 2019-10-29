@@ -66,9 +66,39 @@ const useStyles = makeStyles( theme => ( {
 
 export default function GetQuote() {
     const classes = useStyles();
-    const [age, setAge] = React.useState( '' );
-    const handleChange = event => {
-        setAge( event.target.value );
+    const [manuf, setManuf] = React.useState( '' );
+    const [model, setModel] = React.useState( '' );
+    const [trim, setTrim] = React.useState( '' );
+    const [year, setYear] = React.useState( '' );
+    const [manufTypes, setManufTypes] = React.useState(["BMW", "Audi"]);
+    const [modelTypes, setModelTypes] = React.useState( [] );
+    const [trimTypes, setTrimTypes] = React.useState( [] );
+    const [yearTypes, setYearTypes] = React.useState( [] );
+    const [deal, setDeal] = React.useState(null);
+    const handleManufChange = event => {
+        setManuf( event.target.value );
+        setModelTypes(['s6','s7'])
+        setTrimTypes([])
+        setYearTypes([])
+        setModel( '' );
+        setTrim( '' );
+        setYear( '' );
+    };
+    const handleModelChange = event => {
+        setModel( event.target.value );
+        setTrimTypes( ['g6','g7'] )
+        setYearTypes( [] )
+        setTrim( '' );
+        setYear( '' );
+    };
+    const handleTrimChange = event => {
+        setTrim( event.target.value );
+        setYearTypes( [2006, 2007] )
+        setYear( '' );        
+    };
+    const handleYearChange = event => {
+        setYear( event.target.value );
+        setDeal({price:"100",dealer:"dealer1"})
     };
     return (
         <div>
@@ -84,16 +114,18 @@ export default function GetQuote() {
                         style={{ width: "300px" }}
                         labelId="demo-customized-select-label"
                         id="demo-customized-select"
-                        value={age}
-                        onChange={handleChange}
+                        value={manuf}
+                        onChange={handleManufChange}
                         input={<BootstrapInput />}
                     >
                         <MenuItem value="">
                             <em>None</em>
                         </MenuItem>
-                        <MenuItem value={10}>Ten</MenuItem>
-                        <MenuItem value={20}>Twenty</MenuItem>
-                        <MenuItem value={30}>Thirty</MenuItem>
+                        {
+                            manufTypes.map( ( item, key ) =>
+                                <MenuItem value={item}>{item}</MenuItem>
+                            )
+                        }
                     </Select>
                 </FormControl>
                 <InputLabel id="demo-customized-select-label">Select Model</InputLabel>
@@ -102,16 +134,18 @@ export default function GetQuote() {
                         style={{ width: "300px" }}
                         labelId="demo-customized-select-label"
                         id="demo-customized-select"
-                        value={age}
-                        onChange={handleChange}
+                        value={model}
+                        onChange={handleModelChange}
                         input={<BootstrapInput />}
                     >
                         <MenuItem value="">
                             <em>None</em>
                         </MenuItem>
-                        <MenuItem value={10}>Ten</MenuItem>
-                        <MenuItem value={20}>Twenty</MenuItem>
-                        <MenuItem value={30}>Thirty</MenuItem>
+                        {
+                            modelTypes.map( ( item, key ) =>
+                                <MenuItem value={item}>{item}</MenuItem>
+                            )
+                        }
                     </Select>
                 </FormControl>
                 <InputLabel id="demo-customized-select-label">Select Trim</InputLabel>
@@ -120,16 +154,18 @@ export default function GetQuote() {
                         style={{ width: "300px" }}
                         labelId="demo-customized-select-label"
                         id="demo-customized-select"
-                        value={age}
-                        onChange={handleChange}
+                        value={trim}
+                        onChange={handleTrimChange}
                         input={<BootstrapInput />}
                     >
                         <MenuItem value="">
                             <em>None</em>
                         </MenuItem>
-                        <MenuItem value={10}>Ten</MenuItem>
-                        <MenuItem value={20}>Twenty</MenuItem>
-                        <MenuItem value={30}>Thirty</MenuItem>
+                        {
+                            trimTypes.map( ( item, key ) =>
+                                <MenuItem value={item}>{item}</MenuItem>
+                            )
+                        }
                     </Select>
                 </FormControl>
                 <InputLabel id="demo-customized-select-label">Select Year</InputLabel>
@@ -138,27 +174,29 @@ export default function GetQuote() {
                         style={{ width: "300px" }}
                         labelId="demo-customized-select-label"
                         id="demo-customized-select"
-                        value={age}
-                        onChange={handleChange}
+                        value={year}
+                        onChange={handleYearChange}
                         input={<BootstrapInput />}
                     >
                         <MenuItem value="">
                             <em>None</em>
                         </MenuItem>
-                        <MenuItem value={10}>Ten</MenuItem>
-                        <MenuItem value={20}>Twenty</MenuItem>
-                        <MenuItem value={30}>Thirty</MenuItem>
+                        {
+                            yearTypes.map( ( item, key ) =>
+                                <MenuItem value={item}>{item}</MenuItem>
+                            )
+                        }
                     </Select>
                 </FormControl>
-                <Typography style={{ "marginTop": "10px" }}>Lowest Dealer Price: 10000</Typography>
-                <Typography style={{ "marginTop": "10px" }}>Dealer Name: Dealer 1</Typography>
+                {deal?<div><Typography style={{ "marginTop": "10px" }}>Lowest Dealer Price: {deal.price}</Typography>
+                <Typography style={{ "marginTop": "10px" }}>Dealer Name: {deal.dealer}</Typography>
                 <Button
                     style={{ "backgroundColor": "#70b359", "color": "white", "padding": "10px", "marginTop": "30px" }}
                     // onClick={e => addCarButtonClick( e )}
                     >
                     Buy Car
                     <AddIcon />
-                </Button>
+                    </Button></div>:null}
             </Grid>
         </div>
     );
