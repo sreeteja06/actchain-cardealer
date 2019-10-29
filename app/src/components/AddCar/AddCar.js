@@ -95,6 +95,7 @@ export default function AddCar() {
 
     const onChangeManu = ( value, type ) => {
         car[type] = value
+        console.log(car)
     }
 
     return (

@@ -82,6 +82,7 @@ export default function GetQuote() {
     const [trimTypes, setTrimTypes] = React.useState( [] );
     const [yearTypes, setYearTypes] = React.useState( [] );
     const [deal, setDeal] = React.useState(null);
+    const [carCostID, setCarCostID] = React.useState( null );
 
     React.useEffect( () => {
         const fetchData = async () => {
@@ -155,7 +156,7 @@ export default function GetQuote() {
         await setTrim( event.target.value );
         setLoaded( false )
         const result = await axios(
-            `car/getYears?manufacturer=${ manuf }&model=${ model}&trim=${trim}`, {
+            `car/getYears?manufacturer=${ manuf }&model=${ model }&trim=${ event.target.value}`, {
             headers: {
                 'x-auth': localStorage.getItem( 'carDealer_X_auth' )
             }
@@ -170,17 +171,42 @@ export default function GetQuote() {
         await setYear( event.target.value );
         setLoaded( false )
         const result = await axios(
-            `car/getBestDeal?manufacturer=${ manuf }&model=${ model }&trim=${ trim}&year=${year}`, {
+            `car/getBestDeal?manufacturer=${ manuf }&model=${ model }&trim=${ trim }&year=${ event.target.value}`, {
             headers: {
                 'x-auth': localStorage.getItem( 'carDealer_X_auth' )
             }
         }
         );
         setLoaded( true )
-        console.log( "best deal" + result.data);
-        await setDeal({price:"100",dealer:"dealer1"})
+        setCarCostID(result.data._id);
+        console.log( result.data._id);
+        await setDeal( { price: result.data.cost,dealer:result.data.dealerName})
     };
-    const buyCar = () => {
+    const buyCar = async () => {
+        try {
+            if ( showSnakBar ) {
+                await setShowSnakBar( false );
+            }
+            let response = await axios.post( '/customer/BuyACar', {
+                "carCostID": carCostID
+            }, {
+                headers: {
+                    'x-auth': localStorage.getItem( 'carDealer_X_auth' )
+                }
+            } )
+            if ( response.status === 200 ) {
+                setSnakBarMessage( "successfully bought car" )
+            } else {
+                setSnakBarMessage( "error buying car" )
+                setSnakBarVarient( 'error' );
+            }
+            await setShowSnakBar( true )
+        } catch ( e ) {
+            console.error( e );
+            setSnakBarMessage( "error adding car model" )
+            setSnakBarVarient( 'error' );
+            await setShowSnakBar( true )
+        }
         console.log("buy car clicked")
     }
     return (
