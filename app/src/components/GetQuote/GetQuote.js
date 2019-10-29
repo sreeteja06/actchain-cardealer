@@ -20,6 +20,8 @@ import { Grid, Typography } from '@material-ui/core'
 import { Button } from '@material-ui/core'
 import AddIcon from '@material-ui/icons/AddOutlined';
 import axios from '../../axios'
+import SnakBar from '../SnackBar/SnackBar'
+import LinearProgress from '@material-ui/core/LinearProgress';
 
 const BootstrapInput = withStyles( theme => ( {
     root: {
@@ -67,6 +69,10 @@ const useStyles = makeStyles( theme => ( {
 
 export default function GetQuote() {
     const classes = useStyles();
+    const [showSnakBar, setShowSnakBar] = React.useState( false )
+    const [snakBarMessage, setSnakBarMessage] = React.useState()
+    const [snakBarVarient, setSnakBarVarient] = React.useState( 'success' )
+    const [loaded, setLoaded] = React.useState( false );
     const [manuf, setManuf] = React.useState( '' );
     const [model, setModel] = React.useState( '' );
     const [trim, setTrim] = React.useState( '' );
