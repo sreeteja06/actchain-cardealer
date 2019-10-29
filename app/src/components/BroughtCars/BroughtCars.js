@@ -107,14 +107,6 @@ const BroughtCars = () => {
             }
         },
         {
-            name: "discount",
-            label: "Bought at discount",
-            options: {
-                filter: true,
-                sort: true,
-            }
-        },
-        {
             name: "dealerName",
             label: "Bought From",
             options: {

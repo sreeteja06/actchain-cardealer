@@ -10,7 +10,6 @@
  */
 import React from 'react';
 import MUIDataTable from "mui-datatables";
-import { Button } from '@material-ui/core'
 import SnakBar from '../SnackBar/SnackBar'
 import axios from '../../axios'
 import LinearProgress from '@material-ui/core/LinearProgress';
@@ -101,14 +100,6 @@ const BroughtCars = () => {
         {
             name: "Msrp",
             label: "MSRP",
-            options: {
-                filter: true,
-                sort: true,
-            }
-        },
-        {
-            name: "discount",
-            label: "sold at discount",
             options: {
                 filter: true,
                 sort: true,

@@ -20,15 +20,6 @@ import CarICon from '@material-ui/icons/DirectionsCarOutlined'
 
 export const DealerNavItems = ( props ) => (
     <div>
-        <ListItem button 
-        onClick={event => props.handleListItemClick( event, 0, "Market" )}
-            selected={props.selectedIndex === 0}
-        >
-            <ListItemIcon style={{ "color": '#FFFFFF' }}>
-                <DashboardIcon />
-            </ListItemIcon>
-            <ListItemText primary="Market" />
-        </ListItem>
         <ListItem button
             onClick={event => props.handleListItemClick( event, 2, "CarDetails" )}
             selected={props.selectedIndex === 2}
@@ -48,15 +39,6 @@ export const DealerNavItems = ( props ) => (
             <ListItemText primary="CarsSold" />
         </ListItem>
         <ListItem button
-            onClick={event => props.handleListItemClick( event, 4, "Subscribe" )}
-            selected={props.selectedIndex === 4}
-        >
-            <ListItemIcon style={{ "color": '#FFFFFF' }}>
-                <PeopleIcon />
-            </ListItemIcon>
-            <ListItemText primary="Subscribe" />
-        </ListItem>
-        <ListItem button
             onClick={event => props.handleListItemClick( event, 5, "AddCar" )}
             selected={props.selectedIndex === 5}
         >
@@ -70,13 +52,6 @@ export const DealerNavItems = ( props ) => (
 
 export const BuyerNavItems = (props) => (
     <div>
-        <ListItem button onClick={event => props.handleListItemClick( event, 0, "Dashboard" )}
-            selected={props.selectedIndex === 0}>
-            <ListItemIcon style={{ "color": '#FFFFFF' }}>
-                <DashboardIcon />
-            </ListItemIcon>
-            <ListItemText primary="Dashboard" />
-        </ListItem>
         <ListItem button onClick={event => props.handleListItemClick( event, 1, "getQuote" )}
             selected={props.selectedIndex === 1}>
             <ListItemIcon style={{ "color": '#FFFFFF' }}>

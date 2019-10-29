@@ -22,13 +22,10 @@ import IconButton from '@material-ui/core/IconButton';
 import LogoutIcon from '@material-ui/icons/PowerSettingsNewOutlined';
 import MenuIcon from '@material-ui/icons/Menu';
 import ChevronLeftIcon from '@material-ui/icons/ChevronLeft';
-import Market from '../../containers/MarketContainer/MarketContainer';
 import { DealerNavItems, BuyerNavItems } from './listitems';
 import CarDetails from '../CarDetails/CarDetails'
 import AddCar from '../AddCar/AddCar'
 import GetQuote from '../GetQuote/GetQuote'
-import BuyerTable from '../BuyerTable/BuyerTable'
-import DealerSubscribe from '../DealerSubscribe/DealerSubscribe';
 import BroughtCars from '../BroughtCars/BroughtCars'
 import CarsSold from '../CarsSold/CarsSold'
 import axios from '../../axios'
@@ -124,9 +121,9 @@ const DashboardNav = ( props ) => {
   if(!XToken){
     props.history.push( '/' )
   }
-  let firstCard = 'Market'
+  let firstCard = 'CarDetails'
   if(userType === 'Buyer'){
-      firstCard = 'Dashboard'
+    firstCard = 'getQuote'
   }
   let [SelectedNavItem, setSelectedNavItem] = React.useState(firstCard);
   
@@ -213,12 +210,9 @@ const DashboardNav = ( props ) => {
         </Drawer>
         <main className={classes.content}>
           <div className={classes.appBarSpacer} />
-          {SelectedNavItem==='Market'?<Market></Market>:null}
           {SelectedNavItem === 'CarDetails' ? <CarDetails></CarDetails> : null}
           {SelectedNavItem === 'AddCar' ? <AddCar></AddCar> : null}
-          {SelectedNavItem === 'Dashboard' ? <BuyerTable></BuyerTable> : null}
           {SelectedNavItem === 'getQuote' ? <GetQuote></GetQuote> : null}
-          {SelectedNavItem === 'Subscribe' ? <DealerSubscribe></DealerSubscribe> : null}
           {SelectedNavItem === 'BoughtCars' ? <BroughtCars></BroughtCars> : null}
           {SelectedNavItem === 'CarsSold' ? <CarsSold></CarsSold> : null}
         </main>
