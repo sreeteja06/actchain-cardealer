@@ -133,19 +133,4 @@ router.get( '/getARequestDetails', awaitHandler( async ( req, res ) => {
     let data = await requestDB.findOne( { _id: req.query.requestID } );
     res.send( data );
 } ) )
-
-router.get( '/getQuotableCars', awaitHandler( async ( req, res ) => {
-    let data = await carDB.find();
-    for(let i=0;i<data.length;i++){
-    let flag = await requestDB.findOne({carID: data[i]._id, customerID: req.query.customerID,sold:false} );
-    let quotable = false
-    if(flag){
-        quotable = true
-    }
-    let temp = {...data[i]._doc}
-   
-    data[i] = {...temp,quotable:quotable}
-    }
-    res.send( data );
-} ) )
 module.exports = router
