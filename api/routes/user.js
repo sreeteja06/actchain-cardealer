@@ -43,25 +43,23 @@ router.post('/users/signup', awaitHandler( ( req, res ) => {
         ID: req.body.ID
     }
     console.log(body.email + ": OTP = " +  body.OTP)
-    //using nodemailer to send the otp to mail
-    var transporter = nodemailer.createTransport( {
-        host: "smtp.office365.com", // hostname
-        secureConnection: false, // TLS requires secureConnection to be false
-        port: 587, // port for secure SMTP
-        tls: {
-            ciphers: 'SSLv3'
-        },
+    console.log("password " + process.env.EPASS);
+    var transporter = nodemailer.createTransport(
+      smtpTransport({
+        service: "gmail",
+        host: "smtp.gmail.com",
         auth: {
-            user: 'sreeteja@activa.one',
-            pass: process.env.EPASS
+          user: "dummycar.dealer@gmail.com",
+          pass: process.env.EPASS
         }
-    } );
+      })
+    );
 
     var mailOptions = {
-        from: 'sreeteja@activa.one',
-        to: body.email,
-        subject: 'OTP for Actchain Car Dealer ',
-        text: 'OTP is '+body.OTP
+      from: "dummycar.dealer@gmail.com",
+      to: body.email,
+      subject: "OTP for Actchain Car Dealer ",
+      text: "OTP is " + body.OTP
     };
 
     transporter.sendMail( mailOptions, function ( error, info ) {

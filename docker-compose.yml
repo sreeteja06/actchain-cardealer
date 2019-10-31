@@ -27,7 +27,7 @@ services:
     ports:
       - 4003:4003
     environment:
-      - EPASS=passofemail
+      - EPASS=${EPASS}
     depends_on:
       - cardealer_mongo
     networks: 
