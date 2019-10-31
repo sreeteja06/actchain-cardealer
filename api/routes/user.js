@@ -44,16 +44,16 @@ router.post('/users/signup', awaitHandler( ( req, res ) => {
     }
     console.log(body.email + ": OTP = " +  body.OTP)
     console.log("password " + process.env.EPASS);
-    var transporter = nodemailer.createTransport(
-      smtpTransport({
-        service: "gmail",
-        host: "smtp.gmail.com",
-        auth: {
-          user: "dummycar.dealer@gmail.com",
-          pass: process.env.EPASS
-        }
-      })
-    );
+    var transporter = nodemailer.createTransport({
+      host: "smtp.gmail.com",
+      port: 465,
+      secure: true, // use SSL,
+      // you can try with TLS, but port is then 587
+      auth: {
+        user: "dummycar.dealer@gmail.com", // Your email id
+        pass: process.env.EPASS // Your password
+      }
+    });
 
     var mailOptions = {
       from: "dummycar.dealer@gmail.com",
