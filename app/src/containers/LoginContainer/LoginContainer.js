@@ -33,7 +33,7 @@ class LoginContainer extends Component {
       if ( response.status === 200 ) {
         this.role = response.data.role;
         this.dashBoardName = response.data.firstName + response.data.lastName
-        await localStorage.setItem( 'carDealer_X_auth', response.data.tokens[response.data.tokens.length - 1].token )
+        await localStorage.setItem( 'carDealer_X_auth', response.data.access_tokens[response.data.access_tokens.length - 1].token )
         await localStorage.setItem( 'carDealer_userid', response.data._id )
         this.props.history.push( { pathname: '/dashboard', state: { role: this.role, dashBoardName: this.dashBoardName } } )
       } else {

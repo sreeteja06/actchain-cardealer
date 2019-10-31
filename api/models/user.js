@@ -31,7 +31,7 @@ let UserSchema = new mongoose.Schema( {
       require: true,
       minlength: 6
    },
-   firstName: {
+   Name: {
       type: String,
       required: true,
    },
@@ -43,7 +43,7 @@ let UserSchema = new mongoose.Schema( {
       type: String,
       default: false
    },
-   tokens: [{
+   access_tokens: [{
       access: {
          type: String,
          required: true
@@ -52,14 +52,26 @@ let UserSchema = new mongoose.Schema( {
          type: String,
          required: true
       }
-   }]
+   }],
+   address :{
+      type:String,
+      required:true
+   },
+   city:{
+      type:String,
+      required:true    
+   },
+   state:{
+      type:String,
+      required:true    
+   }
 } );
 
 UserSchema.methods.generateAuthToken = function () {
    let user = this;
    let access = 'auth';
    let token = jwt.sign( { _id: user._id.toHexString(), access }, process.env.JWT_SECRET ).toString();
-   user.tokens.push( { access, token } );
+   user.access_tokens.push( { access, token } );
    return user.save().then( () => {
       return token;
    } );
@@ -70,7 +82,7 @@ UserSchema.methods.removeToken = function ( token ) {
 
    return user.update( {
       $pull: {
-         tokens: { token }
+         access_tokens: { token }
       }
    } );
 };
@@ -87,8 +99,8 @@ UserSchema.statics.findByToken = function ( token ) {
 
    return User.findOne( {
       '_id': decoded._id,
-      'tokens.token': token,
-      'tokens.access': 'auth'
+      'access_tokens.token': token,
+      'access_tokens.access': 'auth'
    } );
 };
 

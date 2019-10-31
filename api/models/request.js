@@ -6,7 +6,7 @@ let requestSchema = new mongoose.Schema({
         required: true,
 
     },
-    customerID: {
+    buyerID: {
         type: mongoose.Schema.Types.ObjectId,
         required: true,
 

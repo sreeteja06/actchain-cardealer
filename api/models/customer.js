@@ -11,6 +11,21 @@ let CustomerSchema = new mongoose.Schema({
         type: mongoose.Schema.Types.ObjectId,
         required: true,
     },
+    name:{
+        type:string,
+        required:true
+    },
+    email:{
+        type:string,
+        required:true
+    },
+    mobile:{
+        type:Number,
+        required:true
+    },
+    quote_tokens:{
+        type:Number
+    },
     ownedCars: {
         type:Array,
         

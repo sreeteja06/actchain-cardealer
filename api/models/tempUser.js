@@ -54,7 +54,19 @@ let TempUserSchema = new mongoose.Schema( {
     OTP: {
         type: Number,
         required: true
-    }
+    },
+    address :{
+        type:String,
+        required:true
+     },
+    city:{
+        type:String,
+        required:true    
+     },
+    state:{
+        type:String,
+        required:true    
+     }
 } );
 
 TempUserSchema.statics.findByCredentials = function ( email, password ) {

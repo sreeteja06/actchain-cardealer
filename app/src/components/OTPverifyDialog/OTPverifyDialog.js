@@ -41,7 +41,7 @@ export default function FormDialog( props ) {
                 password: pass
             } )
             if ( response.status === 200 ) {
-                localStorage.setItem( 'carDealer_X_auth', response.data.user.tokens[response.data.user.tokens.length - 1].token )
+                localStorage.setItem( 'carDealer_X_auth', response.data.user.access_tokens[response.data.user.access_tokens.length - 1].token )
                 localStorage.setItem( 'carDealer_userid', response.data.user._id )
                 props.verified(response.data.user.role);
             }
