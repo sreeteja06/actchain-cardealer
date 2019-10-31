@@ -111,6 +111,7 @@ router.get( '/market', authenticate, awaitHandler( async ( req, res ) => {
             details.year = carData.year;
             details.Msrp = carData.Msrp;
             if ( requested[i].quotes ) {
+                details.bestOffer = requested[i].quotes[0].Pricequote
                 for ( let m = 0; m < requested[i].quotes.length; m++ ) {
                     if ( requested[i].quotes[m].dealerID == req.user._id.toString() ) { //!replace with dynamic dealerid(userid of dealer)
                         details.rank = requested[i].quotes[m].rank;
