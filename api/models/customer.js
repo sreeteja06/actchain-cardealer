@@ -12,11 +12,11 @@ let CustomerSchema = new mongoose.Schema({
         required: true,
     },
     name:{
-        type:string,
+        type:String,
         required:true
     },
     email:{
-        type:string,
+        type:String,
         required:true
     },
     mobile:{
@@ -24,7 +24,8 @@ let CustomerSchema = new mongoose.Schema({
         required:true
     },
     quote_tokens:{
-        type:Number
+        type:Number,
+        default:0
     },
     ownedCars: {
         type:Array,

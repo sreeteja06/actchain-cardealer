@@ -8,13 +8,13 @@
  * Author: SreeTeja06 (sreeteja.muthyala@gmail.com)
 
  */
-const mongoose = require( 'mongoose' );
-const validator = require( 'validator' );
-const jwt = require( 'jsonwebtoken' );
-const bcrypt = require( 'bcryptjs' );
+const mongoose = require('mongoose');
+const validator = require('validator');
+const jwt = require('jsonwebtoken');
+const bcrypt = require('bcryptjs');
 
 
-let TempUserSchema = new mongoose.Schema( {
+let TempUserSchema = new mongoose.Schema({
     email: {
         type: String,
         required: true,
@@ -55,53 +55,78 @@ let TempUserSchema = new mongoose.Schema( {
         type: Number,
         required: true
     },
-    address :{
-        type:String,
-        required:true
-     },
-    city:{
-        type:String,
-        required:true    
-     },
-    state:{
-        type:String,
-        required:true    
-     }
-} );
+    address: {
+        type: String,
+        required: true
+    },
+    city: {
+        type: String,
+        required: true
+    },
+    state: {
+        type: String,
+        required: true
+    },
+    contact_name: {
+        type: String
 
-TempUserSchema.statics.findByCredentials = function ( email, password ) {
+    },
+    contact_email: {
+        type: String
+
+    },
+    contact_title: {
+        type: String
+
+    },
+    contact_mobile: {
+        type: String
+
+    },
+    website :{
+        type:String
+    },
+    Brand:{
+        type:String
+    },
+    mobile:{
+        type:Number
+    }
+});
+
+TempUserSchema.statics.findByCredentials = function (email, password) {
     let User = this;
 
-    return User.findOne( { email } ).then( ( user ) => {
-        if ( !user ) {
+    return User.findOne({ email }).then((user) => {
+        if (!user) {
             return Promise.reject();
         }
 
-        return new Promise( ( resolve, reject ) => {
-            bcrypt.compare( password, user.password, ( err, res ) => {
-                if ( res ) {
-                    resolve( user );
+        return new Promise((resolve, reject) => {
+            bcrypt.compare(password, user.password, (err, res) => {
+                if (res) {
+                    resolve(user);
                 } else {
                     reject();
                 }
-            } );
-        } );
-    } );
+            });
+        });
+    });
 };
 
-TempUserSchema.pre( 'save', function ( next ) {
+TempUserSchema.pre('save', function (next) {
     let user = this;
 
-    if ( user.isModified( 'password' ) ) {
-        bcrypt.genSalt( 10, ( err, salt ) => {
-            bcrypt.hash( user.password, salt, ( err, hash ) => {
+    if (user.isModified('password')) {
+        bcrypt.genSalt(10, (err, salt) => {
+            bcrypt.hash(user.password, salt, (err, hash) => {
                 user.password = hash;
                 next();
-            } );
-        } );
+            });
+        });
     } else {
         next();
     }
-} );
+});
 
-module.exports = mongoose.model( 'tempUser', TempUserSchema );
+module.exports = mongoose.model('tempUser', TempUserSchema);

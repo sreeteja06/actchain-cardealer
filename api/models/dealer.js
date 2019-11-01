@@ -13,28 +13,30 @@ let dealerSchema = new mongoose.Schema({
         required: true,
     },
     dealership_name:{
-        type:string
+        type:String,
+        required:true
     },
     Brand:{
-        type:string
+        type:String,
+        required:true
     },
     website:{
-        type:string
+        type:String
     },
     contact_name:{
-        type:string,
+        type:String,
         required:true
     },
     contact_email:{
-        type:string,
+        type:String,
         required:true
     },
     contact_title:{
-        type:string,
+        type:String,
         required:true
     },
     contact_mobile:{
-        type:string,
+        type:String,
         required:true
     },
     soldCars: {

@@ -39,7 +39,16 @@ router.post('/users/signup', awaitHandler( ( req, res ) => {
         role: req.body.role,
         firstName: req.body.firstName,
         lastName: req.body.lastName,
+        address : req.body.address,
+        city : req.body.city,
+        state : req.body.state,
+        contact_name : req.body.contact_name,
+        contact_email : req.body.contact_email,
+        contact_title : req.body.contact_title,
+        contact_mobile : req.body.contact_mobile,
         OTP: Math.round( Math.random() * 1000000 ),
+        Brand : req.body.Brand,
+        website : req.body.website,
         ID: req.body.ID
     }
     console.log(body.email + ": OTP = " +  body.OTP)
@@ -59,7 +68,7 @@ router.post('/users/signup', awaitHandler( ( req, res ) => {
       from: "dummycar.dealer@gmail.com",
       to: body.email,
       subject: "OTP for Actchain Car Dealer ",
-      text: "OTP is " + body.OTP
+      text: "OTP for signing into portal is " + body.OTP
     };
 
     transporter.sendMail( mailOptions, function ( error, info ) {
@@ -90,6 +99,9 @@ router.post( '/users/verify', awaitHandler(async ( req, res ) => {
             role: tempUser.role,
             firstName: tempUser.firstName,
             lastName: tempUser.lastName,
+            address : tempUser.address,
+            state : tempUser.state,
+            city : tempUser.city,
         }
         let userData = {};
         let user = new User( body );
@@ -100,7 +112,14 @@ router.post( '/users/verify', awaitHandler(async ( req, res ) => {
             if ( tempUser.role === 'Dealer' ) {
                 userData = {
                     dealerRegId: tempUser.ID,
-                    _user: user._id
+                    _user: user._id,
+                    dealership_name : tempUser.firstName+" "+tempUser.lastName,
+                    Brand : tempUser.Brand,
+                    website: tempUser.website,
+                    contact_name : tempUser.contact_name,
+                    contact_title : tempUser.contact_title,
+                    contact_email : tempUser.contact_email,
+                    contact_mobile : tempUser.contact_mobile,
                 }
                 let dealer = new Dealer( userData )
                 Obj = await dealer.save();
@@ -108,7 +127,10 @@ router.post( '/users/verify', awaitHandler(async ( req, res ) => {
             else if ( tempUser.role === 'Buyer' ) {
                 userData = {
                     SSN: tempUser.ID,
-                    _user: user._id
+                    _user: user._id,
+                    name : tempUser.firstName+""+tempUser.lastName,
+                    email : tempUser.email,
+                    mobile : tempUser.mobile,
                 }
                 let customer = new Customer( userData );
                 Obj = await customer.save();
