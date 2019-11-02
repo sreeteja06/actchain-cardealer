@@ -39,99 +39,107 @@ const Market = ( props ) => {
         } )
     }
     const columns = [
-        {
-            name: "requestID",
-            label: "requestID",
-            options: {
-                filter: false,
-                sort: false,
-                display: false
-            }
-        },
-        {
-            name: "name",
-            label: "Name",
-            options: {
-                filter: false,
-                sort: true,
-            }
-        },
-        {
-            name: "manufacturer",
-            label: "Manufacturer",
-            options: {
-                filter: true,
-                sort: true,
-            }
-        },
-        {
-            name: "model",
-            label: "Model",
-            options: {
-                filter: true,
-                sort: true,
-            }
-        },
-        {
-            name: "trim",
-            label: "Trim",
-            options: {
-                filter: true,
-                sort: true,
-            }
-        },
-        {
-            name: "year",
-            label: "Year",
-            options: {
-                filter: true,
-                sort: true,
-            }
-        },
-        {
-            name: "Msrp",
-            label: "MSRP",
-            options: {
-                filter: true,
-                sort: true,
-            }
-        },
-        {
-            name: "rank",
-            label: "Rank",
-            options: {
-                filter: true,
-                sort: true,
-            }
-        },
-        {
-            name: "Pricequote",
-            label: "Offer",
-            options: {
-                filter: true,
-                sort: true,
-            }
-        },
-        {
-            name: "Quote Offer",
-            label: "Quote Offer",
-            options: {
-                filter: false,
-                sort: false,
-                customBodyRender: ( value, tableMeta, updateValue ) => {
-                    return (
-                      <div>
-                        <Button
-                          style={{ backgroundColor: "#70b359", color: "white" }}
-                          onClick={e => QuoteDiscount(tableMeta.rowData)}
-                        >
-                          Quote Offer
-                        </Button>
-                      </div>
-                    );
-                }
-            }
-        },
+      {
+        name: "requestID",
+        label: "requestID",
+        options: {
+          filter: false,
+          sort: false,
+          display: false
+        }
+      },
+      {
+        name: "name",
+        label: "Name",
+        options: {
+          filter: false,
+          sort: true
+        }
+      },
+      {
+        name: "manufacturer",
+        label: "Manufacturer",
+        options: {
+          filter: true,
+          sort: true
+        }
+      },
+      {
+        name: "model",
+        label: "Model",
+        options: {
+          filter: true,
+          sort: true
+        }
+      },
+      {
+        name: "trim",
+        label: "Trim",
+        options: {
+          filter: true,
+          sort: true
+        }
+      },
+      {
+        name: "year",
+        label: "Year",
+        options: {
+          filter: true,
+          sort: true
+        }
+      },
+      {
+        name: "Msrp",
+        label: "MSRP",
+        options: {
+          filter: true,
+          sort: true
+        }
+      },
+      {
+        name: "rank",
+        label: "Rank",
+        options: {
+          filter: true,
+          sort: true
+        }
+      },
+      {
+        name: "bestOffer",
+        label: "Best Quote",
+        options: {
+          filter: true,
+          sort: true
+        }
+      },
+      {
+        name: "Pricequote",
+        label: "Previous Quote",
+        options: {
+          filter: true,
+          sort: true
+        }
+      },
+      {
+        name: "Quote Offer",
+        label: "Quote Offer",
+        options: {
+          filter: false,
+          sort: false,
+          customBodyRender: (value, tableMeta, updateValue) => {
+            return (
+              <div>
+                <Button
+                  style={{ backgroundColor: "#70b359", color: "white" }}
+                  onClick={e => QuoteDiscount(tableMeta.rowData)}
+                >
+                  Quote Offer
+                </Button>
+              </div>
+            );
+          }
+        }
+      }
     ];
 
     const options = {

@@ -28,8 +28,8 @@ import CarDetails from '../CarDetails/CarDetails'
 import AddCar from '../AddCar/AddCar'
 import GetQuote from '../GetQuote/GetQuote'
 import BuyerTable from '../BuyerTable/BuyerTable'
-import DealerSubscribe from '../DealerSubscribe/DealerSubscribe';
 import BroughtCars from '../BroughtCars/BroughtCars'
+import BuyTokens from '../BuyToken/BuyToken'
 import CarsSold from '../CarsSold/CarsSold'
 import axios from '../../axios'
 
@@ -161,35 +161,52 @@ const DashboardNav = ( props ) => {
     <div>
       <div className={classes.root}>
         <CssBaseline />
-        <AppBar position="absolute" className={clsx( classes.appBar, open && classes.appBarShift )}>
+        <AppBar
+          position="absolute"
+          className={clsx(classes.appBar, open && classes.appBarShift)}
+        >
           <Toolbar className={classes.toolbar}>
             <IconButton
               edge="start"
               color="inherit"
               aria-label="open drawer"
               onClick={handleDrawerOpen}
-              className={clsx( classes.menuButton, open && classes.menuButtonHidden )}
+              className={clsx(
+                classes.menuButton,
+                open && classes.menuButtonHidden
+              )}
             >
               <MenuIcon />
             </IconButton>
-            <Typography component="h1" variant="h6" color="inherit" noWrap className={classes.title}>
-              {SelectedNavItem === 'CarDetails' ? 'Cars For Sale' : SelectedNavItem}
+            <Typography
+              component="h1"
+              variant="h6"
+              color="inherit"
+              noWrap
+              className={classes.title}
+            >
+              {SelectedNavItem === "CarDetails"
+                ? "Cars For Sale"
+                : SelectedNavItem}
             </Typography>
-            <Typography component="h1" variant="h6" color="inherit" noWrap className={classes.title}>
+            <Typography
+              component="h1"
+              variant="h6"
+              color="inherit"
+              noWrap
+              className={classes.title}
+            >
               {dashboardName}
             </Typography>
-            <IconButton 
-              color="inherit"
-              onClick={logout}
-            >
-             <LogoutIcon/>
+            <IconButton color="inherit" onClick={logout}>
+              <LogoutIcon />
             </IconButton>
           </Toolbar>
         </AppBar>
         <Drawer
           variant="permanent"
           classes={{
-            paper: clsx( classes.drawerPaper, !open && classes.drawerPaperClose ),
+            paper: clsx(classes.drawerPaper, !open && classes.drawerPaperClose)
           }}
           open={open}
         >
@@ -201,26 +218,34 @@ const DashboardNav = ( props ) => {
           <Divider />
           <List>
             <List>
-              {userType === 'Dealer'? 
-                <DealerNavItems handleListItemClick={handleListItemClick} selectedIndex={selectedIndex} ></DealerNavItems>
-              :null}
-              {userType === 'Buyer' ?
-                <BuyerNavItems handleListItemClick={handleListItemClick} selectedIndex={selectedIndex} ></BuyerNavItems>
-                : null}
+              {userType === "Dealer" ? (
+                <DealerNavItems
+                  handleListItemClick={handleListItemClick}
+                  selectedIndex={selectedIndex}
+                ></DealerNavItems>
+              ) : null}
+              {userType === "Buyer" ? (
+                <BuyerNavItems
+                  handleListItemClick={handleListItemClick}
+                  selectedIndex={selectedIndex}
+                ></BuyerNavItems>
+              ) : null}
             </List>
           </List>
           <Divider />
         </Drawer>
         <main className={classes.content}>
           <div className={classes.appBarSpacer} />
-          {SelectedNavItem==='Market'?<Market></Market>:null}
-          {SelectedNavItem === 'CarDetails' ? <CarDetails></CarDetails> : null}
-          {SelectedNavItem === 'AddCar' ? <AddCar></AddCar> : null}
-          {SelectedNavItem === 'Dashboard' ? <BuyerTable></BuyerTable> : null}
-          {SelectedNavItem === 'getQuote' ? <GetQuote></GetQuote> : null}
-          {SelectedNavItem === 'Subscribe' ? <DealerSubscribe></DealerSubscribe> : null}
-          {SelectedNavItem === 'BoughtCars' ? <BroughtCars></BroughtCars> : null}
-          {SelectedNavItem === 'CarsSold' ? <CarsSold></CarsSold> : null}
+          {SelectedNavItem === "Market" ? <Market></Market> : null}
+          {SelectedNavItem === "CarDetails" ? <CarDetails></CarDetails> : null}
+          {SelectedNavItem === "AddCar" ? <AddCar></AddCar> : null}
+          {SelectedNavItem === "Dashboard" ? <BuyerTable></BuyerTable> : null}
+          {SelectedNavItem === "getQuote" ? <GetQuote></GetQuote> : null}
+          {SelectedNavItem === "BoughtCars" ? (
+            <BroughtCars></BroughtCars>
+          ) : null}
+          {SelectedNavItem === "CarsSold" ? <CarsSold></CarsSold> : null}
+          {SelectedNavItem === "BuyTokens" ? <BuyTokens></BuyTokens> : null}
         </main>
       </div>
     </div>
