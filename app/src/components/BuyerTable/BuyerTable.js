@@ -137,7 +137,7 @@ const BuyerTable = (props) => {
         },
         {
             name: "discount",
-            label: "Offer",
+            label: "Quote",
             options: {
                 filter: true,
                 sort: true,
@@ -145,7 +145,7 @@ const BuyerTable = (props) => {
         },
         {
             name: "dealerName",
-            label: "Offer By",
+            label: "Quote By",
             options: {
                 filter: true,
                 sort: true,
