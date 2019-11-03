@@ -31,7 +31,7 @@ let UserSchema = new mongoose.Schema( {
       require: true,
       minlength: 6
    },
-   Name: {
+   firstName: {
       type: String,
       required: true,
    },

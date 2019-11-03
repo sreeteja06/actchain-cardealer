@@ -25,9 +25,9 @@ router.get( '/getSoldCars', authenticate, awaitHandler( async ( req, res ) => {
     let obj = {}
     for ( let i = 0; i < soldCars.length; i++ ) {
         obj = {}
-        obj.discount = ( await requestDB.findOne( { _id: soldCars[i].requestID } ) ).quotes[0].Pricequote
-        let tempBuyer = ( await userDB.findOne( { _id: soldCars[i].customerID } ) )
-        obj.customerName = tempBuyer.firstName + " " + tempBuyer.lastName
+        obj.cost = ( await requestDB.findOne( { _id: soldCars[i].requestID } ) ).quotes[0].Pricequote
+        let tempBuyer = ( await userDB.findOne( { _id: soldCars[i].buyerID } ) )
+        obj.customerName = tempBuyer.name;
         let car = await carDB.findOne( { _id: soldCars[i].carID } )
         obj.manufacturer = car.manufacturer
         obj.model = car.model
@@ -94,13 +94,12 @@ router.get( '/market', authenticate, awaitHandler( async ( req, res ) => {
     let detailsArray = [];
     let details = {};
     let dealerData = await dealerDB.findOne( { _user: req.user._id } );
-    let access = [];
-    access = dealerData.manufacturerAccess;
+    
     for ( let i = 0; i < requested.length; i++ ) {
         let carData = await carDB.findOne( { _id: requested[i].carID } );
 
-        let userData = await userDB.findOne( { _id: requested[i].customerID } );
-        if ( access.includes( carData.manufacturer ) ) {
+        let userData = await userDB.findOne( { _id: requested[i].buyerID } );
+        if ( dealerData.Brand == ( carData.manufacturer ) ) {
             details = {};
             details.requestID = ( requested[i]._id );
             details.carID = ( requested[i].carID );
@@ -110,7 +109,7 @@ router.get( '/market', authenticate, awaitHandler( async ( req, res ) => {
             details.trim = carData.trim;
             details.year = carData.year;
             details.Msrp = carData.Msrp;
-            if ( requested[i].quotes ) {
+            if ( requested[i].quotes.length > 0) {
                 details.bestOffer = requested[i].quotes[0].Pricequote
                 for ( let m = 0; m < requested[i].quotes.length; m++ ) {
                     if ( requested[i].quotes[m].dealerID == req.user._id.toString() ) { //!replace with dynamic dealerid(userid of dealer)
@@ -126,22 +125,5 @@ router.get( '/market', authenticate, awaitHandler( async ( req, res ) => {
     res.send( detailsArray );
 } ) )
 
-router.post( '/addSubscription', authenticate, awaitHandler( async ( req, res ) => {
-    let dealerData = await dealerDB.findOne( { _user: req.user._id } ); // replace req.body.dealer with user._id
-    if(!dealerData.manufacturerAccess.includes(req.body.subscribe)){
-        dealerData.manufacturerAccess.push( req.body.subscribe );
-        dealerData.save( function ( err ) {
-            if ( err ) throw err;
-            res.send( dealerData );
-        } )
-    }else {
-        res.end(501)
-     }
-} ) )
 
-router.get( '/subscriptions', authenticate, awaitHandler( async ( req, res ) => {
-    let dealerData = await dealerDB.findOne( { _user: req.user._id } );
-    let subscriptions = dealerData.manufacturerAccess;
-    res.send(subscriptions);
-} ) )
 module.exports = router

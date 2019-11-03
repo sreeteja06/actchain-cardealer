@@ -7,6 +7,7 @@ let dealerDB = require( '../models/dealer' );
 let carDB = require( '../models/car' );
 let requestDB = require( '../models/request' );
 let userDB = require( '../models/user' );
+
 const { authenticate } = require( '../middleware/authentication' );
 const awaitHandler = fn => {
     return async ( req, res, next ) => {
@@ -33,7 +34,7 @@ router.post(
         }
         let requestData = new requestDB( {
             carID: req.body.carID,
-            customerID: req.user._id,
+            buyerID: req.user._id,
         } );
         requestData.save( function ( err ) {
             if ( err ) throw err;
@@ -45,7 +46,7 @@ router.post(
     ) );
 
 router.get( '/requestedCars', authenticate, awaitHandler( async ( req, res ) => {
-    let requestsByCustomer = await requestDB.find( { customerID: req.user._id, sold: false } );
+    let requestsByCustomer = await requestDB.find( { buyerID: req.user._id, sold: false } );
     let responseArray = []
     let obj = {}
     for ( let i = 0; i < requestsByCustomer.length; i++ ) {
@@ -72,11 +73,12 @@ router.post(
     awaitHandler( async ( req, res ) => {
 
         let requestData = await requestDB.findOne( { _id: req.body.requestID } );
+       
         requestData.sold = true;
         let dealerData = await dealerDB.findOne({_user :requestData.quotes[0].dealerID });
-        let customerData = await customerDB.findOne( { _user: requestData.customerID } ); // can get customer from x-auth
+        let customerData = await customerDB.findOne( { _user: requestData.buyerID } ); // can get customer from x-auth
         customerData.ownedCars.push( { carID: requestData.carID, requestID: requestData._id, dealerID: requestData.quotes[0].dealerID } );
-        dealerData.soldCars.push({ carID: requestData.carID, requestID: requestData._id,customerID:requestData.customerID});
+        dealerData.soldCars.push({ carID: requestData.carID, requestID: requestData._id,buyerID:requestData.buyerID});
         await customerData.save( function ( err ) {
             if ( err ) throw err;
         }
@@ -118,7 +120,7 @@ router.get( '/getBroughtCars', authenticate, awaitHandler( async ( req, res ) =>
 router.get( '/getQuotableCars', authenticate, awaitHandler( async ( req, res ) => {
     let data = await carDB.find();
     for ( let i = 0; i < data.length; i++ ) {
-        let flag = await requestDB.findOne( { carID: data[i]._id, customerID: req.user._id, sold: false } );
+        let flag = await requestDB.findOne( { carID: data[i]._id, buyerID: req.user._id, sold: false } );
         let quotable = true
         if ( flag ) {
             quotable = false
