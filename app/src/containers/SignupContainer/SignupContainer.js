@@ -51,37 +51,46 @@ class LoginContainer extends Component {
   SignupHandler = async e => {
     e.preventDefault();
     console.log(`${JSON.stringify(this.state)}`);
-    // try {
-    //   if (this.state.showSnakBar) {
-    //     await this.setState({
-    //       showSnakBar: false
-    //     });
-    //   }
-    //   let response = await axios.post("/users/signup", {
-    //     email: this.state.email,
-    //     password: this.state.password,
-    //     role: this.state.type,
-    //     ID: this.state.ID,
-    //     firstName: this.state.firstname,
-    //     lastName: this.state.lastname
-    //   });
-    //   if (response.status === 200) {
-    //     localStorage.setItem("carDealer_userid", response.data);
-    //     this.setOpen(true);
-    //   } else {
-    //     this.setState({
-    //       showSnakBar: true,
-    //       snakBarMessage: "error signing up",
-    //       snakBarVarient: "error"
-    //     });
-    //   }
-    // } catch (e) {
-    //   this.setState({
-    //     showSnakBar: true,
-    //     snakBarMessage: "error signing up",
-    //     snakBarVarient: "error"
-    //   });
-    // }
+    try {
+      if (this.state.showSnakBar) {
+        await this.setState({
+          showSnakBar: false
+        });
+      }
+      let response = await axios.post("/users/signup", {
+        email: this.state.email,
+        password: this.state.password,
+        role: this.state.type,
+        ID: this.state.ID,
+        firstName: this.state.firstname,
+        lastName: this.state.lastname,
+        city: this.state.city,
+        state: this.state.addState,
+        mobile:this.state.phone,
+        contact_name: this.state.contactName,
+        contact_email: this.state.contactEmail,
+        contact_title: this.state.contactTitle,
+        contact_mobile: this.state.contactPhone,
+        Brand: this.state.brand,
+        website: this.state.website,
+      });
+      if (response.status === 200) {
+        localStorage.setItem("carDealer_userid", response.data);
+        this.setOpen(true);
+      } else {
+        this.setState({
+          showSnakBar: true,
+          snakBarMessage: "error signing up",
+          snakBarVarient: "error"
+        });
+      }
+    } catch (e) {
+      this.setState({
+        showSnakBar: true,
+        snakBarMessage: "error signing up",
+        snakBarVarient: "error"
+      });
+    }
   };
 
   getEmail = e => {
