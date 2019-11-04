@@ -71,6 +71,7 @@ class LoginContainer extends Component {
         contact_email: this.state.contactEmail,
         contact_title: this.state.contactTitle,
         contact_mobile: this.state.contactPhone,
+        address: this.state.address,
         Brand: this.state.brand,
         website: this.state.website,
       });
