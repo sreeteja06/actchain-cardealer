@@ -60,6 +60,16 @@ export const DealerNavItems = props => (
       </ListItemIcon>
       <ListItemText primary="Add Car" />
     </ListItem>
+    <ListItem
+      button
+      onClick={event => props.handleListItemClick(event, 6, "Register")}
+      selected={props.selectedIndex === 6}
+    >
+      <ListItemIcon style={{ color: "#FFFFFF" }}>
+        <MonetizationOnIcon />
+      </ListItemIcon>
+      <ListItemText primary="Register" />
+    </ListItem>
   </div>
 );
 

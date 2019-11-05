@@ -149,7 +149,7 @@ const BuyerTable = (props) => {
         },
         {
             name: "discount",
-            label: "Quote",
+            label: "Quote%",
             options: {
                 filter: true,
                 sort: true,
