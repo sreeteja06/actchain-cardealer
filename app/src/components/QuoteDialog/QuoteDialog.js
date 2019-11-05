@@ -94,7 +94,7 @@ export default function FormDialog( props ) {
             setValidationError( true )
         }
         setValue(tempValue)
-        let effectivePrice = (props.values.MSRP * (100 - tempValue))/100
+        let effectivePrice = (props.values.MSRP * (tempValue))/100
         setOfferCalculate(effectivePrice)
     }
 
@@ -115,7 +115,7 @@ export default function FormDialog( props ) {
                         autoFocus
                         margin="dense"
                         id="discount"
-                        label="Quote Discount"
+                        label="Quote Offer"
                         type="number"
                         fullWidth
                         error={validationError}
