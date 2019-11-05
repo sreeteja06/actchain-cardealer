@@ -63,6 +63,7 @@ const BuyerTable = (props) => {
                 await setShowSnakBar( true )
                 return 
             }
+            setLoaded( false )
             let result = await axios.post( '/customer/acceptDeal', {
                 requestID: value[0],
             }, {
@@ -86,8 +87,9 @@ const BuyerTable = (props) => {
             }
             );
             if ( result2.status === 200 ) {
-                setData( result.data )
+                setData( result2.data )
             }
+            setLoaded( true )
         }catch(e){
             console.error( e );
             setSnakBarMessage( "error accepting deal" )
