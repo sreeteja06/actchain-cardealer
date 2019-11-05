@@ -27,6 +27,11 @@ router.get( '/', awaitHandler( async ( req, res ) => {
 router.post(
     '/requestACar',authenticate,
     awaitHandler( async ( req, res ) => {
+        let data = await customerDB.findOne({_user : req.user._id});
+        if(data.quote_tokens ==0){
+            throw new Error;
+        }
+        else{
         const carDetails = await requestDB.findOne( { carID: req.body.carID, sold: false } );
         if ( carDetails ) {
             res.status( 400 ).send( "you already asked for a quote" );
@@ -39,10 +44,14 @@ router.post(
         requestData.save( function ( err ) {
             if ( err ) throw err;
             console.log( 'car successfully saved.' );
+            data.quote_tokens=data.quote_tokens-1;
+            data.save(function(Err){
+                if (Err){throw new Err}
+            })
             res.send( requestData );
         }
         )
-    }
+    }}
     ) );
 
 router.get( '/requestedCars', authenticate, awaitHandler( async ( req, res ) => {
