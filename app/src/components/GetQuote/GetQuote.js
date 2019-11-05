@@ -87,8 +87,14 @@ export default function GetQuote() {
           "x-auth": localStorage.getItem("carDealer_X_auth")
         }
       });
+      const result2 = await axios(`customer/getNoOfTokens`, {
+        headers: {
+          "x-auth": localStorage.getItem("carDealer_X_auth")
+        }
+      });
       if (result1.status === 200) {
         setData(result1.data);
+        setData(result2.data.tokens);
       }
     } catch (e) {
       setSnakBarMessage("error asking quote");
@@ -208,7 +214,7 @@ export default function GetQuote() {
                 variant="h5"
                 style={{ color: "white" }}
               >
-                Total tokens you have:{tokens}
+                Available Tokens:{tokens}
               </Typography>
             </Box>
           </div>

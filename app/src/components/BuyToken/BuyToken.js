@@ -66,6 +66,7 @@ export default function BuyToken() {
   const [validationError, setValidationError] = React.useState(false);
   const [snakBarMessage, setSnakBarMessage] = React.useState();
   const [snakBarVarient, setSnakBarVarient] = React.useState("success");
+  const [disableButton, setDisableButton] = React.useState(false);
   let tokens;
 
   React.useEffect(() => {
@@ -100,6 +101,7 @@ export default function BuyToken() {
       setValidationError(true);
     }else{
     try {
+      setDisableButton(true)
       if (showSnakBar) {
         await setShowSnakBar(false);
       }
@@ -120,6 +122,15 @@ export default function BuyToken() {
         setSnakBarMessage("error buying tokens");
         setSnakBarVarient("error");
       }
+      const result2 = await axios(`customer/getNoOfTokens`, {
+        headers: {
+          "x-auth": localStorage.getItem("carDealer_X_auth")
+        }
+      });
+      if (result2.status === 200) {
+        setData(result2.data.tokens);
+      }
+      setDisableButton(false)
       await setShowSnakBar(true);
     } catch (e) {
       console.error(e);
@@ -132,17 +143,31 @@ export default function BuyToken() {
   const inputHandler = event => {
     if(!event.target.value || event.target.value <= 0){
       setValidationError(true)
+    } else {
+      setValidationError(false);
     }
     console.log(event.target.value)
     tokens = event.target.value
   };
+
+  let styleObj;
+
+  if (disableButton) {
+    styleObj = { backgroundColor: "grey", color: "white" };
+  } else {
+    styleObj = {
+      backgroundColor: "#70b359",
+      color: "white",
+      padding: "10px"
+    }
+  }
 
   return (
     <>
       <div style={{ width: "100%" }}>
         <Box component="span" display="block" p={1} m={1} bgcolor="#81c784">
           <Typography align="center" variant="h5" style={{ color: "white" }}>
-            Total tokens you have:{data}
+            Available Tokens:{data}
           </Typography>
         </Box>
       </div>
@@ -166,11 +191,8 @@ export default function BuyToken() {
             error={validationError}
           />
           <Button
-            style={{
-              backgroundColor: "#70b359",
-              color: "white",
-              padding: "10px"
-            }}
+            disabled={disableButton}
+            style={styleObj}
             onClick={e => BuyTokenButtonClick(e)}
           >
             Buy Token
