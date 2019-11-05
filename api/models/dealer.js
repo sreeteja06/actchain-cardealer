@@ -41,7 +41,12 @@ let dealerSchema = new mongoose.Schema({
     soldCars: {
         type:Array,
         
+    },
+    registered :{
+        type:Boolean,
+        default:false
     }
+
 });
 
 

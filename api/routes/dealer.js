@@ -47,12 +47,14 @@ router.get( '/', awaitHandler( async ( req, res ) => {
 router.post(
     '/quoteDiscount', authenticate,
     awaitHandler( async ( req, res ) => {
-        console.log( req.body )
+        
         let dealer = req.user._id, point;
         console.log( "TCL: dealer", dealer )
         let flag = false;
         var quote = { "dealerID": dealer, "Pricequote": req.body.Pricequote };
         let requested = await requestDB.findOne( { _id: req.body.requestID } );
+        let data = await dealerDB.findOne({_user:req.user._id});
+        if(data.registered ==  true){
         for ( let i = 0; i < requested.quotes.length; i++ ) {
             if ( requested.quotes[i].dealerID == dealer.toString() ) {
                 flag = true;
@@ -88,7 +90,10 @@ router.post(
             if ( err ) throw err;
             console.log( 'car successfully saved.' );
         } )
-        res.send( requested );
+        res.send( requested );}
+        else{
+            res.send("please register to your respective brand before quoting");
+        }
     } ) );
 router.get( '/market', authenticate, awaitHandler( async ( req, res ) => {
     let requested = await requestDB.find( { sold: false } );
@@ -125,6 +130,21 @@ router.get( '/market', authenticate, awaitHandler( async ( req, res ) => {
     }
     res.send( detailsArray );
 } ) )
+router.post('/register',authenticate,awaitHandler(async (req,res)=>{
+    let dealerData = await dealerDB.findOne( { _user: req.user._id } );
+    if(dealerData.registered == true){
+        res.send("you have already registered").end();  
+    } else{
+    dealerData.registered = true;
+    dealerData.save(function(err){
+    if (err) throw new err;
+    res.send("you are succesfully registered");
+    })}
+}))
+ router.get('/registered',authenticate,awaitHandler(async(req,res)=>{
+    let dealerData = await dealerDB.findOne( { _user: req.user._id } );
+    res.send(dealerData.registered);
+ }))
 
 
 module.exports = router
