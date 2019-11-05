@@ -27,13 +27,14 @@ router.get( '/getSoldCars', authenticate, awaitHandler( async ( req, res ) => {
         obj = {}
         obj.cost = ( await requestDB.findOne( { _id: soldCars[i].requestID } ) ).quotes[0].Pricequote
         let tempBuyer = ( await userDB.findOne( { _id: soldCars[i].buyerID } ) )
-        obj.customerName = tempBuyer.name;
+        let customerName = tempBuyer.firstName + tempBuyer.lastName;
         let car = await carDB.findOne( { _id: soldCars[i].carID } )
         obj.manufacturer = car.manufacturer
         obj.model = car.model
         obj.trim = car.trim
         obj.year = car.year
-        obj.Msrp = car.Msrp 
+        obj.Msrp = car.Msrp
+        obj.soldTo = customerName
         arr.push(obj)
     }
     res.send(arr);
