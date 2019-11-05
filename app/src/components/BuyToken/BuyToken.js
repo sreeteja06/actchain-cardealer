@@ -61,11 +61,40 @@ let car = {
 
 export default function BuyToken() {
   const classes = useStyles();
+  const [data, setData] = React.useState(0);
   const [showSnakBar, setShowSnakBar] = React.useState(false);
   const [validationError, setValidationError] = React.useState(false);
   const [snakBarMessage, setSnakBarMessage] = React.useState();
   const [snakBarVarient, setSnakBarVarient] = React.useState("success");
   let tokens;
+
+  React.useEffect(() => {
+    const fetchData = async () => {
+      try {
+        if (showSnakBar) {
+          await setShowSnakBar(false);
+        }
+        const result = await axios(`customer/getNoOfTokens`, {
+          headers: {
+            "x-auth": localStorage.getItem("carDealer_X_auth")
+          }
+        });
+        if (result.status === 200) {
+          setData(result.data.tokens);
+        } else {
+          setSnakBarMessage("error getting car details");
+          setSnakBarVarient("error");
+          setShowSnakBar(true);
+        }
+      } catch (e) {
+        setSnakBarMessage("error getting car details");
+        setSnakBarVarient("error");
+        setShowSnakBar(true);
+      }
+    };
+    fetchData();
+  }, []);
+
   const BuyTokenButtonClick = async () => {
     if(!tokens || validationError){
       setValidationError(true);
@@ -75,7 +104,7 @@ export default function BuyToken() {
         await setShowSnakBar(false);
       }
       let response = await axios.post(
-        "/car/createCar",
+        "/customer/buyTokens",
         {
           tokens: tokens
         },
@@ -86,9 +115,9 @@ export default function BuyToken() {
         }
       );
       if (response.status === 200) {
-        setSnakBarMessage("successfully added car model");
+        setSnakBarMessage("successfully bought tokens");
       } else {
-        setSnakBarMessage("error adding car model");
+        setSnakBarMessage("error buying tokens");
         setSnakBarVarient("error");
       }
       await setShowSnakBar(true);
@@ -113,7 +142,7 @@ export default function BuyToken() {
       <div style={{ width: "100%" }}>
         <Box component="span" display="block" p={1} m={1} bgcolor="#81c784">
           <Typography align="center" variant="h5" style={{ color: "white" }}>
-            Total tokens you have:{" "}
+            Total tokens you have:{data}
           </Typography>
         </Box>
       </div>

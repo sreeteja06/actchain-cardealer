@@ -19,6 +19,7 @@ export default function GetQuote() {
   const [data, setData] = React.useState([]);
   const [showSnakBar, setShowSnakBar] = React.useState(false);
   const [snakBarMessage, setSnakBarMessage] = React.useState();
+  const [tokens, setTokens] = React.useState(0);
   const [snakBarVarient, setSnakBarVarient] = React.useState("success");
   const [loaded, setLoaded] = React.useState(false);
 
@@ -33,8 +34,14 @@ export default function GetQuote() {
             "x-auth": localStorage.getItem("carDealer_X_auth")
           }
         });
-        if (result.status === 200) {
+        const result2 = await axios(`customer/getNoOfTokens`, {
+          headers: {
+            "x-auth": localStorage.getItem("carDealer_X_auth")
+          }
+        });
+        if (result.status === 200 && result2.status === 200) {
           setData(result.data);
+          setTokens(result2.data.tokens);
         } else {
           setSnakBarMessage("error getting car details");
           setSnakBarVarient("error");
@@ -201,7 +208,7 @@ export default function GetQuote() {
                 variant="h5"
                 style={{ color: "white" }}
               >
-                Total tokens you have:{" "}
+                Total tokens you have:{tokens}
               </Typography>
             </Box>
           </div>
