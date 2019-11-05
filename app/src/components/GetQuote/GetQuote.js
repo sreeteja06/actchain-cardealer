@@ -62,6 +62,7 @@ export default function GetQuote() {
       if (showSnakBar) {
         await setShowSnakBar(false);
       }
+      setLoaded(false)
       let result = await axios.post(
         "/customer/requestACar",
         {
@@ -94,8 +95,9 @@ export default function GetQuote() {
       });
       if (result1.status === 200) {
         setData(result1.data);
-        setData(result2.data.tokens);
+        setTokens(result2.data.tokens);
       }
+      setLoaded(true)
     } catch (e) {
       setSnakBarMessage("error asking quote");
       setSnakBarVarient("error");

@@ -63,6 +63,7 @@ const BuyerTable = (props) => {
                 await setShowSnakBar( true )
                 return 
             }
+            setLoaded(false)
             let result = await axios.post( '/customer/acceptDeal', {
                 requestID: value[0],
             }, {
@@ -78,6 +79,17 @@ const BuyerTable = (props) => {
                 setSnakBarVarient( 'error' );
             }
             await setShowSnakBar( true )
+            const result2 = await axios(
+                `customer/requestedCars`, {
+                headers: {
+                    'x-auth': localStorage.getItem( 'carDealer_X_auth' )
+                }
+            }
+            );
+            if ( result2.status === 200 ) {
+                setData( result.data )
+            }
+            setLoaded(true)
         }catch(e){
             console.error( e );
             setSnakBarMessage( "error accepting deal" )
