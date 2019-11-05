@@ -62,6 +62,7 @@ export default function GetQuote() {
       if (showSnakBar) {
         await setShowSnakBar(false);
       }
+      setLoaded(false)
       let result = await axios.post(
         "/customer/requestACar",
         {
@@ -87,9 +88,16 @@ export default function GetQuote() {
           "x-auth": localStorage.getItem("carDealer_X_auth")
         }
       });
+      const result2 = await axios(`customer/getNoOfTokens`, {
+        headers: {
+          "x-auth": localStorage.getItem("carDealer_X_auth")
+        }
+      });
       if (result1.status === 200) {
         setData(result1.data);
+        setTokens(result2.data.tokens);
       }
+      setLoaded(true)
     } catch (e) {
       setSnakBarMessage("error asking quote");
       setSnakBarVarient("error");
@@ -208,7 +216,7 @@ export default function GetQuote() {
                 variant="h5"
                 style={{ color: "white" }}
               >
-                Total tokens you have:{tokens}
+                Available Tokens:{tokens}
               </Typography>
             </Box>
           </div>
