@@ -34,6 +34,7 @@ router.get( '/getSoldCars', authenticate, awaitHandler( async ( req, res ) => {
         obj.trim = car.trim
         obj.year = car.year
         obj.Msrp = car.Msrp
+        obj.soldTo = soldCars[i].buyerID
         arr.push(obj)
     }
     res.send(arr);
