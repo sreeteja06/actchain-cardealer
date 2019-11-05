@@ -120,9 +120,9 @@ router.get( '/getBroughtCars', authenticate, awaitHandler( async ( req, res ) =>
 router.get( '/getQuotableCars', authenticate, awaitHandler( async ( req, res ) => {
     let data = await carDB.find();
     let quotable;
-    let dataCustomer = await customerDB.findOne({_user:req.user_id}).quote_tokens;
+    let dataCustomer = await customerDB.findOne({_user:req.user_id});
     for ( let i = 0; i < data.length; i++ ) {
-       if(dataCustomer == 0){
+       if(dataCustomer.quote_tokens == 0){
            quotable=false;
        }
        else{
