@@ -3,6 +3,7 @@ let router = express.Router()
 let { mongoose } = require( '../db/mongoose' );
 require( '../config/config' );
 let customerDB = require( '../models/customer' );
+let dealerDB = require("../models/dealer")
 let car = require( '../models/car' );
 let requestDB = require('../models/request')
 let { authenticate } = require('../middleware/authentication')
@@ -44,7 +45,8 @@ router.get('/getCar',authenticate,awaitHandler(async(req,res)=>{
 }))
 
 router.get( '/getAllCars',authenticate, awaitHandler( async ( req, res ) => {
-    let data = await car.find( );
+    let dealer = await dealerDB.findOne({_user: req.user._id})
+    let data = await car.find( {manufacturer: dealer.Brand} );
     res.send( data );
 } ) )
 
