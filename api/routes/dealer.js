@@ -143,7 +143,7 @@ router.post('/register',authenticate,awaitHandler(async (req,res)=>{
 }))
  router.get('/registered',authenticate,awaitHandler(async(req,res)=>{
     let dealerData = await dealerDB.findOne( { _user: req.user._id } );
-    res.send(dealerData.registered);
+    res.send({registered:dealerData.registered});
  }))
 
 

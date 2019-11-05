@@ -32,10 +32,10 @@ router.post(
             throw new Error;
         }
         else{
-        const carDetails = await requestDB.findOne( { carID: req.body.carID, sold: false } );
+        const carDetails = await requestDB.findOne( { carID: req.body.carID, buyerID:req.user._id,sold: false } );
         if ( carDetails ) {
             res.status( 400 ).send( "you already asked for a quote" );
-            return;
+            return; 
         }
         let requestData = new requestDB( {
             carID: req.body.carID,
