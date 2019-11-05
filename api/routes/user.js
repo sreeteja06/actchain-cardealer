@@ -171,7 +171,5 @@ router.delete('/users/logout', authenticate, awaitHandler((req, res) => {
     });
 }));
 
-router.get('/users', awaitHandler((req, res) => {
-    res.send('you ar iuh usrsrs');
-}));
+
 module.exports = router
