@@ -70,7 +70,7 @@ router.post(
         let n = requested.quotes.length;
         for ( let i = 0; i < n; i++ ) {
             for ( let j = 1; j < ( n - i ); j++ ) {
-                if ( requested.quotes[j - 1].Pricequote < requested.quotes[j].Pricequote ) {
+                if ( requested.quotes[j - 1].Pricequote > requested.quotes[j].Pricequote ) {
                     // let temp = requested.quotes[j - 1];
                     // requested.quotes[j - 1] = requested.quotes[j];
                     // requested.quotes[j] = temp;
