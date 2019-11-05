@@ -163,7 +163,7 @@ router.post(
         let data = await customerDB.findOne( {_user: req.user._id} );
         console.log(data);
         let token = req.body.tokens;
-        data.quote_tokens=data.quote_tokens+token;
+        data.quote_tokens=data.quote_tokens+parseInt(token);
         await data.save( function ( err ) {
             if ( err ) throw err;
             console.log( 'tokens updated.' );
