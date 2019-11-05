@@ -28,7 +28,7 @@ const Market = ( props ) => {
             }
           });
           if (result.status === 200) {
-            setRegistered(result.data);
+            setRegistered(result.data.registered);
           }
         } catch (e) {
         }

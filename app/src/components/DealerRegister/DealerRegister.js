@@ -80,7 +80,7 @@ export default function BuyToken() {
           }
         });
         if (result.status === 200) {
-          setData(result.data);
+          setData(result.data.registered);
         } else {
           setSnakBarMessage("error registering");
           setSnakBarVarient("error");
@@ -121,7 +121,7 @@ export default function BuyToken() {
         }
       });
       if (result2.status === 200) {
-        setData(result2.data);
+        setData(result2.data.registered);
       }
       setDisableButton(false)
       await setShowSnakBar(true);
