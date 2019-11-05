@@ -107,7 +107,7 @@ const BroughtCars = () => {
             }
         },
         {
-            name: "cost",
+            name: "discount",
             label: "quoted",
             options: {
                 filter: true,
@@ -115,7 +115,7 @@ const BroughtCars = () => {
             }
         },
         {
-            name: "soldTo",
+            name: "customerName",
             label: "sold to",
             options: {
                 filter: true,
