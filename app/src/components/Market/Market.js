@@ -13,9 +13,28 @@ import MUIDataTable from "mui-datatables";
 import { Button } from '@material-ui/core'
 import QuoteDialog from '../QuoteDialog/QuoteDialog';
 import LinearProgress from '@material-ui/core/LinearProgress';
+import axios from "../../axios";
 
 const Market = ( props ) => {
     const [open, setOpen] = React.useState( false );
+    const [registered, setRegistered] = React.useState( false )
+
+    React.useEffect(() => {
+      const fetchData = async () => {
+        try {
+          const result = await axios(`dealer/registered`, {
+            headers: {
+              "x-auth": localStorage.getItem("carDealer_X_auth")
+            }
+          });
+          if (result.status === 200) {
+            setRegistered(result.data);
+          }
+        } catch (e) {
+        }
+      };
+      fetchData();
+    }, []);
 
     const [dialogProps, setDialogProps] = React.useState( {
         requestID: "",
@@ -106,7 +125,7 @@ const Market = ( props ) => {
       },
       {
         name: "bestOffer",
-        label: "Best Quote",
+        label: "Best Quote%",
         options: {
           filter: true,
           sort: true
@@ -114,7 +133,7 @@ const Market = ( props ) => {
       },
       {
         name: "Pricequote",
-        label: "Previous Quote",
+        label: "Previous Quote%",
         options: {
           filter: true,
           sort: true
@@ -136,6 +155,30 @@ const Market = ( props ) => {
                   Quote Offer
                 </Button>
               </div>
+            );
+          }
+        },
+        options: {
+          filter: false,
+          sort: false,
+          customBodyRender: (value, tableMeta, updateValue) => {
+            let styleObj;
+            if (!registered) {
+              styleObj = { backgroundColor: "grey", color: "white" };
+            } else {
+              styleObj = {
+                backgroundColor: "#70b359",
+                color: "white"
+              };
+            }
+            return (
+              <Button
+                style={styleObj}
+                onClick={e => QuoteDiscount(tableMeta.rowData)}
+                disabled={!registered}
+              >
+                Quote Offer
+              </Button>
             );
           }
         }

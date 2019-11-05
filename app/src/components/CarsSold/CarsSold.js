@@ -108,7 +108,7 @@ const BroughtCars = () => {
         },
         {
             name: "discount",
-            label: "quoted",
+            label: "quoted%",
             options: {
                 filter: true,
                 sort: true,

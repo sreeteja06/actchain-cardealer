@@ -23,6 +23,7 @@ import LogoutIcon from '@material-ui/icons/PowerSettingsNewOutlined';
 import MenuIcon from '@material-ui/icons/Menu';
 import ChevronLeftIcon from '@material-ui/icons/ChevronLeft';
 import Market from '../../containers/MarketContainer/MarketContainer';
+import Register from '../../components/DealerRegister/DealerRegister'
 import { DealerNavItems, BuyerNavItems } from './listitems';
 import CarDetails from '../CarDetails/CarDetails'
 import AddCar from '../AddCar/AddCar'
@@ -239,6 +240,7 @@ const DashboardNav = ( props ) => {
           {SelectedNavItem === "Market" ? <Market></Market> : null}
           {SelectedNavItem === "CarDetails" ? <CarDetails></CarDetails> : null}
           {SelectedNavItem === "AddCar" ? <AddCar></AddCar> : null}
+          {SelectedNavItem === "Register"? <Register></Register>:null}
           {SelectedNavItem === "Dashboard" ? <BuyerTable></BuyerTable> : null}
           {SelectedNavItem === "getQuote" ? <GetQuote></GetQuote> : null}
           {SelectedNavItem === "BoughtCars" ? (
