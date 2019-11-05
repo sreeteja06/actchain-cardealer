@@ -119,12 +119,18 @@ router.get( '/getBroughtCars', authenticate, awaitHandler( async ( req, res ) =>
 
 router.get( '/getQuotableCars', authenticate, awaitHandler( async ( req, res ) => {
     let data = await carDB.find();
+    let quotable;
+    let dataCustomer = await customerDB.findOne({_user:req.user_id}).quote_tokens;
     for ( let i = 0; i < data.length; i++ ) {
+       if(dataCustomer == 0){
+           quotable=false;
+       }
+       else{
         let flag = await requestDB.findOne( { carID: data[i]._id, buyerID: req.user._id, sold: false } );
-        let quotable = true
+        quotable = true
         if ( flag ) {
             quotable = false
-        }
+        }}
         let temp = { ...data[i]._doc }
         data[i] = { ...temp, quotable: quotable }
     }
@@ -135,4 +141,26 @@ router.get( '/getARequestDetails', awaitHandler( async ( req, res ) => {
     let data = await requestDB.findOne( { _id: req.query.requestID } );
     res.send( data );
 } ) )
+
+router.get( '/getNoOfTokens',authenticate, awaitHandler( async ( req, res ) => {
+    let data = await customerDB.findOne( { _user: req.user._id } ); 
+    let tokens = data.quote_tokens;
+    res.send({tokens});
+} ) )
+
+router.post(
+    '/buyTokens',authenticate,
+    awaitHandler( async ( req, res ) => {
+        let data = await customerDB.findOne( {_user: req.user._id} );
+        console.log(data);
+        let token = req.body.tokens;
+        data.quote_tokens=data.quote_tokens+token;
+        await data.save( function ( err ) {
+            if ( err ) throw err;
+            console.log( 'tokens updated.' );
+            res.send( "tokens updated" +"  "+ data.quote_tokens );
+        })
+    }))
+       
+    
 module.exports = router
