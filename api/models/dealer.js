@@ -6,7 +6,6 @@ let dealerSchema = new mongoose.Schema({
     dealerRegId:{
         type: String,
         required: true,
-        unique : true
     },
     _user: {
         type: mongoose.Schema.Types.ObjectId,
