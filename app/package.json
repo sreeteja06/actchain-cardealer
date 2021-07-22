@@ -38,6 +38,6 @@
     ]
   },
   "devDependencies": {
-    "xlsx": "^0.15.1"
+    "xlsx": "^0.17.0"
   }
 }
